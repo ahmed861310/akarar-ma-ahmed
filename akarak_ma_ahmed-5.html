@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>عقارك مع أحمد | تسويق عقاري</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Tahoma,Arial,sans-serif;background:#f6f7f9;color:#172033}
+header{background:#102a43;color:#fff;padding:18px 6%;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:5}
+.logo{font-size:23px;font-weight:800}.logo span{color:#f4c95d}
+nav a{color:#fff;text-decoration:none;margin-right:20px}
+.hero{padding:70px 6%;background:linear-gradient(135deg,#102a43,#1f4e6e);color:#fff}
+.hero h1{font-size:42px;margin:0 0 12px}.hero p{font-size:18px;opacity:.9}
+.search{background:#fff;color:#172033;padding:18px;border-radius:14px;display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:10px;max-width:1000px;margin-top:28px;box-shadow:0 10px 30px #0002}
+input,select,button{padding:13px;border:1px solid #ddd;border-radius:9px;font-size:15px}button{background:#102a43;color:white;border:0;cursor:pointer;font-weight:700}
+section{padding:45px 6%}.title{text-align:center;margin-bottom:28px}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.card{background:#fff;border-radius:15px;overflow:hidden;box-shadow:0 4px 18px #00000012}.photo{height:190px;background:linear-gradient(135deg,#dfe8ef,#aebdca);display:flex;align-items:center;justify-content:center;font-size:50px}
+.card-body{padding:18px}.price{font-size:20px;font-weight:800;margin:10px 0}.meta{color:#667085;line-height:1.9}.wa{display:block;text-align:center;background:#1b9c5a;color:#fff;padding:11px;border-radius:8px;text-decoration:none;margin-top:14px}
+.about{background:#fff}.contact{background:#102a43;color:#fff;text-align:center}.contact a{color:#f4c95d}
+footer{padding:20px;text-align:center;background:#0b1f31;color:#fff}
+@media(max-width:800px){.search,.grid{grid-template-columns:1fr}.hero h1{font-size:32px}nav{display:none}}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">عقارك <span>مع أحمد</span></div>
+  <nav><a href="#properties">العقارات</a><a href="#about">عنّا</a><a href="#contact">تواصل</a></nav>
+</header>
+
+<div class="hero">
+  <h1>دليلك لعقار مناسب وبسعر مناسب</h1>
+  <p>تسويق شقق ومحلات وأراضي للبيع والإيجار — تواصل مباشرة مع أحمد.</p>
+  <div class="search">
+    <select id="type"><option value="">كل الأنواع</option><option>شقة</option><option>محل</option><option>أرض</option></select>
+    <input id="area" placeholder="اكتب المنطقة">
+    <input id="max" type="number" placeholder="أقصى سعر">
+    <button onclick="filterCards()">بحث</button>
+  </div>
+</div>
+
+<section id="properties">
+  <div class="title"><h2>أحدث العقارات</h2><p>عروض قابلة للتحديث بسهولة</p></div>
+  <div class="grid" id="cards">
+    <article class="card" data-type="شقة" data-area="الهرم" data-price="1500000">
+      <div class="photo">🏠</div><div class="card-body">
+        <h3>شقة للبيع في الهرم</h3><div class="price">1,500,000 جنيه</div>
+        <div class="meta">📐 120 م² · 🛏️ 3 غرف · 🏢 الدور 5<br>📍 الهرم — الجيزة</div>
+        <a class="wa" href="https://wa.me/201149902302?text=مرحباً،%20مهتم%20بشقة%20الهرم" target="_blank">اسأل على واتساب</a>
+      </div>
+    </article>
+
+    <article class="card" data-type="شقة" data-area="فيصل" data-price="950000">
+      <div class="photo">🏢</div><div class="card-body">
+        <h3>شقة للبيع في فيصل</h3><div class="price">950,000 جنيه</div>
+        <div class="meta">📐 100 م² · 🛏️ غرفتان · 🛗 أسانسير<br>📍 فيصل — الجيزة</div>
+        <a class="wa" href="https://wa.me/201149902302?text=مرحباً،%20مهتم%20بشقة%20فيصل" target="_blank">اسأل على واتساب</a>
+      </div>
+    </article>
+
+    <article class="card" data-type="محل" data-area="العمرانية" data-price="25000">
+      <div class="photo">🏪</div><div class="card-body">
+        <h3>محل للإيجار في العمرانية</h3><div class="price">25,000 جنيه/شهر</div>
+        <div class="meta">📐 65 م² · واجهة رئيسية · تشطيب جيد<br>📍 العمرانية — الجيزة</div>
+        <a class="wa" href="https://wa.me/201149902302?text=مرحباً،%20مهتم%20بمحل%20العمرانية" target="_blank">اسأل على واتساب</a>
+      </div>
+    </article>
+  </div>
+</section>
+
+<section id="about" class="about">
+  <div class="title"><h2>ليه تتعامل معانا؟</h2></div>
+  <div class="grid">
+    <div><h3>🔎 عروض حقيقية</h3><p>نركز على العقارات المتاحة فعلياً ونحدّث البيانات باستمرار.</p></div>
+    <div><h3>🤝 وسيط موثوق</h3><p>تنسيق المعاينات والتواصل بين المالك والمشتري بشكل واضح.</p></div>
+    <div><h3>📱 تواصل سريع</h3><p>تقدر تسأل عن أي عقار مباشرة عبر واتساب.</p></div>
+  </div>
+</section>
+
+<section id="contact" class="contact">
+  <h2>عايز تبيع أو تأجر عقارك؟</h2>
+  <p>ابعت التفاصيل والصور، وننسق معاك للتسويق.</p>
+  <p>واتساب: <a href="https://wa.me/201149902302">اضغط هنا للتواصل</a></p>
+</section>
+<footer>© 2026 عقارك مع أحمد — جميع الحقوق محفوظة</footer>
+
+<script>
+function filterCards(){
+  const type=document.getElementById('type').value.trim();
+  const area=document.getElementById('area').value.trim().toLowerCase();
+  const max=Number(document.getElementById('max').value)||Infinity;
+  document.querySelectorAll('.card').forEach(c=>{
+    const okType=!type||c.dataset.type===type;
+    const okArea=!area||c.dataset.area.toLowerCase().includes(area);
+    const okPrice=Number(c.dataset.price)<=max;
+    c.style.display=(okType&&okArea&&okPrice)?'block':'none';
+  });
+}
+</script>
+</body>
+</html>
