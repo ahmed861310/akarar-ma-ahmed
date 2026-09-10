@@ -1,111 +1,32 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>خدماتي ⚡ V1.5</title>
-  <link rel="stylesheet" href="style.css?v=1.5.1">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0757c9"><title>خدماتي | منصة الخدمات</title>
+<link rel="stylesheet" href="style.css?v=1.6">
 </head>
 <body>
-<header class="topbar">
-  <div class="brand">خدماتي <span>⚡</span></div>
-  <button id="logoutTop" class="ghost hidden">تسجيل خروج</button>
-</header>
-
+<header class="topbar"><div class="brand"><span class="brand-mark">⚡</span> خدماتي</div><div class="top-actions"><button id="notifyBtn" class="icon-btn" aria-label="الإشعارات">🔔<i id="notifDot"></i></button><button id="logoutTop" class="ghost hidden">خروج</button></div></header>
 <main>
-  <section id="loginPage" class="page login-page">
-    <div class="login-card">
-      <div class="logo-circle">⚡</div>
-      <h1>تسجيل الدخول</h1>
-      <p class="muted">سجّل دخولك للوصول إلى خدماتك</p>
-
-      <label for="phone">رقم الهاتف</label>
-      <div class="input-wrap"><span class="phone-prefix">🇪🇬 +20</span><input id="phone" class="phone-input" inputmode="numeric" maxlength="11" placeholder="01xxxxxxxxx" autocomplete="tel"></div>
-
-      <label for="password">كلمة السر</label>
-      <div class="password-wrap"><input id="password" type="password" placeholder="كلمة السر" autocomplete="current-password"><button type="button" id="togglePass" class="toggle-pass" aria-label="إظهار كلمة السر">◉</button></div>
-      <div class="actions"><button type="button" id="forgotBtn" class="forgot">نسيت كلمة السر؟</button></div>
-
-      <button id="loginBtn" class="primary">تسجيل الدخول</button>
-      <button id="demoBtn" class="secondary">تجربة سريعة</button>
-      <div class="divider"><span>أو</span></div>
-      <button type="button" class="google"><b>G</b> تسجيل الدخول بواسطة جوجل</button>
-      <p class="signup">ليس مشترك؟ <button type="button" id="signupBtn">أنشئ حساب</button></p>
-      <p id="loginMsg" class="msg"></p>
-    </div>
-  </section>
-
-  <section id="signupPage" class="page signup-page hidden">
-    <div class="signup-card">
-      <button id="backLoginBtn" class="back-btn" type="button">← العودة لتسجيل الدخول</button>
-      <div class="logo-circle small-logo">⚡</div>
-      <h1>إنشاء حساب جديد</h1>
-      <p class="muted center">أنشئ حسابك وابدأ استخدام خدماتي</p>
-
-      <label for="signupName">الاسم بالكامل</label>
-      <input id="signupName" type="text" placeholder="اكتب اسمك" autocomplete="name">
-
-      <label for="signupPhone">رقم الهاتف</label>
-      <div class="input-wrap"><span class="phone-prefix">🇪🇬 +20</span><input id="signupPhone" class="phone-input" inputmode="numeric" maxlength="11" placeholder="01xxxxxxxxx" autocomplete="tel"></div>
-
-      <label for="signupPassword">كلمة السر</label>
-      <input id="signupPassword" type="password" placeholder="6 أحرف أو أرقام على الأقل" autocomplete="new-password">
-
-      <label for="signupPassword2">تأكيد كلمة السر</label>
-      <input id="signupPassword2" type="password" placeholder="أعد كتابة كلمة السر" autocomplete="new-password">
-
-      <button id="createAccountBtn" class="primary" type="button">إنشاء الحساب</button>
-      <p id="signupMsg" class="msg"></p>
-    </div>
-  </section>
-
-  <section id="homePage" class="page hidden">
-    <div class="welcome">
-      <div>
-        <span class="muted">مرحباً بعودتك 👋</span>
-        <h1 id="welcomeName">مستخدم خدماتي</h1>
-        <p>كل خدماتك في مكان واحد.</p>
-      </div>
-      <div class="avatar">👤</div>
-    </div>
-
-    <div class="stats">
-      <div class="stat"><strong id="requestsCount">0</strong><span>طلبات</span></div>
-      <div class="stat"><strong id="notificationsCount">2</strong><span>إشعارات</span></div>
-      <div class="stat"><strong>متاح</strong><span>الحساب</span></div>
-    </div>
-
-    <h2>الخدمات</h2>
-    <div class="services">
-      <button class="service" data-title="الطلبات">
-        <span>📋</span><b>الطلبات</b><small>إنشاء ومتابعة الطلبات</small>
-      </button>
-      <button class="service" data-title="المدفوعات">
-        <span>💳</span><b>المدفوعات</b><small>متابعة المدفوعات والفواتير</small>
-      </button>
-      <button class="service" data-title="متابعة الطلب">
-        <span>🔎</span><b>متابعة الطلب</b><small>اعرف آخر حالة لطلبك</small>
-      </button>
-      <button class="service" data-title="الشكاوى">
-        <span>📝</span><b>الشكاوى</b><small>أرسل شكوى وتابع الرد</small>
-      </button>
-      <button class="service" data-title="الإشعارات">
-        <span>🔔</span><b>الإشعارات</b><small>آخر التنبيهات والتحديثات</small>
-      </button>
-      <button class="service" data-title="حسابي">
-        <span>👤</span><b>حسابي</b><small>بيانات الحساب والإعدادات</small>
-      </button>
-    </div>
-
-    <div class="panel">
-      <h2>آخر التحديثات</h2>
-      <div class="notice"><span>🔔</span><div><b>مرحباً بك في خدماتي</b><p>تم تجهيز لوحة الخدمات الجديدة.</p></div></div>
-      <div class="notice"><span>✅</span><div><b>الحساب جاهز</b><p>يمكنك تجربة الخدمات من لوحة التحكم.</p></div></div>
-    </div>
-  </section>
-</main>
-
-<div id="toast" class="toast"></div>
-<script src="app.js"></script>
-</body>
-</html>
+<section id="loginPage" class="page login-page"><div class="login-card"><div class="logo-circle">⚡</div><h1>أهلاً بك في خدماتي</h1><p class="muted center">منصة واحدة للوصول إلى خدماتك بسهولة</p>
+<label for="phone">رقم الهاتف</label><div class="input-wrap"><span class="phone-prefix">🇪🇬 +20</span><input id="phone" class="phone-input" inputmode="numeric" maxlength="11" placeholder="01xxxxxxxxx" autocomplete="tel"></div>
+<label for="password">كلمة السر</label><div class="password-wrap"><input id="password" type="password" placeholder="كلمة السر"><button type="button" id="togglePass" class="toggle-pass">◉</button></div>
+<div class="actions"><button id="forgotBtn" class="forgot">نسيت كلمة السر؟</button></div><button id="loginBtn" class="primary">تسجيل الدخول</button><button id="demoBtn" class="secondary">تجربة سريعة</button>
+<div class="divider"><span>أو</span></div><button class="google"><b>G</b> تسجيل الدخول بواسطة جوجل</button><p class="signup">ليس لديك حساب؟ <button id="signupBtn">إنشاء حساب جديد</button></p><p id="loginMsg" class="msg"></p></div></section>
+<section id="signupPage" class="page signup-page hidden"><div class="signup-card"><button id="backLoginBtn" class="back-btn">← العودة</button><div class="logo-circle small-logo">⚡</div><h1>إنشاء حساب جديد</h1><p class="muted center">سجّل بياناتك للبدء</p><label for="signupName">الاسم بالكامل</label><input id="signupName" placeholder="اكتب اسمك"><label for="signupPhone">رقم الهاتف</label><div class="input-wrap"><span class="phone-prefix">🇪🇬 +20</span><input id="signupPhone" class="phone-input" inputmode="numeric" maxlength="11" placeholder="01xxxxxxxxx"></div><label for="signupPassword">كلمة السر</label><input id="signupPassword" type="password" placeholder="6 أحرف أو أرقام على الأقل"><label for="signupPassword2">تأكيد كلمة السر</label><input id="signupPassword2" type="password" placeholder="أعد كتابة كلمة السر"><button id="createAccountBtn" class="primary">إنشاء الحساب</button><p id="signupMsg" class="msg"></p></div></section>
+<section id="homePage" class="page hidden">
+<div class="hero"><div><span class="eyebrow">منصة الخدمات الرقمية</span><h1>مرحباً <span id="welcomeName">بك</span> 👋</h1><p>أنجز خدماتك وتابع طلباتك من مكان واحد.</p></div><div class="avatar">👤</div></div>
+<div class="quick-search"><span>🔎</span><input id="serviceSearch" placeholder="ابحث عن خدمة..."><kbd>بحث</kbd></div>
+<div class="section-head"><h2>الخدمات الرئيسية</h2><button id="allServicesBtn" class="link-btn">عرض الكل</button></div>
+<div class="services" id="servicesGrid">
+<button class="service" data-title="الاستعلامات"><span class="service-icon">🔎</span><b>الاستعلامات</b><small>استعلم عن حالة خدماتك</small></button>
+<button class="service" data-title="المدفوعات"><span class="service-icon">💳</span><b>المدفوعات</b><small>فواتير ومدفوعات إلكترونية</small></button>
+<button class="service" data-title="الطلبات"><span class="service-icon">📋</span><b>الطلبات</b><small>أنشئ وتابع طلباتك</small></button>
+<button class="service" data-title="الخدمات الحكومية"><span class="service-icon">🏛️</span><b>خدمات حكومية</b><small>الوصول للخدمات المتاحة</small></button>
+<button class="service" data-title="الشكاوى"><span class="service-icon">📝</span><b>الشكاوى</b><small>قدّم شكوى وتابع الرد</small></button>
+<button class="service" data-title="المساعدة"><span class="service-icon">💬</span><b>المساعدة والدعم</b><small>نحن هنا لمساعدتك</small></button>
+</div>
+<div class="stats"><div class="stat"><span>📋</span><div><strong id="requestsCount">0</strong><small>طلباتك</small></div></div><div class="stat"><span>🔔</span><div><strong id="notificationsCount">2</strong><small>إشعارات</small></div></div><div class="stat"><span>✓</span><div><strong>نشط</strong><small>حالة الحساب</small></div></div></div>
+<div class="panel"><div class="section-head"><h2>آخر التحديثات</h2><button id="clearNotices" class="link-btn">تمت القراءة</button></div><div class="notice"><span>🔔</span><div><b>مرحباً بك في خدماتي</b><p>يمكنك الآن استكشاف الخدمات من لوحة التحكم.</p></div></div><div class="notice"><span>✅</span><div><b>حسابك جاهز</b><p>ابدأ باستخدام خدماتك الرقمية بسهولة.</p></div></div></div>
+<div class="bottom-help"><span>💡</span><div><b>تحتاج مساعدة؟</b><p>اختَر «المساعدة والدعم» وسنرشدك للخطوة التالية.</p></div></div>
+</section></main><div id="toast" class="toast"></div><script src="app.js"></script></body></html>
