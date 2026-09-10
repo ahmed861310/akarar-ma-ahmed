@@ -12,7 +12,20 @@ $('createAccountBtn').onclick=()=>{const n=$('signupName').value.trim(),p=$('sig
 $('forgotBtn').onclick=()=>setMsg('loginMsg','استعادة كلمة السر ستحتاج لاحقاً إلى ربط الحساب برسالة SMS.');
 $('togglePass').onclick=()=>{const f=$('password'),s=f.type==='text';f.type=s?'password':'text';$('togglePass').textContent=s?'◉':'◎'};
 function toast(t){$('toast').textContent=t;$('toast').classList.add('show');setTimeout(()=>$('toast').classList.remove('show'),2200)}
-document.querySelectorAll('.service').forEach(b=>b.onclick=()=>toast(`قسم «${b.dataset.title}» جاهز للربط بالبيانات الحقيقية.`));
+const serviceInfo={
+'الاستعلامات':['🔎','الاستعلامات','استعلم عن حالة طلب أو معاملة وسجّل التفاصيل التي تريد متابعتها.'],
+'المدفوعات':['💳','المدفوعات','سجّل طلب مساعدة بخصوص فاتورة أو دفعة إلكترونية.'],
+'الطلبات':['📋','الطلبات','أنشئ طلب خدمة جديد وأرسل تفاصيله من داخل حسابك.'],
+'الخدمات الحكومية':['🏛️','الخدمات الحكومية','واجهة موحدة لاستقبال طلبات الخدمات الحكومية المتاحة لاحقاً عبر API.'],
+'الشكاوى':['📝','الشكاوى','قدّم شكوى مع وصف المشكلة ليتم تسجيلها ومتابعتها.'],
+'المساعدة':['💬','المساعدة والدعم','أرسل استفسارك أو المشكلة التي تواجهها وسجّلها كطلب دعم.']};
+let selectedService='';
+function openService(title){const d=serviceInfo[title]||['📋',title,'الخدمة متاحة للتجربة.'];selectedService=title;$('modalIcon').textContent=d[0];$('modalTitle').textContent=d[1];$('modalDesc').textContent=d[2];$('requestNote').value='';setMsg('requestMsg','');$('serviceModal').classList.remove('hidden');$('serviceModal').setAttribute('aria-hidden','false');$('requestNote').focus()}
+function closeService(){ $('serviceModal').classList.add('hidden');$('serviceModal').setAttribute('aria-hidden','true')}
+document.querySelectorAll('.service').forEach(b=>b.onclick=()=>openService(b.dataset.title));
+$('closeModal').onclick=closeService;
+$('serviceModal').addEventListener('click',e=>{if(e.target.id==='serviceModal')closeService()});
+$('submitRequest').onclick=()=>{const u=getUser(),note=$('requestNote').value.trim();if(!note)return setMsg('requestMsg','اكتب تفاصيل الطلب أولاً.');u.requests=(u.requests||0)+1;u.lastRequest={service:selectedService,note,createdAt:new Date().toISOString()};localStorage.setItem('khadamatiUser',JSON.stringify(u));$('requestsCount').textContent=u.requests;setMsg('requestMsg','تم تسجيل الطلب بنجاح ✅',true);toast('تم إرسال طلبك بنجاح');setTimeout(closeService,700)};
 $('serviceSearch').oninput=e=>{const q=e.target.value.trim();document.querySelectorAll('.service').forEach(b=>b.classList.toggle('hidden',q&&!b.innerText.includes(q)))};
 $('allServicesBtn').onclick=()=>{$('serviceSearch').value='';document.querySelectorAll('.service').forEach(b=>b.classList.remove('hidden'));toast('تم عرض جميع الخدمات')};
 $('clearNotices').onclick=()=>{ $('notificationsCount').textContent='0';$('notifDot').style.display='none';toast('تم وضع الإشعارات كمقروءة ✓')};$('notifyBtn').onclick=()=>toast('لديك 2 إشعار جديد');
