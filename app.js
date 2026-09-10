@@ -9,8 +9,14 @@ function validPhone(v){return /^01\d{9}$/.test(v)}
 function users(){try{return JSON.parse(localStorage.getItem("khadamati_users")||"[]")}catch{return[]}}
 function saveUsers(v){localStorage.setItem("khadamati_users",JSON.stringify(v))}
 function show(view){
-  ["loginView","signupView","forgotView","accountView"].forEach(id=>$(id).classList.add("hidden"));
-  $(view).classList.remove("hidden");
+  ["loginView","signupView","forgotView","accountView"].forEach(id=>{
+    const el=$(id);
+    el.classList.add("hidden");
+    el.hidden=true;
+  });
+  const active=$(view);
+  active.classList.remove("hidden");
+  active.hidden=false;
   window.scrollTo({top:0,behavior:"smooth"});
 }
 function currentUser(){
