@@ -200,4 +200,51 @@ document.addEventListener('click',e=>{const b=e.target.closest('.ex-file');if(!b
 <button data-v7-nav="messages"><span>💬</span><b>الرسائل</b></button>
 <button data-v7-nav="accountPage"><span>👤</span><b>حسابي</b></button>
 </nav>
+
+<style>
+/* V7.1 — 3-step premium request flow */
+.k71-overlay{position:fixed;inset:0;background:rgba(8,25,32,.62);backdrop-filter:blur(7px);z-index:9999;display:flex;align-items:center;justify-content:center;padding:16px}
+.k71-overlay.hidden{display:none}.k71-box{width:min(560px,100%);max-height:92vh;overflow:auto;background:var(--card,#fff);border:1px solid rgba(0,0,0,.08);border-radius:24px;box-shadow:0 24px 80px rgba(0,0,0,.28);padding:22px;direction:rtl}.k71-head{display:flex;align-items:center;justify-content:space-between;gap:12px}.k71-close{border:0;background:transparent;font-size:28px;cursor:pointer}.k71-brand{font-weight:900;font-size:13px;opacity:.7}.k71-title{margin:4px 0;font-size:25px}.k71-sub{margin:0 0 18px;color:#6b7280}.k71-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 20px}.k71-step{padding:10px 8px;border-radius:14px;background:#f1f5f6;text-align:center;font-size:12px;font-weight:800}.k71-step.active{background:#0f766e;color:white}.k71-step.done{background:#dff7f2;color:#0f766e}.k71-screen{display:none}.k71-screen.active{display:block}.k71-service{display:flex;align-items:center;gap:12px;padding:15px;border:1px solid #e5e7eb;border-radius:16px;background:#fafafa;margin-bottom:14px}.k71-icon{font-size:30px}.k71-service b{display:block;font-size:17px}.k71-service small{color:#6b7280}.k71-field{margin:14px 0}.k71-field label{display:block;font-weight:800;margin-bottom:7px}.k71-field textarea,.k71-field input,.k71-field select{width:100%;box-sizing:border-box;border:1px solid #d7dee0;border-radius:14px;padding:13px;font:inherit;background:white}.k71-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.k71-check{display:flex;gap:10px;align-items:flex-start;background:#f8fafb;border-radius:14px;padding:13px;margin-top:12px}.k71-check input{margin-top:5px}.k71-summary{border:1px solid #e5e7eb;border-radius:16px;padding:15px;background:#fafafa}.k71-row{display:flex;justify-content:space-between;gap:15px;padding:9px 0;border-bottom:1px dashed #dfe5e6}.k71-row:last-child{border-bottom:0}.k71-actions{display:flex;gap:10px;margin-top:18px}.k71-actions button{flex:1}.k71-note{font-size:12px;color:#6b7280;margin-top:12px}.k71-progress{height:6px;background:#e5e7eb;border-radius:99px;overflow:hidden;margin:10px 0 0}.k71-progress i{display:block;height:100%;width:33%;background:#0f766e;border-radius:99px;transition:.2s}
+@media(max-width:520px){.k71-box{padding:17px;border-radius:20px}.k71-title{font-size:22px}.k71-grid{grid-template-columns:1fr}.k71-actions{flex-direction:column-reverse}}
+</style>
+<div id="k71RequestFlow" class="k71-overlay hidden" aria-hidden="true">
+ <div class="k71-box" role="dialog" aria-modal="true" aria-labelledby="k71Title">
+  <div class="k71-head"><div><div class="k71-brand">خدماتي · طلب خدمة</div><h2 id="k71Title" class="k71-title">خلّي طلبك واضح من البداية</h2></div><button class="k71-close" id="k71Close" aria-label="إغلاق">×</button></div>
+  <p class="k71-sub" id="k71Hint">3 خطوات بسيطة، وبعدها يتسجل الطلب مباشرة.</p>
+  <div class="k71-steps"><div class="k71-step active" data-k71-step="1">1 · الخدمة</div><div class="k71-step" data-k71-step="2">2 · التفاصيل</div><div class="k71-step" data-k71-step="3">3 · المراجعة</div></div>
+  <div class="k71-progress"><i id="k71Progress"></i></div>
+  <section class="k71-screen active" data-k71-screen="1"><div class="k71-service"><span id="k71Icon" class="k71-icon">⚡</span><div><b id="k71Service">الخدمة</b><small>سنستخدم اختيارك لإنشاء طلب جديد.</small></div></div><div class="k71-field"><label>هل تحتاج مقدم خدمة محدد؟</label><select id="k71Provider"><option value="">لا، اختَر لي لاحقًا</option><option value="smart">أريد أفضل مقدم خدمة متاح</option></select></div><div class="k71-actions"><button class="primary" id="k71Next1">التالي</button></div></section>
+  <section class="k71-screen" data-k71-screen="2"><div class="k71-field"><label for="k71Details">ماذا تريد بالضبط؟</label><textarea id="k71Details" rows="6" maxlength="1500" placeholder="مثال: أحتاج تصميم لوجو احترافي، وأريد 3 أفكار مبدئية..."></textarea></div><div class="k71-grid"><div class="k71-field"><label for="k71Budget">الميزانية المتوقعة (جنيه)</label><input id="k71Budget" type="number" min="0" inputmode="decimal" placeholder="مثال: 500"></div><div class="k71-field"><label for="k71Deadline">متى تحتاجها؟</label><select id="k71Deadline"><option value="مرن">مرن</option><option value="1 يوم">خلال يوم</option><option value="3 أيام">خلال 3 أيام</option><option value="7 أيام">خلال أسبوع</option><option value="14 يوم">خلال أسبوعين</option></select></div></div><div class="k71-actions"><button class="secondary" id="k71Back2">رجوع</button><button class="primary" id="k71Next2">التالي</button></div></section>
+  <section class="k71-screen" data-k71-screen="3"><div class="k71-summary"><div class="k71-row"><span>الخدمة</span><b id="k71SumService">—</b></div><div class="k71-row"><span>الميزانية</span><b id="k71SumBudget">غير محددة</b></div><div class="k71-row"><span>المدة</span><b id="k71SumDeadline">مرن</b></div><div style="padding-top:12px"><strong>التفاصيل</strong><p id="k71SumDetails" class="k71-note"></p></div></div><label class="k71-check"><input type="checkbox" id="k71Confirm"><span>راجعت البيانات وأريد إرسال الطلب إلى خدماتي.</span></label><div class="k71-actions"><button class="secondary" id="k71Back3">تعديل</button><button class="primary" id="k71Submit">🚀 إرسال الطلب</button></div><p class="k71-note">بعد الإرسال يمكنك متابعة الحالة والتواصل والدفع الآمن من «طلباتي».</p></section>
+ </div>
+</div>
+<script>
+/* V7.1 request-flow enhancer: preserves the existing backend by handing final data to the original request form. */
+(function(){
+ let step=1, target=null;
+ const $7=id=>document.getElementById(id);
+ function open(targetBtn){
+   target=targetBtn; step=1;
+   const title=targetBtn?.dataset?.title||targetBtn?.querySelector('b')?.textContent||'الخدمة';
+   const icon=targetBtn?.querySelector('.service-icon')?.textContent||'⚡';
+   $7('k71Service').textContent=title;$7('k71SumService').textContent=title;$7('k71Icon').textContent=icon;
+   $7('k71Details').value='';$7('k71Budget').value='';$7('k71Deadline').value='مرن';$7('k71Confirm').checked=false;
+   showStep();$7('k71RequestFlow').classList.remove('hidden');$7('k71RequestFlow').setAttribute('aria-hidden','false');setTimeout(()=> $7('k71Details').focus(),80);
+ }
+ function close(){$7('k71RequestFlow').classList.add('hidden');$7('k71RequestFlow').setAttribute('aria-hidden','true');target=null}
+ function showStep(){document.querySelectorAll('[data-k71-screen]').forEach(x=>x.classList.toggle('active',Number(x.dataset.k71Screen)===step));document.querySelectorAll('[data-k71-step]').forEach(x=>{const n=Number(x.dataset.k71Step);x.classList.toggle('active',n===step);x.classList.toggle('done',n<step)});$7('k71Progress').style.width=(step===1?'33%':step===2?'66%':'100%');$7('k71Hint').textContent=step===1?'اختار نوع التجربة التي تناسبك.':step===2?'كلما كانت التفاصيل أوضح، كان تنفيذ الطلب أسرع.':'راجع بياناتك مرة أخيرة قبل الإرسال.'}
+ function next1(){step=2;showStep();$7('k71Details').focus()}
+ function next2(){const d=$7('k71Details').value.trim();if(d.length<8){$7('k71Details').focus();return window.alert('اكتب تفاصيل الطلب بشكل أوضح (8 أحرف على الأقل).')}const b=Number($7('k71Budget').value||0);$7('k71SumBudget').textContent=b>0?b+' جنيه':'غير محددة';$7('k71SumDeadline').textContent=$7('k71Deadline').value;$7('k71SumDetails').textContent=d;step=3;showStep()}
+ function submit(){if(!$7('k71Confirm').checked)return window.alert('أكد أنك راجعت البيانات أولاً.');if(!target)return close();
+   const details=$7('k71Details').value.trim();const budget=Number($7('k71Budget').value||0);const deadline=$7('k71Deadline').value;
+   const enriched=details+(budget?`\n\nالميزانية المتوقعة: ${budget} جنيه`:'')+(deadline&&deadline!=='مرن'?`\nالمدة المطلوبة: ${deadline}`:'');
+   close(); target.click();
+   setTimeout(()=>{const note=document.getElementById('requestNote');const btn=document.getElementById('submitRequest');if(note&&btn){note.value=enriched;btn.click()}},180);
+ }
+ document.addEventListener('click',e=>{const b=e.target.closest('.service[data-title]');if(!b)return;if(b.dataset.title==='الطلبات')return;e.preventDefault();e.stopImmediatePropagation();open(b)},true);
+ $7('k71Close').onclick=close;$7('k71RequestFlow').addEventListener('click',e=>{if(e.target.id==='k71RequestFlow')close()});$7('k71Next1').onclick=next1;$7('k71Back2').onclick=()=>{step=1;showStep()};$7('k71Next2').onclick=next2;$7('k71Back3').onclick=()=>{step=2;showStep()};$7('k71Submit').onclick=submit;
+ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$7('k71RequestFlow').classList.contains('hidden'))close()});
+})();
+</script>
+
 </body></html>
