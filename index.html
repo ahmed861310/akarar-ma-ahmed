@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#0757c9"><title>خدماتي | منصة الخدمات</title>
-<link rel="stylesheet" href="style.css?v=3.0">
+<link rel="stylesheet" href="style.css?v=3.2">
 </head>
 <body>
 <header class="topbar"><div class="brand"><span class="brand-mark">⚡</span> خدماتي</div><div class="top-actions"><button id="walletTopBtn" class="icon-btn" aria-label="المحفظة">💰</button><button id="notifyBtn" class="icon-btn" aria-label="الإشعارات">🔔<i id="notifDot"></i></button><button id="logoutTop" class="ghost hidden">خروج</button></div></header>
@@ -31,11 +31,20 @@
 <div class="bottom-help"><span>💡</span><div><b>تحتاج مساعدة؟</b><p>اختَر «المساعدة والدعم» وسنرشدك للخطوة التالية.</p></div></div>
 </section>
 <section id="adminPage" class="page hidden">
-  <div class="admin-head"><div><span class="eyebrow dark-eyebrow">الإدارة</span><h1>لوحة تحكم خدماتي</h1><p class="muted">إدارة الطلبات والمستخدمين ومتابعة حالة كل طلب.</p></div><button id="adminBackBtn" class="back-btn">← الرئيسية</button></div>
-  <div class="admin-stats"><div class="admin-stat"><span>📋</span><div><strong id="adminTotalRequests">0</strong><small>كل الطلبات</small></div></div><div class="admin-stat"><span>⏳</span><div><strong id="adminPending">0</strong><small>قيد المراجعة</small></div></div><div class="admin-stat"><span>👥</span><div><strong id="adminUsers">0</strong><small>المستخدمون</small></div></div><div class="admin-stat"><span>✅</span><div><strong id="adminDone">0</strong><small>تم التنفيذ</small></div></div></div>
-  <div class="admin-toolbar"><div class="admin-tabs"><button class="admin-tab active" data-tab="requests">الطلبات</button><button class="admin-tab" data-tab="users">المستخدمون</button></div><input id="adminSearch" placeholder="ابحث برقم الطلب أو اسم المستخدم أو الخدمة..."></div>
-  <div id="adminRequestsPanel" class="admin-panel"><div id="adminRequestsList"></div></div>
+  <div class="admin-head"><div><span class="eyebrow dark-eyebrow">مركز التحكم</span><h1>لوحة تحكم خدماتي</h1><p class="muted">إدارة المنصة بالكامل: الطلبات، المستخدمون، مقدمو الخدمات، والأموال.</p></div><button id="adminBackBtn" class="back-btn">← الرئيسية</button></div>
+  <div class="admin-stats">
+    <div class="admin-stat"><span>📋</span><div><strong id="adminTotalRequests">0</strong><small>كل الطلبات</small></div></div>
+    <div class="admin-stat"><span>⏳</span><div><strong id="adminPending">0</strong><small>قيد المراجعة</small></div></div>
+    <div class="admin-stat"><span>👥</span><div><strong id="adminUsers">0</strong><small>المستخدمون</small></div></div>
+    <div class="admin-stat"><span>💰</span><div><strong id="adminRevenue">0</strong><small>عمولات خدماتي</small></div></div>
+  </div>
+  <div class="admin-finance-strip"><div><span>🔐</span><div><b id="adminHeld">0 جنيه</b><small>أموال محجوزة</small></div></div><div><span>📈</span><div><b id="adminReleased">0 جنيه</b><small>أموال محررة</small></div></div><div><span>↩️</span><div><b id="adminRefunded">0 جنيه</b><small>مبالغ مستردة</small></div></div><div><span>🏦</span><div><b id="adminWithdrawals">0</b><small>طلبات سحب</small></div></div></div>
+  <div class="admin-toolbar"><div class="admin-tabs"><button class="admin-tab active" data-tab="overview">نظرة عامة</button><button class="admin-tab" data-tab="requests">الطلبات</button><button class="admin-tab" data-tab="users">المستخدمون</button><button class="admin-tab" data-tab="providers">مقدمو الخدمات</button><button class="admin-tab" data-tab="finance">الماليات</button></div><input id="adminSearch" placeholder="ابحث في القسم الحالي..."></div>
+  <div id="adminOverviewPanel" class="admin-panel"><div class="admin-overview-grid"><div class="panel"><h2>آخر الطلبات</h2><div id="adminRecentRequests"></div></div><div class="panel"><h2>أهم مقدمي الخدمات</h2><div id="adminTopProviders"></div></div></div></div>
+  <div id="adminRequestsPanel" class="admin-panel hidden"><div id="adminRequestsList"></div></div>
   <div id="adminUsersPanel" class="admin-panel hidden"><div id="adminUsersList"></div></div>
+  <div id="adminProvidersPanel" class="admin-panel hidden"><div id="adminProvidersList"></div></div>
+  <div id="adminFinancePanel" class="admin-panel hidden"><div id="adminFinanceList"></div></div>
 </section>
 <section id="providersPage" class="page hidden">
   <div class="providers-head"><button id="providersBackBtn" class="back-btn">← الرئيسية</button><div><span class="eyebrow dark-eyebrow">سوق خدماتي</span><h1>مقدمو الخدمات</h1><p class="muted">اختر مقدم الخدمة المناسب وأرسل له طلبك مباشرة.</p></div><button id="becomeProviderBtn" class="secondary provider-cta">أضف خدمتك</button></div>

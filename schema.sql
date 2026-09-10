@@ -219,3 +219,19 @@ end; $$;
 grant execute on function public.refund_request_payment(bigint) to authenticated;
 
 -- للشحن الحقيقي: لا تُضاف أموال حقيقية من الواجهة. يتم ربط بوابة دفع ثم استدعاء خادم آمن.
+
+-- V3.2: لوحة إدارة متقدمة
+DROP POLICY IF EXISTS "withdraw admin update" ON public.withdrawal_requests;
+CREATE POLICY "withdraw admin update" ON public.withdrawal_requests
+FOR UPDATE USING (public.is_admin()) WITH CHECK (public.is_admin());
+
+DROP POLICY IF EXISTS "withdraw admin read" ON public.withdrawal_requests;
+CREATE POLICY "withdraw admin read" ON public.withdrawal_requests
+FOR SELECT USING (user_id = auth.uid() OR public.is_admin());
+
+-- السماح للإدارة بقراءة العمليات المالية فقط؛ المستخدم يقرأ عملياته هو.
+DROP POLICY IF EXISTS "wallet tx own read" ON public.wallet_transactions;
+CREATE POLICY "wallet tx own read" ON public.wallet_transactions
+FOR SELECT USING (user_id = auth.uid() OR public.is_admin());
+
+-- الإدارة فقط تستطيع تحديث حالة طلب السحب. التحويل المالي الحقيقي يجب تنفيذه عبر خادم آمن/بوابة دفع.
