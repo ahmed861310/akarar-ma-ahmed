@@ -59,6 +59,10 @@
   <div class="requests-head"><button id="backHomeBtn" class="back-btn">← الرئيسية</button><div><span class="eyebrow dark-eyebrow">حسابك</span><h1>طلباتي</h1><p class="muted">تابع كل الطلبات التي أرسلتها وحالتها الحالية.</p></div><div class="request-total"><strong id="requestsPageCount">0</strong><small>إجمالي الطلبات</small></div></div>
   <div id="requestsList" class="requests-list"></div>
 </section>
+<section id="chatPage" class="page hidden">
+  <div class="chat-head"><button id="chatBackBtn" class="back-btn">← الطلب</button><div><span class="eyebrow dark-eyebrow">محادثة الطلب</span><h1 id="chatTitle">محادثة</h1><p id="chatSubtitle" class="muted">تواصل مع مقدم الخدمة حول تفاصيل الطلب.</p></div><span class="chat-live">● مباشر</span></div>
+  <div class="chat-shell"><div id="chatMessages" class="chat-messages"></div><div class="chat-compose"><textarea id="chatInput" rows="2" maxlength="1000" placeholder="اكتب رسالتك..."></textarea><button id="sendChatBtn" class="primary">إرسال ↗</button></div><p id="chatMsg" class="msg"></p></div>
+</section>
 <section id="walletPage" class="page hidden">
   <div class="wallet-head"><button id="walletBackBtn" class="back-btn">← الرئيسية</button><div><span class="eyebrow dark-eyebrow">الماليات</span><h1>محفظة خدماتي</h1><p class="muted">تابع رصيدك وحركة الأموال داخل المنصة.</p></div></div>
   <div class="wallet-hero"><div><span>الرصيد المتاح</span><strong id="walletPageBalance">0 جنيه</strong><small>الوساطة تحجز المبلغ حتى اكتمال الخدمة؛ لا يتم تحويله لمقدم الخدمة إلا بعد تأكيد الاستلام. الوضع التجريبي لا يخصم أموالاً حقيقية.</small></div><button id="addBalanceBtn" class="primary">شحن تجريبي</button></div>
