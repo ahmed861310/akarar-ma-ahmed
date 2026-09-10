@@ -692,3 +692,43 @@ create or replace function public.admin_adjust_trust_risk(p_provider_id bigint,p
 returns boolean language plpgsql security definer set search_path=public
 as $$ begin if not public.is_admin() then raise exception 'admin only'; end if; if p_delta not between -25 and 25 then raise exception 'invalid delta'; end if; insert into public.provider_risk_events(provider_id,admin_id,points,reason) values(p_provider_id,auth.uid(),p_delta,'تعديل إداري لدرجة المخاطر'); return true; end; $$;
 revoke all on function public.admin_adjust_trust_risk(bigint,integer) from public, anon, authenticated; grant execute on function public.admin_adjust_trust_risk(bigint,integer) to authenticated;
+
+-- V6.0: محرك المخاطر الذكي (Rule-based Risk Engine)
+-- لا يعتمد على نموذج ذكاء اصطناعي خارجي؛ القواعد قابلة للمراجعة ويمكن تطويرها لاحقًا.
+create or replace function public.admin_risk_alerts()
+returns table(
+  provider_id bigint,
+  name text,
+  active boolean,
+  verified boolean,
+  score integer,
+  avg_rating numeric,
+  review_count bigint,
+  open_reports bigint,
+  open_disputes bigint
+)
+language sql stable security definer set search_path=public
+as $$
+with ratings as (
+  select provider_id, avg(rating)::numeric as avg_rating, count(*)::bigint as review_count
+  from public.provider_ratings group by provider_id
+), reports as (
+  select provider_id, count(*)::bigint as open_reports from public.reports
+  where provider_id is not null and status in ('open','investigating') group by provider_id
+), disputes as (
+  select provider_id, count(*)::bigint as open_disputes from public.disputes
+  where provider_id is not null and status in ('open','investigating') group by provider_id
+), trust as (
+  select p.id, (public.provider_trust_score(p.id)).score as score from public.providers p
+)
+select p.id,p.name,p.active,p.verified,coalesce(t.score,0),coalesce(r.avg_rating,0),coalesce(r.review_count,0),coalesce(x.open_reports,0),coalesce(d.open_disputes,0)
+from public.providers p
+left join ratings r on r.provider_id=p.id
+left join reports x on x.provider_id=p.id
+left join disputes d on d.provider_id=p.id
+left join trust t on t.id=p.id
+where public.is_admin()
+order by (coalesce(x.open_reports,0)*20 + coalesce(d.open_disputes,0)*18 + case when coalesce(t.score,0)<50 then 15 else 0 end) desc;
+$$;
+revoke all on function public.admin_risk_alerts() from public, anon, authenticated;
+grant execute on function public.admin_risk_alerts() to authenticated;

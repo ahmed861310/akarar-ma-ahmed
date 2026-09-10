@@ -6,7 +6,7 @@
 <meta name="description" content="خدماتي منصة عربية لطلب الخدمات، اكتشاف مقدمي الخدمات ومتابعة الطلبات بأمان.">
 <meta property="og:title" content="خدماتي | منصة الخدمات الرقمية">
 <meta property="og:description" content="اكتشف الخدمات ومقدمي الخدمات واطلب خدمتك بسهولة."><meta property="og:type" content="website"><meta name="robots" content="index,follow">
-<link rel="stylesheet" href="style.css?v=5.5">
+<link rel="stylesheet" href="style.css?v=6.0">
 </head>
 <body>
 <div id="installBanner" class="install-banner hidden"><div><b>📱 ثبّت خدماتي</b><small>أضف المنصة إلى شاشة الموبايل لتفتحها كتطبيق.</small></div><button id="installAppBtn" class="primary small-primary">تثبيت</button><button id="dismissInstallBtn" class="ghost">×</button></div><header class="topbar"><div class="brand"><span class="brand-mark">⚡</span> خدماتي</div><div class="top-actions"><button id="walletTopBtn" class="icon-btn" aria-label="المحفظة">💰</button><button id="notifyBtn" class="icon-btn" aria-label="الإشعارات">🔔<i id="notifDot"></i><b id="notifBadge" class="notif-badge hidden">0</b></button><button id="logoutTop" class="ghost hidden">خروج</button></div></header>
@@ -49,12 +49,12 @@
     <div class="admin-stat"><span>💰</span><div><strong id="adminRevenue">0</strong><small>عمولات خدماتي</small></div></div>
   </div>
   <div class="admin-finance-strip"><div><span>🔐</span><div><b id="adminHeld">0 جنيه</b><small>أموال محجوزة</small></div></div><div><span>📈</span><div><b id="adminReleased">0 جنيه</b><small>أموال محررة</small></div></div><div><span>↩️</span><div><b id="adminRefunded">0 جنيه</b><small>مبالغ مستردة</small></div></div><div><span>🏦</span><div><b id="adminWithdrawals">0</b><small>طلبات سحب</small></div></div></div>
-  <div class="admin-toolbar"><div class="admin-tabs"><button class="admin-tab active" data-tab="overview">نظرة عامة</button><button class="admin-tab" data-tab="requests">الطلبات</button><button class="admin-tab" data-tab="users">المستخدمون</button><button class="admin-tab" data-tab="providers">مقدمو الخدمات</button><button class="admin-tab" data-tab="finance">الماليات</button><button class="admin-tab" data-tab="verification">التوثيق</button><button class="admin-tab" data-tab="safety">🛡️ الأمان</button><button class="admin-tab" data-tab="trust">🏆 الثقة</button></div><input id="adminSearch" placeholder="ابحث في القسم الحالي..."></div>
+  <div class="admin-toolbar"><div class="admin-tabs"><button class="admin-tab active" data-tab="overview">نظرة عامة</button><button class="admin-tab" data-tab="requests">الطلبات</button><button class="admin-tab" data-tab="users">المستخدمون</button><button class="admin-tab" data-tab="providers">مقدمو الخدمات</button><button class="admin-tab" data-tab="finance">الماليات</button><button class="admin-tab" data-tab="verification">التوثيق</button><button class="admin-tab" data-tab="safety">🛡️ الأمان</button><button class="admin-tab" data-tab="trust">🏆 الثقة</button><button class="admin-tab" data-tab="risk">🚨 المخاطر الذكية</button></div><input id="adminSearch" placeholder="ابحث في القسم الحالي..."></div>
   <div id="adminOverviewPanel" class="admin-panel"><div id="adminGrowthSummary" class="growth-summary"></div><div class="admin-overview-grid"><div class="panel"><h2>آخر الطلبات</h2><div id="adminRecentRequests"></div></div><div class="panel"><h2>أهم مقدمي الخدمات</h2><div id="adminTopProviders"></div></div></div></div>
   <div id="adminRequestsPanel" class="admin-panel hidden"><div id="adminRequestsList"></div></div>
   <div id="adminUsersPanel" class="admin-panel hidden"><div id="adminUsersList"></div></div>
   <div id="adminProvidersPanel" class="admin-panel hidden"><div id="adminProvidersList"></div></div>
-  <div id="adminFinancePanel" class="admin-panel hidden"><div id="adminFinanceList"></div></div><div id="adminVerificationPanel" class="admin-panel hidden"><div id="adminVerificationList"></div></div><div id="adminSafetyPanel" class="admin-panel hidden"><div id="adminSafetyList"></div></div><div id="adminTrustPanel" class="admin-panel hidden"><div class="panel"><h2>🏆 مركز الثقة الذكي</h2><p class="muted">درجة الثقة تعتمد على التقييمات، الإنجازات، التوثيق، وإشارات المخاطر.</p><div id="adminTrustList"></div></div></div>
+  <div id="adminFinancePanel" class="admin-panel hidden"><div id="adminFinanceList"></div></div><div id="adminVerificationPanel" class="admin-panel hidden"><div id="adminVerificationList"></div></div><div id="adminSafetyPanel" class="admin-panel hidden"><div id="adminSafetyList"></div></div><div id="adminTrustPanel" class="admin-panel hidden"><div class="panel"><h2>🏆 مركز الثقة الذكي</h2><p class="muted">درجة الثقة تعتمد على التقييمات، الإنجازات، التوثيق، وإشارات المخاطر.</p><div id="adminTrustList"></div></div></div><div id="adminRiskPanel" class="admin-panel hidden"><div class="risk-hero"><div><span class="eyebrow dark-eyebrow">🚨 محرك الأمان</span><h2>المخاطر الذكية</h2><p class="muted">تحليل قائم على قواعد واضحة لاكتشاف الأنماط غير الطبيعية مبكرًا.</p></div><div class="risk-hero-score"><strong id="riskAlertsCount">0</strong><small>تنبيهات تحتاج مراجعة</small></div></div><div class="risk-summary" id="riskSummary"></div><div id="adminRiskList"></div></div>
 </section>
 <section id="providersPage" class="page hidden">
   <div class="providers-head"><button id="providersBackBtn" class="back-btn">← الرئيسية</button><div><span class="eyebrow dark-eyebrow">سوق خدماتي</span><h1>مقدمو الخدمات</h1><p class="muted">اختر مقدم الخدمة المناسب وأرسل له طلبك مباشرة.</p></div><button id="becomeProviderBtn" class="secondary provider-cta">أضف خدمتك</button></div>
@@ -108,4 +108,39 @@ function render(){const box=document.getElementById('plansGrid');if(!box)return;
 window.showBusiness=function(){if(typeof show==='function')show('businessPage');render()};
 document.addEventListener('DOMContentLoaded',()=>{document.getElementById('businessBtn')?.addEventListener('click',showBusiness);document.getElementById('businessBackBtn')?.addEventListener('click',()=>typeof showHome==='function'&&showHome());document.getElementById('cancelPlanBtn')?.addEventListener('click',()=>{localStorage.removeItem('khadamati_subscription');updateSub();if(typeof toast==='function')toast('تم إلغاء الباقة التجريبية')})});
 })();
-</script></body></html>
+</script>
+<script>
+(function(){
+  const riskRules=[
+    {key:'many_reports',label:'بلاغات متعددة',points:20,desc:'وجود أكثر من بلاغ مفتوح مرتبط بمقدم الخدمة.'},
+    {key:'low_trust',label:'ثقة منخفضة',points:15,desc:'درجة الثقة أقل من 50%.'},
+    {key:'unverified_active',label:'نشاط بلا توثيق',points:8,desc:'مقدم خدمة نشط بدون توثيق.'},
+    {key:'low_rating',label:'تقييم منخفض',points:12,desc:'متوسط التقييم أقل من 3 نجوم مع وجود تقييمات.'},
+    {key:'disputes',label:'نزاعات متكررة',points:18,desc:'وجود نزاعين أو أكثر مفتوحين.'}
+  ];
+  function riskScore(p){let score=0,signals=[];const trust=Number(p.score||0);const reports=Number(p.open_reports||0), disputes=Number(p.open_disputes||0), rating=Number(p.avg_rating||0), reviews=Number(p.review_count||0);
+    if(reports>=2){score+=20;signals.push(riskRules[0])} else if(reports===1){score+=8;signals.push({...riskRules[0],points:8,desc:'يوجد بلاغ مفتوح واحد.'})}
+    if(trust<50){score+=15;signals.push(riskRules[1])} else if(trust<65){score+=7;signals.push({...riskRules[1],points:7,desc:'درجة الثقة أقل من 65%.'})}
+    if(p.active!==false&&!p.verified){score+=8;signals.push(riskRules[2])}
+    if(reviews>0&&rating<3){score+=12;signals.push(riskRules[3])}
+    if(disputes>=2){score+=18;signals.push(riskRules[4])} else if(disputes===1){score+=7;signals.push({...riskRules[4],points:7,desc:'يوجد نزاع مفتوح واحد.'})}
+    return {score:Math.min(100,score),signals};}
+  function riskLevel(s){return s>=50?'مرتفع':s>=25?'متوسط':'منخفض'}
+  function demoRisk(){try{const ps=typeof demoProviders==='function'?demoProviders():[];return ps.map(p=>{const t=typeof trustScore==='function'?trustScore(p):50;return {...p,score:t,open_reports:0,open_disputes:0,avg_rating:Number(p.avg_rating||0),review_count:Number(p.review_count||0)}})}catch{return []}}
+  async function loadRisk(){
+    if(typeof BACKEND_READY!=='undefined'&&BACKEND_READY){const {data,error}=await sb.rpc('admin_risk_alerts');if(error)throw error;return data||[]}
+    return demoRisk();
+  }
+  function renderRiskRows(rows){const list=$('adminRiskList');if(!list)return;const enriched=rows.map(p=>({...p,risk:riskScore(p)})).sort((a,b)=>b.risk.score-a.risk.score);const flagged=enriched.filter(x=>x.risk.score>=25);$('riskAlertsCount').textContent=flagged.length;
+    const high=enriched.filter(x=>x.risk.score>=50).length,med=enriched.filter(x=>x.risk.score>=25&&x.risk.score<50).length,low=enriched.length-high-med;
+    $('riskSummary').innerHTML=`<div><b>🔴 ${high}</b><small>مخاطر مرتفعة</small></div><div><b>🟠 ${med}</b><small>مخاطر متوسطة</small></div><div><b>🟢 ${low}</b><small>مخاطر منخفضة</small></div>`;
+    list.innerHTML=enriched.length?enriched.map(x=>{const s=x.risk.score,l=riskLevel(s);return `<article class="smart-risk-row ${s>=50?'risk-high':s>=25?'risk-medium':'risk-low'}"><div class="smart-risk-main"><div><b>🧑‍💼 ${escapeHtml(x.name||'مقدم خدمة')}</b><span class="risk-level">${l} · ${s}/100</span></div><small>الثقة ${Number(x.score||0)}% · بلاغات مفتوحة ${Number(x.open_reports||0)} · نزاعات ${Number(x.open_disputes||0)}</small><div class="risk-signals">${x.risk.signals.length?x.risk.signals.map(g=>`<span>⚠️ ${escapeHtml(g.label)} +${g.points}</span>`).join(''):'<span>✅ لا توجد إشارات خطر واضحة</span>'}</div></div><button class="secondary risk-review-btn" data-id="${escapeHtml(x.provider_id||x.id)}">فتح ملف المراجعة</button></article>`}).join(''):'<div class="empty-state"><div>🚨</div><h3>لا توجد بيانات للمخاطر</h3></div>';
+    list.querySelectorAll('.risk-review-btn').forEach(b=>b.onclick=()=>{if(typeof showProviderProfile==='function')showProviderProfile(b.dataset.id);else toast('افتح ملف مقدم الخدمة من سوق الخدمات')});
+  }
+  async function renderRisk(){try{renderRiskRows(await loadRisk())}catch(e){$('adminRiskList').innerHTML='<div class="empty-state"><h3>تعذر تشغيل محرك المخاطر</h3><p>تأكد من تطبيق schema.sql المحدث وصلاحيات الإدارة.</p></div>'}}
+  window.renderKhadamatiRisk=renderRisk;
+  const old=window.renderAdmin; if(old) window.renderAdmin=async function(){await old();const tab=document.querySelector('.admin-tab.active')?.dataset.tab;if(tab==='risk')await renderRisk()};
+  document.addEventListener('click',e=>{const t=e.target.closest('.admin-tab');if(t&&t.dataset.tab==='risk')setTimeout(renderRisk,50)});
+})();
+</script>
+</body></html>
