@@ -19,7 +19,7 @@ function openPublicService(slug){const x=publicServices[slug];if(!x)return;track
 function validPhone(p){return /^01[0-9]{9}$/.test(p)}
 function setMsg(id,t,ok=false){const e=$(id);if(!e)return;e.textContent=t;e.classList.toggle('success-msg',ok)}
 function toast(t){$('toast').textContent=t;$('toast').classList.add('show');setTimeout(()=>$('toast').classList.remove('show'),2200)}
-function show(page){['publicPage','loginPage','signupPage','homePage','providersPage','providerProfilePage','requestsPage','adminPage','walletPage','chatPage','servicePage'].forEach(id=>$(id)?.classList.add('hidden'));$(page)?.classList.remove('hidden');$('logoutTop')?.classList.toggle('hidden',!['homePage','requestsPage','adminPage'].includes(page))}
+function show(page){['publicPage','loginPage','signupPage','homePage','providersPage','providerProfilePage','requestsPage','adminPage','walletPage','chatPage','servicePage','businessPage'].forEach(id=>$(id)?.classList.add('hidden'));$(page)?.classList.remove('hidden');$('logoutTop')?.classList.toggle('hidden',!['homePage','requestsPage','adminPage'].includes(page))}
 function demoUser(){try{return JSON.parse(localStorage.getItem('khadamatiDemoUser')||'null')}catch{return null}}
 function saveDemoUser(u){localStorage.setItem('khadamatiDemoUser',JSON.stringify(u))}
 function clearDemo(){localStorage.removeItem('khadamatiDemoUser')}
