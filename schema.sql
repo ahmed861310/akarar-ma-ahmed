@@ -784,3 +784,34 @@ begin
 end; $$;
 revoke all on function public.accept_service_offer(bigint,bigint) from public,anon;
 grant execute on function public.accept_service_offer(bigint,bigint) to authenticated;
+
+-- V6.4: تحويل العرض المقبول إلى طلب خدمة فعلي وربطه بدورة الدفع/الوساطة
+alter table public.service_requests add column if not exists source_market_request_id bigint references public.market_requests(id) on delete set null;
+alter table public.service_requests add column if not exists agreed_deadline_days integer;
+alter table public.service_requests add column if not exists accepted_at timestamptz;
+
+create or replace function public.accept_service_offer(p_request_id bigint,p_offer_id bigint)
+returns bigint language plpgsql security definer set search_path=public as $$
+declare req public.market_requests; off public.service_offers; prov public.providers; new_id bigint; fee numeric; net numeric;
+begin
+ select * into req from public.market_requests where id=p_request_id and user_id=auth.uid() and status='open' for update;
+ if not found then raise exception 'not_allowed'; end if;
+ select * into off from public.service_offers where id=p_offer_id and request_id=p_request_id and status='pending' for update;
+ if not found then raise exception 'offer_not_found'; end if;
+ select * into prov from public.providers where id=off.provider_id and active=true;
+ if not found then raise exception 'provider_unavailable'; end if;
+ fee := round(off.price * coalesce(prov.commission_rate,10) / 100, 2);
+ net := greatest(off.price-fee,0);
+ insert into public.service_requests(user_id,service,note,status,provider_id,provider_price,platform_fee,provider_net,payment_status,source_market_request_id,agreed_deadline_days,accepted_at)
+ values(req.user_id,req.service,req.title||E'\n\n'||req.details,'قيد المراجعة',off.provider_id,off.price,fee,net,'pending',req.id,off.delivery_days,now())
+ returning id into new_id;
+ update public.service_offers set status=case when id=p_offer_id then 'accepted' else 'rejected' end where request_id=p_request_id;
+ update public.market_requests set status='awarded',selected_offer_id=p_offer_id where id=p_request_id;
+ insert into public.notifications(user_id,title,body,type) values(req.user_id,'تم اختيار عرضك','تم تحويل العرض المختار إلى طلب خدمة #'||new_id||' ويمكنك الآن متابعة الدفع والتنفيذ.','request');
+ insert into public.notifications(user_id,title,body,type)
+ select p.user_id,'تم اختيار عرضك','العميل اختارك لتنفيذ طلب #'||new_id||' بسعر '||off.price||' جنيه.','request' from public.providers p where p.id=off.provider_id;
+ return new_id;
+end; $$;
+revoke all on function public.accept_service_offer(bigint,bigint) from public,anon;
+grant execute on function public.accept_service_offer(bigint,bigint) to authenticated;
+
