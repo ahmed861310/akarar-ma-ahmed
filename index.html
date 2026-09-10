@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#1f36f5">
+  <title>خدماتي - V1</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="app">
+    <section id="loginPage" class="page active">
+      <div class="topbar">
+        <button class="lang" id="langBtn">English</button>
+        <div class="brand"><span>خدماتي</span><b>⚡</b></div>
+      </div>
+
+      <div class="auth-wrap">
+        <h1>تسجيل الدخول</h1>
+        <form id="loginForm" class="form">
+          <label class="field phone-field">
+            <span class="country">🇪🇬 <small>+20</small>⌄</span>
+            <input id="loginPhone" type="tel" inputmode="numeric" placeholder="رقم الهاتف" required>
+          </label>
+          <label class="field">
+            <input id="loginPassword" type="password" placeholder="كلمة السر" required>
+            <button type="button" class="eye" data-target="loginPassword">◉</button>
+          </label>
+          <button type="button" class="link-btn" id="forgotBtn">نسيت كلمة السر؟</button>
+          <button class="primary" type="submit">تسجيل الدخول</button>
+        </form>
+
+        <div class="divider"><span>أو</span></div>
+        <button class="google" id="googleBtn"><b>G</b> تسجيل الدخول بواسطة جوجل</button>
+        <p class="switch">لست مشترك؟ <button id="showRegister">أنشئ حساب</button></p>
+      </div>
+      <button class="help" id="helpBtn">تحتاج إلى المساعدة؟</button>
+    </section>
+
+    <section id="registerPage" class="page">
+      <div class="topbar">
+        <button class="back" data-back>→</button>
+        <div class="brand"><span>خدماتي</span><b>⚡</b></div>
+      </div>
+      <div class="auth-wrap">
+        <h1>إنشاء حساب</h1>
+        <p class="subtitle">أنشئ حسابك للوصول إلى خدماتك بسهولة</p>
+        <form id="registerForm" class="form">
+          <label class="field"><input id="regName" type="text" placeholder="الاسم بالكامل" required></label>
+          <label class="field"><input id="regPhone" type="tel" inputmode="numeric" placeholder="رقم الهاتف" required></label>
+          <label class="field"><input id="regPassword" type="password" placeholder="كلمة السر" minlength="6" required></label>
+          <label class="field"><input id="regPassword2" type="password" placeholder="تأكيد كلمة السر" minlength="6" required></label>
+          <button class="primary" type="submit">إنشاء الحساب</button>
+        </form>
+        <p class="switch">لديك حساب بالفعل؟ <button data-back>تسجيل الدخول</button></p>
+      </div>
+    </section>
+
+    <section id="homePage" class="page">
+      <header class="home-head">
+        <div>
+          <p class="hello">أهلاً بك 👋</p>
+          <h1 id="userName">مستخدم خدماتي</h1>
+        </div>
+        <button class="avatar" id="profileBtn">👤</button>
+      </header>
+
+      <div class="search">
+        <span>⌕</span><input id="search" placeholder="ابحث عن خدمة...">
+      </div>
+
+      <div class="hero">
+        <div>
+          <span>خدماتك في مكان واحد</span>
+          <h2>أنجز خدماتك بسهولة</h2>
+          <p>اختار الخدمة وابدأ طلبك الآن.</p>
+        </div>
+        <div class="hero-icon">⚡</div>
+      </div>
+
+      <div class="section-title"><h2>الخدمات</h2><button id="allServices">عرض الكل</button></div>
+      <div id="services" class="services">
+        <button class="service" data-service="خدمات المستندات"><i>📄</i><b>المستندات</b><small>طلبات ومستندات</small></button>
+        <button class="service" data-service="الخدمات الحكومية"><i>🏛️</i><b>خدمات حكومية</b><small>خدمات إلكترونية</small></button>
+        <button class="service" data-service="المدفوعات"><i>💳</i><b>المدفوعات</b><small>دفع ومتابعة</small></button>
+        <button class="service" data-service="طلبات الدعم"><i>🛟</i><b>الدعم</b><small>ساعدنا نساعدك</small></button>
+      </div>
+
+      <div class="section-title"><h2>طلباتك الأخيرة</h2><button id="ordersBtn">كل الطلبات</button></div>
+      <div class="empty"><div>📋</div><b>لا توجد طلبات حتى الآن</b><span>ابدأ باستخدام إحدى الخدمات</span></div>
+
+      <nav class="nav">
+        <button class="nav-item active"><span>⌂</span>الرئيسية</button>
+        <button class="nav-item" id="myOrders"><span>▣</span>طلباتي</button>
+        <button class="nav-item" id="profileNav"><span>●</span>حسابي</button>
+      </nav>
+    </section>
+  </main>
+
+  <div id="toast" class="toast"></div>
+  <script src="app.js"></script>
+</body>
+</html>
