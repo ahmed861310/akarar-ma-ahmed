@@ -43,13 +43,16 @@
 </section>
 <section id="accountPage" class="page hidden">
   <div class="v7-account-hero"><div class="v7-account-avatar">👤</div><div><span class="eyebrow dark-eyebrow">حسابي</span><h1 id="accountName">حسابك في خدماتي</h1><p id="accountPhone" class="muted">إدارة الحساب والمحفظة والأمان من مكان واحد.</p></div></div>
+  <div id="v72AccountSummary" class="v72-account-summary"></div>
+  <div id="v72ProfileProgress" class="v72-profile-progress"></div>
+  <div class="v72-account-actions"><button class="v72-account-action" data-v72-action="requests"><strong>📋 طلباتي</strong><span>تابع التنفيذ والدفع</span></button><button class="v72-account-action" data-v72-action="messages"><strong>💬 رسائلي</strong><span>محادثات الطلبات</span></button><button class="v72-account-action" data-v72-action="notifications"><strong>🔔 الإشعارات</strong><span>آخر التحديثات</span></button></div>
   <div class="v7-account-grid">
     <button class="v7-account-card" data-v7-action="wallet"><span>💰</span><div><b>المحفظة</b><small>الرصيد والمدفوعات</small></div><i>‹</i></button>
     <button class="v7-account-card" data-v7-action="provider"><span>🧑‍💼</span><div><b>قدّم خدمتك</b><small>اعرض خدمتك للعملاء</small></div><i>‹</i></button>
     <button class="v7-account-card" data-v7-action="referral"><span>🎁</span><div><b>الإحالات والمكافآت</b><small>شارك رابطك وتابع مكافآتك</small></div><i>‹</i></button>
     <button class="v7-account-card" data-v7-action="safety"><span>🛡️</span><div><b>الأمان والثقة</b><small>البلاغات والنزاعات والتوثيق</small></div><i>‹</i></button>
     <button class="v7-account-card" data-v7-action="business"><span>🚀</span><div><b>خدماتي للأعمال</b><small>باقات النمو وتحقيق الدخل</small></div><i>‹</i></button>
-    <button class="v7-account-card" data-v7-action="logout"><span>↪️</span><div><b>تسجيل الخروج</b><small>الخروج من الحساب الحالي</small></div><i>‹</i></button>
+    <button class="v7-account-card danger" data-v7-action="logout"><span>↪️</span><div><b>تسجيل الخروج</b><small>الخروج من الحساب الحالي</small></div><i>‹</i></button>
   </div>
   <div class="v7-security-note"><b>🔐 حسابك محمي</b><span>تواصل، ادفع، وتابع التنفيذ من داخل المنصة.</span></div>
 </section>
@@ -247,4 +250,45 @@ document.addEventListener('click',e=>{const b=e.target.closest('.ex-file');if(!b
 })();
 </script>
 
+<script>
+/* V7.2 — Account Center: live summary + profile completeness + quick actions */
+(function(){
+  function acct(){return window.demoUser?window.demoUser():null}
+  async function refresh(){
+    if(!user()) return;
+    const u=acct()||{}; let requests=[]; let wallet=0; let unread=0;
+    try{
+      if(BACKEND_READY){
+        const [rr,ww,nn]=await Promise.all([
+          sb.from('service_requests').select('id,status').order('created_at',{ascending:false}).limit(100),
+          walletData(), loadNotifications()
+        ]);
+        requests=rr.data||[]; wallet=Number(ww?.balance||0); unread=(nn||[]).filter(x=>!x.read).length;
+      }else{
+        requests=u.requestList||[]; wallet=Number(u.walletBalance||0); unread=demoNotifications().filter(x=>!x.read).length;
+      }
+    }catch(e){requests=u.requestList||[];wallet=Number(u.walletBalance||0);unread=demoNotifications().filter(x=>!x.read).length}
+    const active=requests.filter(r=>!['تم التنفيذ','ملغي','cancelled','completed'].includes(r.status)).length;
+    const done=requests.filter(r=>['تم التنفيذ','completed'].includes(r.status)).length;
+    const hasName=String(u.name||sessionUser?.name||sessionUser?.user_metadata?.full_name||'').trim().length>=3;
+    const hasPhone=String(u.phone||sessionUser?.phone||'').trim().length>=8;
+    const score=(hasName?40:0)+(hasPhone?30:0)+(requests.length?15:0)+(wallet>0?15:0);
+    const box=document.getElementById('v72AccountSummary');
+    if(box)box.innerHTML=`<div class="v72-account-stat"><span>📋</span><b>${requests.length}</b><small>كل الطلبات</small></div><div class="v72-account-stat"><span>⚡</span><b>${active}</b><small>طلبات نشطة</small></div><div class="v72-account-stat"><span>💰</span><b>${money(wallet)}</b><small>رصيد المحفظة</small></div><div class="v72-account-stat"><span>🔔</span><b>${unread}</b><small>غير مقروء</small></div>`;
+    const pg=document.getElementById('v72ProfileProgress');
+    if(pg)pg.innerHTML=`<div class="v72-profile-progress-head"><div><b>اكتمال الحساب</b><small> كلما اكتمل حسابك، كانت تجربتك أفضل.</small></div><strong>${score}%</strong></div><div class="v72-progress-track"><i style="width:${score}%"></i></div>`;
+  }
+  window.refreshKhadamatiAccount=refresh;
+  document.addEventListener('click',e=>{
+    const b=e.target.closest('[data-v72-action]'); if(!b)return;
+    const a=b.dataset.v72Action;
+    if(a==='requests')nav('requestsPage');
+    if(a==='messages')nav('messages');
+    if(a==='notifications')openNotifications();
+  });
+  window.addEventListener('khadamati:navigate',e=>{if(e.detail?.page==='accountPage')setTimeout(refresh,30)});
+  const oldNav=window.nav;
+  setTimeout(refresh,150);
+})();
+</script>
 </body></html>
