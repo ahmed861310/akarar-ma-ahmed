@@ -6,7 +6,7 @@
 <meta name="description" content="خدماتي منصة عربية لطلب الخدمات، اكتشاف مقدمي الخدمات ومتابعة الطلبات بأمان.">
 <meta property="og:title" content="خدماتي | منصة الخدمات الرقمية">
 <meta property="og:description" content="اكتشف الخدمات ومقدمي الخدمات واطلب خدمتك بسهولة."><meta property="og:type" content="website"><meta name="robots" content="index,follow">
-<link rel="stylesheet" href="style.css?v=4.1">
+<link rel="stylesheet" href="style.css?v=4.2">
 </head>
 <body>
 <header class="topbar"><div class="brand"><span class="brand-mark">⚡</span> خدماتي</div><div class="top-actions"><button id="walletTopBtn" class="icon-btn" aria-label="المحفظة">💰</button><button id="notifyBtn" class="icon-btn" aria-label="الإشعارات">🔔<i id="notifDot"></i><b id="notifBadge" class="notif-badge hidden">0</b></button><button id="logoutTop" class="ghost hidden">خروج</button></div></header>
@@ -30,9 +30,15 @@
 <button class="service" data-service-slug="complaints" data-title="الشكاوى"><span class="service-icon">📝</span><b>الشكاوى</b><small>قدّم شكوى وتابع الرد</small></button>
 <button class="service" data-service-slug="support" data-title="المساعدة"><span class="service-icon">💬</span><b>المساعدة والدعم</b><small>نحن هنا لمساعدتك</small></button>
 </div>
-<div class="wallet-mini"><div><span>💰</span><div><small>رصيد المحفظة</small><strong id="walletBalance">0 جنيه</strong></div></div><button id="walletBtn" class="secondary">فتح المحفظة</button></div><div class="stats"><div class="stat"><span>📋</span><div><strong id="requestsCount">0</strong><small>طلباتك</small></div></div><div class="stat"><span>🔔</span><div><strong id="notificationsCount">2</strong><small>إشعارات</small></div></div><div class="stat"><span>✓</span><div><strong>نشط</strong><small>حالة الحساب</small></div></div></div>
+<div class="referral-banner"><div><span class="eyebrow dark-eyebrow">🎁 برنامج الإحالة</span><h2>اكسب مكافآت بدعوة أصحابك</h2><p>شارك رابطك، وكل مستخدم جديد يأتي من خلالك يُسجل في برنامج الإحالة.</p></div><button id="referralBtn" class="primary small-primary">دعواتي</button></div><div class="wallet-mini"><div><span>💰</span><div><small>رصيد المحفظة</small><strong id="walletBalance">0 جنيه</strong></div></div><button id="walletBtn" class="secondary">فتح المحفظة</button></div><div class="stats"><div class="stat"><span>📋</span><div><strong id="requestsCount">0</strong><small>طلباتك</small></div></div><div class="stat"><span>🔔</span><div><strong id="notificationsCount">2</strong><small>إشعارات</small></div></div><div class="stat"><span>✓</span><div><strong>نشط</strong><small>حالة الحساب</small></div></div></div>
 <div class="panel"><div class="section-head"><h2>طلباتي الأخيرة</h2><button id="viewRequestsBtn" class="link-btn">عرض كل الطلبات</button></div><div id="requestsPreview"></div></div><div class="panel updates-panel"><div class="section-head"><h2>الإشعارات</h2><button id="clearNotices" class="link-btn">تمت القراءة</button></div><div id="notificationsList"></div></div>
 <div class="bottom-help"><span>💡</span><div><b>تحتاج مساعدة؟</b><p>اختَر «المساعدة والدعم» وسنرشدك للخطوة التالية.</p></div></div>
+</section>
+<section id="referralPage" class="page hidden">
+  <div class="providers-head"><button id="referralBackBtn" class="back-btn">← الرئيسية</button><div><span class="eyebrow dark-eyebrow">🎁 برنامج الإحالة</span><h1>دعواتي ومكافآتي</h1><p class="muted">شارك رابطك الخاص وراقب الدعوات والمكافآت.</p></div></div>
+  <div class="referral-card"><div class="referral-code-box"><small>كود الإحالة الخاص بك</small><strong id="myReferralCode">KH-000000</strong><button id="copyReferralBtn" class="secondary">نسخ الكود</button></div><div class="referral-link-box"><small>رابط الدعوة</small><input id="myReferralLink" readonly><button id="shareReferralBtn" class="primary">🔗 مشاركة الرابط</button></div></div>
+  <div class="stats referral-stats"><div class="stat"><span>👥</span><div><strong id="refInvites">0</strong><small>دعوات</small></div></div><div class="stat"><span>✅</span><div><strong id="refQualified">0</strong><small>دعوات مؤهلة</small></div></div><div class="stat"><span>🎁</span><div><strong id="refRewards">0 جنيه</strong><small>مكافآت</small></div></div></div>
+  <div class="panel"><h2>كيف تعمل؟</h2><div class="ref-steps"><article><b>1</b><span>شارك رابطك</span></article><article><b>2</b><span>صديقك يسجل من الرابط</span></article><article><b>3</b><span>بعد استيفاء الشروط تُحسب المكافأة</span></article></div><button id="demoReferralBtn" class="secondary">محاكاة دعوة تجريبية</button><p class="muted" style="margin-bottom:0">المكافآت في النسخة التجريبية محاكاة فقط. قبل الإطلاق، حدّد قيمة المكافأة وشروط الاستحقاق في قاعدة البيانات.</p></div>
 </section>
 <section id="adminPage" class="page hidden">
   <div class="admin-head"><div><span class="eyebrow dark-eyebrow">مركز التحكم</span><h1>لوحة تحكم خدماتي</h1><p class="muted">إدارة المنصة بالكامل: الطلبات، المستخدمون، مقدمو الخدمات، والأموال.</p></div><button id="adminBackBtn" class="back-btn">← الرئيسية</button></div>
