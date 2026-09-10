@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>خدماتي ⚡ V1.5</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=1.5.1">
 </head>
 <body>
 <header class="topbar">
@@ -13,20 +13,24 @@
 </header>
 
 <main>
-  <section id="loginPage" class="page">
+  <section id="loginPage" class="page login-page">
     <div class="login-card">
       <div class="logo-circle">⚡</div>
       <h1>تسجيل الدخول</h1>
       <p class="muted">سجّل دخولك للوصول إلى خدماتك</p>
 
-      <label>رقم الهاتف</label>
-      <input id="phone" inputmode="numeric" maxlength="11" placeholder="01xxxxxxxxx">
+      <label for="phone">رقم الهاتف</label>
+      <div class="input-wrap"><span class="phone-prefix">🇪🇬 +20</span><input id="phone" class="phone-input" inputmode="numeric" maxlength="11" placeholder="01xxxxxxxxx" autocomplete="tel"></div>
 
-      <label>كلمة السر</label>
-      <input id="password" type="password" placeholder="كلمة السر">
+      <label for="password">كلمة السر</label>
+      <div class="password-wrap"><input id="password" type="password" placeholder="كلمة السر" autocomplete="current-password"><button type="button" id="togglePass" class="toggle-pass" aria-label="إظهار كلمة السر">◉</button></div>
+      <div class="actions"><button type="button" id="forgotBtn" class="forgot">نسيت كلمة السر؟</button></div>
 
       <button id="loginBtn" class="primary">تسجيل الدخول</button>
       <button id="demoBtn" class="secondary">تجربة سريعة</button>
+      <div class="divider"><span>أو</span></div>
+      <button type="button" class="google"><b>G</b> تسجيل الدخول بواسطة جوجل</button>
+      <p class="signup">ليس مشترك؟ <button type="button" id="signupBtn">أنشئ حساب</button></p>
       <p id="loginMsg" class="msg"></p>
     </div>
   </section>

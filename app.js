@@ -44,3 +44,19 @@ document.querySelectorAll(".service").forEach(btn=>{
   };
 });
 if(state) showHome(); else showLogin();
+
+const togglePass = $("togglePass");
+if (togglePass) togglePass.onclick = () => {
+  const field = $("password");
+  const shown = field.type === "text";
+  field.type = shown ? "password" : "text";
+  togglePass.textContent = shown ? "◉" : "◎";
+};
+const forgotBtn = $("forgotBtn");
+if (forgotBtn) forgotBtn.onclick = () => {
+  $("loginMsg").textContent = "واجهة استعادة كلمة السر جاهزة للربط في المرحلة القادمة.";
+};
+const signupBtn = $("signupBtn");
+if (signupBtn) signupBtn.onclick = () => {
+  $("loginMsg").textContent = "إنشاء الحساب سيُضاف في المرحلة القادمة.";
+};
