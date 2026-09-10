@@ -182,7 +182,7 @@ async function runSmartMatch(){
   try{
     let list=await loadProviders(); if(cat) list=list.filter(p=>p.category===cat);
     if(!list.length){box.innerHTML='<div class="empty-state"><h3>لا يوجد مقدم مناسب حالياً</h3><p>جرّب نوع خدمة أو ميزانية مختلفة.</p></div>';return;}
-    list=list.map(p=>({...p,_smartScore:smartProviderScore(p,budget,speed)})).sort((a,b)=>b._smartScore-a._smartScore).slice(0,3);
+    list=list.map(p=>({...p,_smartScore:smartProviderScoreV62(p,budget,speed)})).sort((a,b)=>b._smartScore-a._smartScore).slice(0,3);
     box.innerHTML=`<div class="smart-result-head"><b>🏆 أفضل 3 ترشيحات</b><small>${budget?`حتى ${budget} جنيه`:'بدون حد ميزانية'} · ${speed==='fast'?'تنفيذ سريع':speed==='normal'?'سرعة عادية':'مرونة في الوقت'}</small></div>`+
       list.map((p,i)=>`<article class="smart-provider-row"><div class="rank">${i+1}</div><div class="smart-provider-main"><b>${escapeHtml(p.name)} ${p.verified?'✓':''}</b><span>${escapeHtml(p.category||'')} · ${adminMoney(p.price)} يبدأ من</span><span>${trustBadge(p)} ${p.avg_rating?`⭐ ${Number(p.avg_rating).toFixed(1)}`:''}</span></div><button class="secondary smart-profile" data-id="${escapeHtml(p.id)}">عرض الملف</button></article>`).join('');
     box.querySelectorAll('.smart-profile').forEach(b=>b.onclick=()=>showProviderProfile(b.dataset.id));
@@ -328,3 +328,37 @@ async function adjustTrustRisk(id,delta){
  try{if(!BACKEND_READY){const t=demoTrust();const k=String(id);t[k]=t[k]||{};t[k].risk_penalty=Math.max(0,Math.min(25,Number(t[k].risk_penalty||0)+delta));saveDemoTrust(t);toast('تم تحديث مستوى المخاطر');return renderAdminTrust()}
  const {error}=await sb.rpc('admin_adjust_trust_risk',{p_provider_id:Number(id),p_delta:Number(delta)});if(error)throw error;toast('تم تحديث نقاط المخاطر');renderAdminTrust();}catch(e){toast('تعذر تحديث نقاط الثقة')}}
 async function renderAdminTrust(){const box=$('adminTrustList');if(!box)return;try{const list=await loadAdminTrust();box.innerHTML=list.length?list.sort((a,b)=>Number(b.score)-Number(a.score)).map(x=>`<article class="trust-admin-row"><div><b>🧑‍💼 ${escapeHtml(x.name||'مقدم خدمة')}</b><small>درجة الثقة: <strong>${Number(x.score||0)}%</strong> · ${escapeHtml(x.level||trustLevel(Number(x.score||0)))}</small><small>خصم المخاطر: ${Number(x.risk_penalty||0)} نقطة</small></div><div class="trust-admin-actions"><button class="secondary trust-minus" data-id="${escapeHtml(x.provider_id||x.id)}">⚠️ +مخاطر</button><button class="secondary trust-plus" data-id="${escapeHtml(x.provider_id||x.id)}">✅ إزالة خطر</button></div></article>`).join(''):'<div class="empty-state"><div>🛡️</div><h3>لا توجد بيانات ثقة</h3></div>';box.querySelectorAll('.trust-minus').forEach(b=>b.onclick=()=>adjustTrustRisk(b.dataset.id,5));box.querySelectorAll('.trust-plus').forEach(b=>b.onclick=()=>adjustTrustRisk(b.dataset.id,-5))}catch(e){box.innerHTML='<div class="empty-state"><h3>تعذر تحميل درجات الثقة</h3></div>'}}
+
+
+/* V6.2 — التعلم من بيانات السوق: إحصاءات وصفية وآمنة، وليست نموذجًا تنبؤيًا متحيزًا */
+async function marketStats(category=''){
+  if(!BACKEND_READY){
+    const providers=demoProviders().filter(p=>!category||p.category===category);
+    const prices=providers.map(p=>Number(p.price||0)).filter(Boolean).sort((a,b)=>a-b);
+    const req=(demoUser()?.requestList||[]).filter(r=>!category||r.service===category||r.providerCategory===category);
+    const ratings=JSON.parse(localStorage.getItem('khadamatiRatings')||'[]');
+    const cats=category?[category]:['تصميم','تسويق','برمجة','صيانة','كتابة','أخرى'];
+    const out={};
+    for(const c of cats){const ps=demoProviders().filter(p=>p.category===c).map(p=>Number(p.price||0)).filter(Boolean).sort((a,b)=>a-b);const med=ps.length?ps[Math.floor(ps.length/2)]:0;out[c]={providers:ps.length,median:med,min:ps[0]||0,max:ps[ps.length-1]||0,requests:req.filter(r=>r.service===c).length,ratings:ratings.filter(r=>{const p=demoProviders().find(x=>String(x.id)===String(r.providerId));return p?.category===c}).length};}
+    return category?out[category]:out;
+  }
+  const providersQ=category?sb.from('providers').select('id,category,price,verified').eq('active',true).eq('category',category):sb.from('providers').select('id,category,price,verified').eq('active',true);
+  const reqQ=category?sb.from('service_requests').select('id,service,provider_price,status').eq('service',category).limit(1000):sb.from('service_requests').select('id,service,provider_price,status').limit(1000);
+  const [pr, rq]=await Promise.all([providersQ,rqQ]); if(pr.error||rq.error)throw pr.error||rq.error;
+  const groups={};
+  for(const p of (pr.data||[])){const c=p.category||'أخرى';groups[c]??={prices:[],providers:0,verified:0,requests:0,completed:0};const g=groups[c];if(Number(p.price)>0)g.prices.push(Number(p.price));g.providers++;if(p.verified)g.verified++;}
+  for(const r of (rq.data||[])){const c=r.service||'أخرى';groups[c]??={prices:[],providers:0,verified:0,requests:0,completed:0};groups[c].requests++;if(r.status==='تم التنفيذ')groups[c].completed++;if(Number(r.provider_price)>0)groups[c].prices.push(Number(r.provider_price));}
+  for(const g of Object.values(groups)){g.prices.sort((a,b)=>a-b);g.min=g.prices[0]||0;g.max=g.prices[g.prices.length-1]||0;g.median=g.prices.length?g.prices[Math.floor(g.prices.length/2)]:0;}
+  return category?(groups[category]||{prices:[],providers:0,verified:0,requests:0,completed:0,min:0,max:0,median:0}):groups;
+}
+function adaptivePriceFit(price,market){if(!market?.median||!price)return 0;const d=Math.abs(price-market.median)/Math.max(1,market.median);return Math.max(-18,18-d*36)}
+let _marketCache=null;
+async function smartProviderScoreV62(p,budget,speed){
+  const base=smartProviderScore(p,budget,speed);
+  try{if(!_marketCache||Date.now()-_marketCache.at>120000){_marketCache={at:Date.now(),data:await marketStats()};}const m=_marketCache.data?.[p.category];return base+adaptivePriceFit(Number(p.price),m)}catch{return base}}
+async function renderMarketInsight(){const cat=$('marketCategory')?.value||'';const box=$('marketInsight');if(!box||!cat){if(box)box.innerHTML='';return}box.innerHTML='<div class="market-loading">جاري تحليل البيانات…</div>';try{const m=await marketStats(cat);if(!m.providers&&!m.prices?.length){box.innerHTML='<div class="empty-state"><h3>لا توجد بيانات كافية</h3><p>أضف مزيدًا من مقدمي الخدمات والطلبات لتحسين التقدير.</p></div>';return}const low=m.min||Math.round((m.median||0)*.85),high=m.max||Math.round((m.median||0)*1.15);box.innerHTML=`<div class="market-stat-grid"><div><span>💰</span><b>${m.median||'—'} جنيه</b><small>السعر الوسيط</small></div><div><span>📊</span><b>${low}–${high} جنيه</b><small>النطاق المرصود</small></div><div><span>🧑‍💼</span><b>${m.providers||0}</b><small>مقدمون نشطون</small></div><div><span>📋</span><b>${m.requests||0}</b><small>طلبات مسجلة</small></div></div><p class="market-note">💡 التقدير إحصائي من البيانات المتاحة، وقد يختلف السعر حسب تفاصيل الطلب.</p>`}catch{box.innerHTML='<div class="empty-state"><h3>تعذر تحليل السوق</h3></div>'}}
+$('marketAnalyzeBtn')?.addEventListener('click',renderMarketInsight);
+$('marketCategory')?.addEventListener('change',renderMarketInsight);
+async function renderAdminMarket(){const box=$('adminMarketList');if(!box)return;try{const d=await marketStats();const rows=Object.entries(d).sort((a,b)=>(b[1].requests||0)-(a[1].requests||0));box.innerHTML=rows.length?rows.map(([c,x])=>`<article class="market-admin-row"><div><b>${escapeHtml(c)}</b><small>${x.providers||0} مقدمي خدمة · ${x.requests||0} طلب · ${x.completed||0} مكتملة</small></div><strong>${x.median||'—'} جنيه</strong><span>${x.min||0}–${x.max||0}</span></article>`).join(''):'<div class="empty-state"><h3>لا توجد بيانات كافية</h3></div>'}catch{box.innerHTML='<div class="empty-state"><h3>تعذر تحميل ذكاء السوق</h3></div>'}}
+const _renderAdminV62=renderAdmin;renderAdmin=async function(){await _renderAdminV62();const tab=document.querySelector('.admin-tab.active')?.dataset.tab;if(tab==='market')await renderAdminMarket()};
+document.querySelectorAll('.admin-tab').forEach(t=>t.addEventListener('click',()=>setTimeout(()=>{if(t.dataset.tab==='market')renderAdminMarket()},0)));
