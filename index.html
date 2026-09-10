@@ -35,6 +35,30 @@
     </div>
   </section>
 
+  <section id="signupPage" class="page signup-page hidden">
+    <div class="signup-card">
+      <button id="backLoginBtn" class="back-btn" type="button">← العودة لتسجيل الدخول</button>
+      <div class="logo-circle small-logo">⚡</div>
+      <h1>إنشاء حساب جديد</h1>
+      <p class="muted center">أنشئ حسابك وابدأ استخدام خدماتي</p>
+
+      <label for="signupName">الاسم بالكامل</label>
+      <input id="signupName" type="text" placeholder="اكتب اسمك" autocomplete="name">
+
+      <label for="signupPhone">رقم الهاتف</label>
+      <div class="input-wrap"><span class="phone-prefix">🇪🇬 +20</span><input id="signupPhone" class="phone-input" inputmode="numeric" maxlength="11" placeholder="01xxxxxxxxx" autocomplete="tel"></div>
+
+      <label for="signupPassword">كلمة السر</label>
+      <input id="signupPassword" type="password" placeholder="6 أحرف أو أرقام على الأقل" autocomplete="new-password">
+
+      <label for="signupPassword2">تأكيد كلمة السر</label>
+      <input id="signupPassword2" type="password" placeholder="أعد كتابة كلمة السر" autocomplete="new-password">
+
+      <button id="createAccountBtn" class="primary" type="button">إنشاء الحساب</button>
+      <p id="signupMsg" class="msg"></p>
+    </div>
+  </section>
+
   <section id="homePage" class="page hidden">
     <div class="welcome">
       <div>
