@@ -2,88 +2,109 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-  <meta name="theme-color" content="#1737ff">
-  <title>خدماتي - V1.2</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#173cff">
+  <title>خدماتي - V1.3</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <main class="app">
-    <header class="topbar">
-      <div class="brand"><span class="bolt">⚡</span><span>خدماتي</span></div>
-      <button id="langBtn" class="lang-btn" type="button">English</button>
-    </header>
+  <header class="topbar">
+    <div class="brand"><span>⚡</span> خدماتي</div>
+    <button id="langBtn" class="text-btn" type="button">English</button>
+  </header>
 
-    <section id="loginView" class="view">
+  <main class="container">
+    <!-- Login -->
+    <section id="loginPage" class="page">
       <div class="hero">
         <h1>تسجيل الدخول</h1>
-        <p>مرحباً بعودتك، سجل الدخول للمتابعة</p>
+        <p>مرحبًا بعودتك، سجل الدخول للمتابعة</p>
       </div>
 
-      <form id="loginForm" class="form" novalidate>
-        <div class="field phone-field">
-          <span class="country">🇪🇬 +20</span>
-          <input id="loginPhone" type="tel" inputmode="numeric" maxlength="11" placeholder="رقم الهاتف" autocomplete="tel">
+      <form id="loginForm" class="card form-card" novalidate>
+        <label for="loginPhone">رقم الهاتف</label>
+        <div class="phone-wrap">
+          <span class="prefix">🇪🇬 +20</span>
+          <input id="loginPhone" type="tel" inputmode="numeric" maxlength="11" placeholder="01xxxxxxxxx" autocomplete="tel">
         </div>
 
-        <div class="field">
+        <label for="loginPassword">كلمة السر</label>
+        <div class="password-wrap">
           <input id="loginPassword" type="password" placeholder="كلمة السر" autocomplete="current-password">
-          <button class="eye" type="button" data-target="loginPassword" aria-label="إظهار كلمة السر">◉</button>
+          <button class="eye" type="button" data-target="loginPassword">◉</button>
         </div>
 
-        <button id="forgotBtn" class="link-btn forgot" type="button">نسيت كلمة السر؟</button>
+        <button type="button" id="forgotBtn" class="link-btn">نسيت كلمة السر؟</button>
         <button class="primary" type="submit">تسجيل الدخول</button>
+
+        <div class="divider"><span>أو</span></div>
+        <button type="button" id="googleBtn" class="google">G &nbsp; تسجيل الدخول بواسطة جوجل</button>
+
+        <p class="switch">لسـت مشترك؟ <button type="button" id="showSignup" class="link-btn inline">أنشئ حساب</button></p>
       </form>
-
-      <div class="or"><span></span><b>أو</b><span></span></div>
-      <button id="googleBtn" class="google" type="button"><strong>G</strong> تسجيل الدخول بواسطة جوجل</button>
-
-      <p class="switch">لست مشترك؟ <button id="showRegister" class="link-btn" type="button">أنشئ حساب</button></p>
-      <button id="helpBtn" class="help link-btn" type="button">تحتاج إلى المساعدة؟</button>
-      <div id="loginMsg" class="message"></div>
     </section>
 
-    <section id="registerView" class="view hidden">
+    <!-- Signup -->
+    <section id="signupPage" class="page hidden">
       <div class="hero">
         <h1>إنشاء حساب</h1>
         <p>أنشئ حسابك وابدأ استخدام خدماتي</p>
       </div>
 
-      <form id="registerForm" class="form" novalidate>
-        <div class="field"><input id="registerName" type="text" placeholder="الاسم بالكامل" autocomplete="name"></div>
-        <div class="field phone-field"><span class="country">🇪🇬 +20</span><input id="registerPhone" type="tel" inputmode="numeric" maxlength="11" placeholder="رقم الهاتف" autocomplete="tel"></div>
-        <div class="field"><input id="registerPassword" type="password" placeholder="كلمة السر" autocomplete="new-password"><button class="eye" type="button" data-target="registerPassword">◉</button></div>
-        <div class="field"><input id="registerConfirm" type="password" placeholder="تأكيد كلمة السر" autocomplete="new-password"><button class="eye" type="button" data-target="registerConfirm">◉</button></div>
-        <button class="primary" type="submit">إنشاء الحساب</button>
-      </form>
+      <form id="signupForm" class="card form-card" novalidate>
+        <label for="signupName">الاسم</label>
+        <input id="signupName" type="text" placeholder="اكتب اسمك" autocomplete="name">
 
-      <p class="switch">لديك حساب بالفعل؟ <button id="showLogin" class="link-btn" type="button">تسجيل الدخول</button></p>
-      <div id="registerMsg" class="message"></div>
+        <label for="signupPhone">رقم الهاتف</label>
+        <div class="phone-wrap">
+          <span class="prefix">🇪🇬 +20</span>
+          <input id="signupPhone" type="tel" inputmode="numeric" maxlength="11" placeholder="01xxxxxxxxx" autocomplete="tel">
+        </div>
+
+        <label for="signupPassword">كلمة السر</label>
+        <div class="password-wrap">
+          <input id="signupPassword" type="password" placeholder="6 أحرف أو أكثر" autocomplete="new-password">
+          <button class="eye" type="button" data-target="signupPassword">◉</button>
+        </div>
+
+        <label for="signupConfirm">تأكيد كلمة السر</label>
+        <input id="signupConfirm" type="password" placeholder="أعد كتابة كلمة السر" autocomplete="new-password">
+
+        <button class="primary" type="submit">إنشاء الحساب</button>
+        <p class="switch">لديك حساب بالفعل؟ <button type="button" id="showLogin" class="link-btn inline">تسجيل الدخول</button></p>
+      </form>
     </section>
 
-    <section id="homeView" class="view hidden">
-      <div class="home-card">
-        <div class="avatar">م</div>
+    <!-- Home -->
+    <section id="homePage" class="page hidden">
+      <div class="home-head">
         <div>
-          <p class="small">مرحباً بك 👋</p>
+          <p class="muted">أهلًا بك 👋</p>
           <h1 id="userName">مستخدم خدماتي</h1>
+        </div>
+        <button id="logoutBtn" class="outline">تسجيل الخروج</button>
+      </div>
+
+      <div class="welcome card">
+        <div class="welcome-icon">⚡</div>
+        <div>
+          <h2>مرحبًا بك في خدماتي</h2>
+          <p>هذه هي الصفحة الرئيسية في V1.3. من هنا سنبدأ إضافة الخدمات والخصائص القادمة.</p>
         </div>
       </div>
 
-      <h2>خدماتك</h2>
-      <div class="services">
-        <button class="service" type="button"><span>🛠️</span><b>الخدمات</b><small>استكشف الخدمات</small></button>
-        <button class="service" type="button"><span>📋</span><b>طلباتي</b><small>تابع طلباتك</small></button>
-        <button class="service" type="button"><span>👤</span><b>حسابي</b><small>بيانات الحساب</small></button>
-        <button class="service" type="button"><span>💬</span><b>المساعدة</b><small>تواصل معنا</small></button>
+      <div class="grid">
+        <button class="service card" type="button"><span>🛠️</span><strong>الخدمات</strong><small>قريبًا</small></button>
+        <button class="service card" type="button"><span>📋</span><strong>طلب خدمة</strong><small>قريبًا</small></button>
+        <button class="service card" type="button"><span>👤</span><strong>حسابي</strong><small>قريبًا</small></button>
+        <button class="service card" type="button"><span>⚙️</span><strong>الإعدادات</strong><small>قريبًا</small></button>
       </div>
-
-      <button id="logoutBtn" class="logout" type="button">تسجيل الخروج</button>
-      <p class="version">خدماتي V1.2</p>
     </section>
+
+    <div id="message" class="message" role="alert"></div>
   </main>
 
-  <div id="toast" class="toast"></div>
+  <footer>خدماتي • V1.3</footer>
   <script src="app.js"></script>
 </body>
 </html>
