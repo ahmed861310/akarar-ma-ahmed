@@ -1,4 +1,89 @@
-<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#2038f5"><title>خدماتي - V1.1</title><link rel="stylesheet" href="style.css"></head><body><main class="app">
-<section id="loginPage" class="page active"><div class="topbar"><button class="lang" id="langBtn">English</button><div class="brand">خدماتي <b>⚡</b></div></div><div class="auth-wrap"><h1>تسجيل الدخول</h1><form id="loginForm" class="form"><label class="field phone"><span>🇪🇬 +20⌄</span><input id="loginPhone" type="tel" inputmode="numeric" placeholder="رقم الهاتف" required></label><label class="field"><input id="loginPassword" type="password" placeholder="كلمة السر" required><button type="button" class="eye" data-target="loginPassword">◉</button></label><button type="button" class="link" id="forgotBtn">نسيت كلمة السر؟</button><button class="primary">تسجيل الدخول</button></form><div class="divider"><span>أو</span></div><button class="google" id="googleBtn"><b>G</b> تسجيل الدخول بواسطة جوجل</button><p class="switch"><span>لست مشترك؟</span><button id="showRegister">أنشئ حساب</button></p></div><button class="help" id="helpBtn">تحتاج إلى المساعدة؟</button></section>
-<section id="registerPage" class="page"><div class="topbar"><button class="back" data-back>→</button><div class="brand">خدماتي <b>⚡</b></div></div><div class="auth-wrap"><h1>إنشاء حساب</h1><p class="subtitle">أنشئ حسابك للوصول إلى خدماتك بسهولة</p><form id="registerForm" class="form"><label class="field"><input id="regName" placeholder="الاسم بالكامل" required></label><label class="field"><input id="regPhone" type="tel" inputmode="numeric" placeholder="رقم الهاتف" required></label><label class="field"><input id="regPassword" type="password" minlength="6" placeholder="كلمة السر" required></label><label class="field"><input id="regPassword2" type="password" minlength="6" placeholder="تأكيد كلمة السر" required></label><button class="primary">إنشاء الحساب</button></form><p class="switch"><span>لديك حساب بالفعل؟</span><button data-back>تسجيل الدخول</button></p></div></section>
-<section id="homePage" class="page"><header><div><p>أهلاً بك 👋</p><h1 id="userName">مستخدم خدماتي</h1></div><button class="avatar" id="profileBtn">👤</button></header><div class="search">⌕ <input id="search" placeholder="ابحث عن خدمة..."></div><div class="hero"><div><span>خدماتك في مكان واحد</span><h2>أنجز خدماتك بسهولة</h2><p>اختار الخدمة وابدأ طلبك الآن.</p></div><strong>⚡</strong></div><div class="section"><h2>الخدمات</h2><button id="allServices">عرض الكل</button></div><div class="services"><button class="service" data-service="خدمات المستندات">📄<b>المستندات</b><small>طلبات ومستندات</small></button><button class="service" data-service="الخدمات الحكومية">🏛️<b>خدمات حكومية</b><small>خدمات إلكترونية</small></button><button class="service" data-service="المدفوعات">💳<b>المدفوعات</b><small>دفع ومتابعة</small></button><button class="service" data-service="طلبات الدعم">🛟<b>الدعم</b><small>ساعدنا نساعدك</small></button></div><div class="section"><h2>طلباتك الأخيرة</h2><button id="ordersBtn">كل الطلبات</button></div><div class="empty">📋<b>لا توجد طلبات حتى الآن</b><span>ابدأ باستخدام إحدى الخدمات</span></div><nav><button class="active">⌂<small>الرئيسية</small></button><button id="myOrders">▣<small>طلباتي</small></button><button id="profileNav">●<small>حسابي</small></button></nav></section></main><div id="toast"></div><script src="app.js"></script></body></html>
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta name="theme-color" content="#1737ff">
+  <title>خدماتي - V1.2</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="app">
+    <header class="topbar">
+      <div class="brand"><span class="bolt">⚡</span><span>خدماتي</span></div>
+      <button id="langBtn" class="lang-btn" type="button">English</button>
+    </header>
+
+    <section id="loginView" class="view">
+      <div class="hero">
+        <h1>تسجيل الدخول</h1>
+        <p>مرحباً بعودتك، سجل الدخول للمتابعة</p>
+      </div>
+
+      <form id="loginForm" class="form" novalidate>
+        <div class="field phone-field">
+          <span class="country">🇪🇬 +20</span>
+          <input id="loginPhone" type="tel" inputmode="numeric" maxlength="11" placeholder="رقم الهاتف" autocomplete="tel">
+        </div>
+
+        <div class="field">
+          <input id="loginPassword" type="password" placeholder="كلمة السر" autocomplete="current-password">
+          <button class="eye" type="button" data-target="loginPassword" aria-label="إظهار كلمة السر">◉</button>
+        </div>
+
+        <button id="forgotBtn" class="link-btn forgot" type="button">نسيت كلمة السر؟</button>
+        <button class="primary" type="submit">تسجيل الدخول</button>
+      </form>
+
+      <div class="or"><span></span><b>أو</b><span></span></div>
+      <button id="googleBtn" class="google" type="button"><strong>G</strong> تسجيل الدخول بواسطة جوجل</button>
+
+      <p class="switch">لست مشترك؟ <button id="showRegister" class="link-btn" type="button">أنشئ حساب</button></p>
+      <button id="helpBtn" class="help link-btn" type="button">تحتاج إلى المساعدة؟</button>
+      <div id="loginMsg" class="message"></div>
+    </section>
+
+    <section id="registerView" class="view hidden">
+      <div class="hero">
+        <h1>إنشاء حساب</h1>
+        <p>أنشئ حسابك وابدأ استخدام خدماتي</p>
+      </div>
+
+      <form id="registerForm" class="form" novalidate>
+        <div class="field"><input id="registerName" type="text" placeholder="الاسم بالكامل" autocomplete="name"></div>
+        <div class="field phone-field"><span class="country">🇪🇬 +20</span><input id="registerPhone" type="tel" inputmode="numeric" maxlength="11" placeholder="رقم الهاتف" autocomplete="tel"></div>
+        <div class="field"><input id="registerPassword" type="password" placeholder="كلمة السر" autocomplete="new-password"><button class="eye" type="button" data-target="registerPassword">◉</button></div>
+        <div class="field"><input id="registerConfirm" type="password" placeholder="تأكيد كلمة السر" autocomplete="new-password"><button class="eye" type="button" data-target="registerConfirm">◉</button></div>
+        <button class="primary" type="submit">إنشاء الحساب</button>
+      </form>
+
+      <p class="switch">لديك حساب بالفعل؟ <button id="showLogin" class="link-btn" type="button">تسجيل الدخول</button></p>
+      <div id="registerMsg" class="message"></div>
+    </section>
+
+    <section id="homeView" class="view hidden">
+      <div class="home-card">
+        <div class="avatar">م</div>
+        <div>
+          <p class="small">مرحباً بك 👋</p>
+          <h1 id="userName">مستخدم خدماتي</h1>
+        </div>
+      </div>
+
+      <h2>خدماتك</h2>
+      <div class="services">
+        <button class="service" type="button"><span>🛠️</span><b>الخدمات</b><small>استكشف الخدمات</small></button>
+        <button class="service" type="button"><span>📋</span><b>طلباتي</b><small>تابع طلباتك</small></button>
+        <button class="service" type="button"><span>👤</span><b>حسابي</b><small>بيانات الحساب</small></button>
+        <button class="service" type="button"><span>💬</span><b>المساعدة</b><small>تواصل معنا</small></button>
+      </div>
+
+      <button id="logoutBtn" class="logout" type="button">تسجيل الخروج</button>
+      <p class="version">خدماتي V1.2</p>
+    </section>
+  </main>
+
+  <div id="toast" class="toast"></div>
+  <script src="app.js"></script>
+</body>
+</html>
