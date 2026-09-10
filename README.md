@@ -47,7 +47,7 @@
 5. اربط Adapter مع بوابة الدفع التي اخترتها، ثم اضبط عنوان الـWebhook لديها.
 6. اختبر حالات success / failed / refunded ومطابقة المبلغ قبل الإطلاق.
 
-## V5.2 — تطبيق PWA + Offline + Push
+## V5.3 — تطبيق PWA + Offline + Push
 - 📱 `manifest.webmanifest` يجعل خدماتي قابلة للتثبيت كتطبيق على أندرويد والمتصفحات الداعمة.
 - ⚡ `sw.js` للتخزين المؤقت والعمل بدون اتصال جزئيًا.
 - 🔔 Service Worker جاهز لإظهار Push Notifications.
@@ -55,3 +55,13 @@
 - 📲 شريط تثبيت داخل الموقع.
 - 🖼️ أيقونات التطبيق 192/512.
 - ⚠️ Push الحقيقي يحتاج VAPID public key + حفظ subscription على الخادم + مزود Push. لا تضع VAPID private key داخل الموقع.
+
+## V5.3 — Push Notifications
+1. شغّل الترحيل الإضافي الموجود في `schema.sql` لإنشاء `push_subscriptions`.
+2. ولّد مفاتيح VAPID وضع المفتاح العام في `config.js` داخل `vapidPublicKey`.
+3. ضع الأسرار `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `VAPID_SUBJECT`, و`SUPABASE_SERVICE_ROLE_KEY` في Supabase Secrets.
+4. انشر الدالة `supabase/functions/send-push`.
+5. ضع رابطها في `pushFunctionUrl` إذا أردت استدعاءها من لوحة إدارة مخصصة.
+6. يجب تشغيل الموقع عبر HTTPS حتى تعمل Push على الأجهزة الحقيقية.
+
+> الوضع التجريبي لا يرسل Push حقيقية؛ زر التفعيل متاح في الوضع الحقيقي بعد تسجيل الدخول.

@@ -10,4 +10,20 @@
   function offlineBadge(){let el=document.getElementById('offlineBadge');if(!navigator.onLine){if(!el){el=document.createElement('div');el.id='offlineBadge';el.className='offline-badge';el.textContent='📡 وضع بدون اتصال';document.body.appendChild(el)}}else el?.remove()}
   window.addEventListener('online',offlineBadge);window.addEventListener('offline',offlineBadge);offlineBadge();
   window.enableKhadamatiPush=async function(){if(!('Notification' in window))throw new Error('المتصفح لا يدعم الإشعارات');const p=await Notification.requestPermission();if(p!=='granted')return {granted:false};const reg=await navigator.serviceWorker.ready;let sub=await reg.pushManager.getSubscription();if(!sub){sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:window.KHADAMATI_CONFIG?.vapidPublicKey||undefined})}return {granted:true,subscription:sub};};
+  window.syncKhadamatiPush=async function(){
+    const cfg=window.KHADAMATI_CONFIG||{};
+    if(!window.supabase||!cfg.supabaseUrl||!cfg.supabaseAnonKey||!subscribed()) return {ok:false,reason:'backend'};
+    const client=window.supabase.createClient(cfg.supabaseUrl,cfg.supabaseAnonKey);
+    const {data:{session}}=await client.auth.getSession();
+    if(!session) return {ok:false,reason:'login'};
+    const result=await window.enableKhadamatiPush();
+    if(!result.granted) return result;
+    const subscription=result.subscription;
+    const payload=subscription.toJSON();
+    const {error}=await client.from('push_subscriptions').upsert({user_id:session.user.id,endpoint:subscription.endpoint,subscription:payload,user_agent:navigator.userAgent,updated_at:new Date().toISOString()},{onConflict:'endpoint'});
+    if(error) throw error;
+    return {ok:true};
+  };
+  function subscribed(){return !!(window.KHADAMATI_CONFIG?.supabaseUrl&&window.KHADAMATI_CONFIG?.supabaseAnonKey);}
+  window.addEventListener('khadamati:login',()=>{window.syncKhadamatiPush?.().catch(()=>{})});
 })();

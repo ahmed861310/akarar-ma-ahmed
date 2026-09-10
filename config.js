@@ -4,5 +4,6 @@ window.KHADAMATI_CONFIG = {
   supabaseUrl: '',
   supabaseAnonKey: '',
   paymentFunctionUrl: '',
-  vapidPublicKey: '' // مثال: https://YOUR-PROJECT.supabase.co/functions/v1/create-payment-session
+  vapidPublicKey: '', // مفتاح VAPID العام للإشعارات Push
+  pushFunctionUrl: '' // مثال: https://YOUR-PROJECT.supabase.co/functions/v1/send-push
 };
