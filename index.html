@@ -11,6 +11,7 @@
 <body>
 <div id="installBanner" class="install-banner hidden"><div><b>📱 ثبّت خدماتي</b><small>أضف المنصة إلى شاشة الموبايل لتفتحها كتطبيق.</small></div><button id="installAppBtn" class="primary small-primary">تثبيت</button><button id="dismissInstallBtn" class="ghost">×</button></div><header class="topbar"><div class="brand"><span class="brand-mark">⚡</span> خدماتي</div><div class="top-actions"><button id="walletTopBtn" class="icon-btn" aria-label="المحفظة">💰</button><button id="notifyBtn" class="icon-btn" aria-label="الإشعارات">🔔<i id="notifDot"></i><b id="notifBadge" class="notif-badge hidden">0</b></button><button id="logoutTop" class="ghost hidden">خروج</button></div></header>
 <main>
+<div id="v7CommandBar" class="v7-commandbar"><button id="v7BackTop" class="v7-backtop">‹</button><div><b id="v7PageTitle">خدماتي</b><small id="v7PageHint">كل خدماتك في مكان واحد</small></div><button id="v7QuickNotify" class="v7-round">🔔</button></div>
 <section id="publicPage" class="page hidden"><div class="public-hero"><div><span class="eyebrow dark-eyebrow">⚡ خدماتي</span><h1>خدماتك تبدأ من هنا.</h1><p>اكتشف مقدمي الخدمات، قارن الأسعار والتقييمات، واطلب الخدمة المناسبة بسهولة.</p><div class="public-actions"><button id="publicProvidersBtn" class="primary">استكشف مقدمي الخدمات</button><button id="publicLoginBtn" class="secondary">تسجيل الدخول</button></div></div><div class="public-visual">🧑‍💼<span>⭐ تقييمات<br>💰 أسعار واضحة<br>🔐 وساطة آمنة</span></div></div><div class="public-features"><article><b>🔎 اكتشف</b><small>ابحث حسب نوع الخدمة والسعر.</small></article><article><b>⭐ قارن</b><small>راجع التقييمات قبل الطلب.</small></article><article><b>🔐 اطلب بأمان</b><small>الوساطة تحجز المبلغ حتى تأكيد الاستلام.</small></article></div><div class="section-head"><h2>مقدمو خدمات مميزون</h2><button id="publicSeeAll" class="link-btn">عرض الكل</button></div><div id="publicProvidersList" class="providers-grid"></div></section>
 <section id="loginPage" class="page login-page"><div class="login-card"><div class="logo-circle">⚡</div><h1>أهلاً بك في خدماتي</h1><p class="muted center">منصة واحدة للوصول إلى خدماتك بسهولة</p>
 <label for="phone">رقم الهاتف</label><div class="input-wrap"><span class="phone-prefix">🇪🇬 +20</span><input id="phone" class="phone-input" inputmode="numeric" maxlength="11" placeholder="01xxxxxxxxx" autocomplete="tel"></div>
@@ -39,6 +40,18 @@
   <div class="referral-card"><div class="referral-code-box"><small>كود الإحالة الخاص بك</small><strong id="myReferralCode">KH-000000</strong><button id="copyReferralBtn" class="secondary">نسخ الكود</button></div><div class="referral-link-box"><small>رابط الدعوة</small><input id="myReferralLink" readonly><button id="shareReferralBtn" class="primary">🔗 مشاركة الرابط</button></div></div>
   <div class="stats referral-stats"><div class="stat"><span>👥</span><div><strong id="refInvites">0</strong><small>دعوات</small></div></div><div class="stat"><span>✅</span><div><strong id="refQualified">0</strong><small>دعوات مؤهلة</small></div></div><div class="stat"><span>🎁</span><div><strong id="refRewards">0 جنيه</strong><small>مكافآت</small></div></div></div>
   <div class="panel"><h2>كيف تعمل؟</h2><div class="ref-steps"><article><b>1</b><span>شارك رابطك</span></article><article><b>2</b><span>صديقك يسجل من الرابط</span></article><article><b>3</b><span>بعد استيفاء الشروط تُحسب المكافأة</span></article></div><button id="demoReferralBtn" class="secondary">محاكاة دعوة تجريبية</button><p class="muted" style="margin-bottom:0">المكافآت في النسخة التجريبية محاكاة فقط. قبل الإطلاق، حدّد قيمة المكافأة وشروط الاستحقاق في قاعدة البيانات.</p></div>
+</section>
+<section id="accountPage" class="page hidden">
+  <div class="v7-account-hero"><div class="v7-account-avatar">👤</div><div><span class="eyebrow dark-eyebrow">حسابي</span><h1 id="accountName">حسابك في خدماتي</h1><p id="accountPhone" class="muted">إدارة الحساب والمحفظة والأمان من مكان واحد.</p></div></div>
+  <div class="v7-account-grid">
+    <button class="v7-account-card" data-v7-action="wallet"><span>💰</span><div><b>المحفظة</b><small>الرصيد والمدفوعات</small></div><i>‹</i></button>
+    <button class="v7-account-card" data-v7-action="provider"><span>🧑‍💼</span><div><b>قدّم خدمتك</b><small>اعرض خدمتك للعملاء</small></div><i>‹</i></button>
+    <button class="v7-account-card" data-v7-action="referral"><span>🎁</span><div><b>الإحالات والمكافآت</b><small>شارك رابطك وتابع مكافآتك</small></div><i>‹</i></button>
+    <button class="v7-account-card" data-v7-action="safety"><span>🛡️</span><div><b>الأمان والثقة</b><small>البلاغات والنزاعات والتوثيق</small></div><i>‹</i></button>
+    <button class="v7-account-card" data-v7-action="business"><span>🚀</span><div><b>خدماتي للأعمال</b><small>باقات النمو وتحقيق الدخل</small></div><i>‹</i></button>
+    <button class="v7-account-card" data-v7-action="logout"><span>↪️</span><div><b>تسجيل الخروج</b><small>الخروج من الحساب الحالي</small></div><i>‹</i></button>
+  </div>
+  <div class="v7-security-note"><b>🔐 حسابك محمي</b><span>تواصل، ادفع، وتابع التنفيذ من داخل المنصة.</span></div>
 </section>
 <section id="adminPage" class="page hidden">
   <div class="admin-head"><div><span class="eyebrow dark-eyebrow">مركز التحكم</span><h1>لوحة تحكم خدماتي</h1><p class="muted">إدارة المنصة بالكامل: الطلبات، المستخدمون، مقدمو الخدمات، والأموال.</p></div><button id="adminBackBtn" class="back-btn">← الرئيسية</button></div>
@@ -180,4 +193,11 @@ document.addEventListener('click',e=>{const b=e.target.closest('.ex-approve');if
 document.addEventListener('click',e=>{const b=e.target.closest('.ex-file');if(!b)return;const r=window.activeExecutionRequest,a=milestonesFor(r),m=a[Number(b.dataset.i)];const f=prompt('اسم ملف التسليم أو وصفه:','التسليم النهائي');if(f===null)return;m.file=f.trim()||'التسليم النهائي';const all=exDemo();all[String(r.id)]=a;saveEx(all);renderExecution(r);toast('تم تسجيل التسليم 📎')});
 })();
 </script>
+<nav id="v7BottomNav" class="v7-bottom-nav" aria-label="التنقل الرئيسي">
+<button data-v7-nav="homePage" class="active"><span>⌂</span><b>الرئيسية</b></button>
+<button data-v7-nav="providersPage"><span>🔎</span><b>الخدمات</b></button>
+<button data-v7-nav="requestsPage"><span>📋</span><b>طلباتي</b><em id="v7RequestBadge" class="hidden">0</em></button>
+<button data-v7-nav="messages"><span>💬</span><b>الرسائل</b></button>
+<button data-v7-nav="accountPage"><span>👤</span><b>حسابي</b></button>
+</nav>
 </body></html>

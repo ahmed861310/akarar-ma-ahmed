@@ -19,7 +19,7 @@ function openPublicService(slug){const x=publicServices[slug];if(!x)return;track
 function validPhone(p){return /^01[0-9]{9}$/.test(p)}
 function setMsg(id,t,ok=false){const e=$(id);if(!e)return;e.textContent=t;e.classList.toggle('success-msg',ok)}
 function toast(t){$('toast').textContent=t;$('toast').classList.add('show');setTimeout(()=>$('toast').classList.remove('show'),2200)}
-function show(page){['publicPage','loginPage','signupPage','homePage','providersPage','providerProfilePage','requestsPage','adminPage','walletPage','chatPage','servicePage','businessPage'].forEach(id=>$(id)?.classList.add('hidden'));$(page)?.classList.remove('hidden');$('logoutTop')?.classList.toggle('hidden',!['homePage','requestsPage','adminPage'].includes(page))}
+function show(page){['publicPage','loginPage','signupPage','homePage','providersPage','providerProfilePage','requestsPage','adminPage','walletPage','chatPage','servicePage','businessPage','referralPage','safetyPage','offersPage','executionPage','accountPage'].forEach(id=>$(id)?.classList.add('hidden'));$(page)?.classList.remove('hidden');$('logoutTop')?.classList.toggle('hidden',!['homePage','requestsPage','adminPage','providersPage','accountPage'].includes(page));window.dispatchEvent(new CustomEvent('khadamati:navigate',{detail:{page}}))}
 function demoUser(){try{return JSON.parse(localStorage.getItem('khadamatiDemoUser')||'null')}catch{return null}}
 function saveDemoUser(u){localStorage.setItem('khadamatiDemoUser',JSON.stringify(u))}
 function clearDemo(){localStorage.removeItem('khadamatiDemoUser')}
@@ -394,3 +394,16 @@ $('offersBackBtn')?.addEventListener('click',showHome);$('publishOfferRequestBtn
 const offersNavBtn=document.createElement('button');offersNavBtn.className='secondary small-primary';offersNavBtn.textContent='⚔️ سوق العروض';offersNavBtn.onclick=showOffers;document.querySelector('.market-banner')?.appendChild(offersNavBtn);
 // إتاحة إرسال عرض من كل طلب سوق مفتوح لمقدمي الخدمات
 const _renderOfferRequests=renderOfferRequests;renderOfferRequests=async function(){await _renderOfferRequests();const box=$('offerRequestsList');if(!box)return;box.querySelectorAll('.offer-request-card').forEach(card=>{const top=card.querySelector('.offer-request-top');const id=card.querySelector('.choose-offer')?.dataset.requestId||'';if(id&&user()&&demoProviders().some(p=>String(p.user_id)===String(user().id))){const b=document.createElement('button');b.className='secondary small-primary';b.textContent='💼 أرسل عرضًا';b.onclick=()=>submitOffer(id);top?.appendChild(b)}})};
+
+
+/* V7.0 shell controller: one-tap navigation without breaking existing flows */
+(function(){
+  const titles={homePage:['الرئيسية','كل خدماتك في مكان واحد'],providersPage:['الخدمات','اكتشف مقدم الخدمة المناسب'],requestsPage:['طلباتي','تابع الحالة والتنفيذ'],accountPage:['حسابي','إدارة حسابك وخدماتك']};
+  function setActive(page){document.querySelectorAll('[data-v7-nav]').forEach(b=>b.classList.toggle('active',b.dataset.v7Nav===page));const t=titles[page]||['خدماتي',''];if($('v7PageTitle'))$('v7PageTitle').textContent=t[0];if($('v7PageHint'))$('v7PageHint').textContent=t[1];}
+  function nav(page){if(!user()&&!['publicPage','loginPage','signupPage'].includes(page))return show('loginPage');if(page==='messages'){showRequests();return}show(page);if(page==='providersPage'&&typeof showProviders==='function')showProviders();if(page==='requestsPage'&&typeof showRequests==='function')showRequests();if(page==='accountPage'){const u=user();$('accountName').textContent=u?.name||'حسابك في خدماتي';$('accountPhone').textContent=u?.phone||'إدارة الحساب والمحفظة والأمان من مكان واحد.'}setActive(page);window.scrollTo({top:0,behavior:'smooth'})}
+  document.addEventListener('click',e=>{const b=e.target.closest('[data-v7-nav]');if(b)nav(b.dataset.v7Nav);const a=e.target.closest('[data-v7-action]');if(a){const x=a.dataset.v7Action;if(x==='wallet')renderWallet();else if(x==='provider')$('becomeProviderBtn')?.click();else if(x==='referral')renderReferral();else if(x==='safety')renderMySafety();else if(x==='business'){if(typeof showBusiness==='function')showBusiness();else show('businessPage')}else if(x==='logout')$('logoutTop')?.click()}});
+  $('v7QuickNotify')?.addEventListener('click',openNotifications);
+  $('v7BackTop')?.addEventListener('click',()=>showHome());
+  window.addEventListener('khadamati:navigate',e=>{setActive(e.detail.page);$('v7CommandBar')?.classList.toggle('hidden',['loginPage','signupPage','publicPage'].includes(e.detail.page));});
+  window.addEventListener('load',()=>{setActive(user()?'homePage':'loginPage');try{const n=JSON.parse(localStorage.getItem('khadamatiRequests')||'[]');if($('v7RequestBadge')&&n.length){$('v7RequestBadge').textContent=n.length;$('v7RequestBadge').classList.remove('hidden')}}catch{}});
+})();
