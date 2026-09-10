@@ -45,3 +45,25 @@ label{font-size:18px}.phone-wrap input,.password-wrap input,.full-input{height:6
 .text-btn,.switch-text,.link-btn{font-size:18px}
 }
 @media(max-width:380px){.brand{font-size:28px}.page{padding-left:13px;padding-right:13px}h1{font-size:39px}.google-btn{font-size:16px}}
+
+
+/* V1.4.2: consistent text-link styling for password recovery */
+.forgot-password, .forgotPassword, .link-button {
+  display: inline-block;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  color: #1456b8 !important;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+  font: inherit;
+  font-weight: 700;
+  padding: 8px 0 !important;
+  margin: 0;
+  cursor: pointer;
+  border-radius: 0 !important;
+}
+.forgot-password:hover, .forgotPassword:hover, .link-button:hover {
+  color: #0b3f8f !important;
+}
