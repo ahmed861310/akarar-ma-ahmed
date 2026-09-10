@@ -1,112 +1,68 @@
-const $ = (id) => document.getElementById(id);
+const form = document.getElementById("loginForm");
+const phone = document.getElementById("phone");
+const password = document.getElementById("password");
+const togglePassword = document.getElementById("togglePassword");
+const languageBtn = document.getElementById("languageBtn");
+const toast = document.getElementById("toast");
 
-const state = {
-  get users() {
-    try { return JSON.parse(localStorage.getItem("khadamati_users") || "[]"); }
-    catch { return []; }
-  },
-  set users(value) { localStorage.setItem("khadamati_users", JSON.stringify(value)); }
-};
-
-function showPage(page) {
-  ["loginPage","signupPage","homePage"].forEach(id => $(id).classList.add("hidden"));
-  $(page).classList.remove("hidden");
-  window.scrollTo({top:0, behavior:"smooth"});
+function showToast(message) {
+  toast.textContent = message;
+  toast.classList.add("show");
+  clearTimeout(window.toastTimer);
+  window.toastTimer = setTimeout(() => toast.classList.remove("show"), 2600);
 }
 
-function message(text) {
-  const box = $("message");
-  box.textContent = text;
-  box.classList.add("show");
-  clearTimeout(message.timer);
-  message.timer = setTimeout(() => box.classList.remove("show"), 3000);
-}
+phone.addEventListener("input", () => {
+  phone.value = phone.value.replace(/\D/g, "").slice(0, 11);
+});
 
-function cleanPhone(phone) {
-  return phone.replace(/\D/g,"");
-}
+togglePassword.addEventListener("click", () => {
+  const isPassword = password.type === "password";
+  password.type = isPassword ? "text" : "password";
+  togglePassword.setAttribute(
+    "aria-label",
+    isPassword ? "إخفاء كلمة السر" : "إظهار كلمة السر"
+  );
+});
 
-function validPhone(phone) {
-  return /^01[0125]\d{8}$/.test(cleanPhone(phone));
-}
+form.addEventListener("submit", (event) => {
+  event.preventDefault();
 
-function login(phone, password) {
-  const user = state.users.find(u => u.phone === phone && u.password === password);
-  if (!user) {
-    message("رقم الهاتف أو كلمة السر غير صحيحة.");
+  const value = phone.value.trim();
+  if (!/^01\d{9}$/.test(value)) {
+    showToast("من فضلك اكتب رقم هاتف مصري صحيح من 11 رقم.");
+    phone.focus();
     return;
   }
-  localStorage.setItem("khadamati_current", JSON.stringify(user));
-  renderHome(user);
-}
 
-function renderHome(user) {
-  $("userName").textContent = user.name || "مستخدم خدماتي";
-  showPage("homePage");
-}
+  if (password.value.length < 4) {
+    showToast("من فضلك اكتب كلمة السر.");
+    password.focus();
+    return;
+  }
 
-$("loginForm").addEventListener("submit", (e) => {
+  showToast("تم إرسال بيانات تسجيل الدخول.");
+});
+
+document.getElementById("forgotLink").addEventListener("click", (e) => {
   e.preventDefault();
-  const phone = cleanPhone($("loginPhone").value);
-  const password = $("loginPassword").value;
-  if (!validPhone(phone)) return message("اكتب رقم هاتف مصري صحيح مثل 01012345678.");
-  if (password.length < 6) return message("كلمة السر يجب أن تكون 6 أحرف أو أكثر.");
-  login(phone, password);
+  showToast("سيتم تجهيز استعادة كلمة السر في الخطوة القادمة.");
 });
 
-$("signupForm").addEventListener("submit", (e) => {
+document.getElementById("signupLink").addEventListener("click", (e) => {
   e.preventDefault();
-  const name = $("signupName").value.trim();
-  const phone = cleanPhone($("signupPhone").value);
-  const password = $("signupPassword").value;
-  const confirm = $("signupConfirm").value;
-
-  if (name.length < 2) return message("اكتب الاسم بشكل صحيح.");
-  if (!validPhone(phone)) return message("اكتب رقم هاتف مصري صحيح.");
-  if (password.length < 6) return message("كلمة السر يجب أن تكون 6 أحرف أو أكثر.");
-  if (password !== confirm) return message("تأكيد كلمة السر غير مطابق.");
-
-  const users = state.users;
-  if (users.some(u => u.phone === phone)) return message("هذا الرقم مسجل بالفعل.");
-
-  const user = {name, phone, password};
-  users.push(user);
-  state.users = users;
-  localStorage.setItem("khadamati_current", JSON.stringify(user));
-  renderHome(user);
-  $("signupForm").reset();
+  showToast("صفحة إنشاء الحساب ستكون متاحة قريباً.");
 });
 
-$("showSignup").onclick = () => showPage("signupPage");
-$("showLogin").onclick = () => showPage("loginPage");
-
-$("logoutBtn").onclick = () => {
-  localStorage.removeItem("khadamati_current");
-  $("loginForm").reset();
-  showPage("loginPage");
-  message("تم تسجيل الخروج.");
-};
-
-$("forgotBtn").onclick = () => message("استرجاع كلمة السر سيُضاف في إصدار قادم.");
-$("googleBtn").onclick = () => message("تسجيل الدخول بجوجل يحتاج ربط Google OAuth، وسيتم إضافته لاحقًا.");
-
-document.querySelectorAll(".eye").forEach(btn => {
-  btn.addEventListener("click", () => {
-    const input = $(btn.dataset.target);
-    input.type = input.type === "password" ? "text" : "password";
-  });
+document.getElementById("helpLink").addEventListener("click", (e) => {
+  e.preventDefault();
+  showToast("مركز المساعدة سيكون متاحاً قريباً.");
 });
 
-$("langBtn").onclick = () => message("الواجهة الإنجليزية الكاملة ستكون في تحديث قادم.");
-
-document.querySelectorAll(".service").forEach(btn => {
-  btn.addEventListener("click", () => message("هذه الخاصية مجهزة للإصدار القادم."));
+document.getElementById("googleBtn").addEventListener("click", () => {
+  showToast("تسجيل الدخول بجوجل يحتاج ربط Google OAuth أولاً.");
 });
 
-const current = localStorage.getItem("khadamati_current");
-if (current) {
-  try { renderHome(JSON.parse(current)); }
-  catch { showPage("loginPage"); }
-} else {
-  showPage("loginPage");
-}
+languageBtn.addEventListener("click", () => {
+  showToast("النسخة الإنجليزية ستتم إضافتها في تحديث لاحق.");
+});
