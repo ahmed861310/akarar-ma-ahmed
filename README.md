@@ -31,3 +31,18 @@
 - 🧪 التفعيل في الواجهة الحالية تجريبي ولا يخصم أموالًا حقيقية.
 - 🗄️ أضيفت جداول `subscription_plans` و`provider_subscriptions` مع RLS في `schema.sql`.
 - 💳 قبل البيع الحقيقي يجب ربط بوابة دفع من Backend آمن مع Webhook، وعدم الاعتماد على localStorage لتأكيد الاشتراك.
+
+## V5.1 — الدفع الآمن الحقيقي (جاهز للربط)
+- 🧾 جدول `payment_orders` لتسجيل كل جلسة دفع وحالتها.
+- 🔐 إنشاء جلسة الدفع يتم من Supabase Edge Function وليس من المتصفح.
+- 🔔 Webhook مستقل لتأكيد الدفع والتحقق من التوقيع ومطابقة المبلغ.
+- 🔑 أسرار بوابة الدفع تبقى داخل Edge Function Secrets.
+- ⚠️ المشروع لا يعلن عن استقبال أموال حقيقية قبل وضع بيانات بوابة الدفع وتنفيذ Gateway Adapter الخاص بالمزود المختار.
+
+### إعداد V5.1
+1. شغّل `schema.sql` كاملًا في Supabase.
+2. انشر `supabase/functions/create-payment-session` و`payment-webhook`.
+3. أضف Secrets: `PAYMENT_GATEWAY_URL`, `PAYMENT_GATEWAY_SECRET`, `PAYMENT_WEBHOOK_SECRET`, و`SUPABASE_SERVICE_ROLE_KEY` داخل Edge Functions فقط.
+4. ضع رابط `create-payment-session` في `config.js` داخل `paymentFunctionUrl`.
+5. اربط Adapter مع بوابة الدفع التي اخترتها، ثم اضبط عنوان الـWebhook لديها.
+6. اختبر حالات success / failed / refunded ومطابقة المبلغ قبل الإطلاق.
