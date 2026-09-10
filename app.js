@@ -407,3 +407,38 @@ const _renderOfferRequests=renderOfferRequests;renderOfferRequests=async functio
   window.addEventListener('khadamati:navigate',e=>{setActive(e.detail.page);$('v7CommandBar')?.classList.toggle('hidden',['loginPage','signupPage','publicPage'].includes(e.detail.page));});
   window.addEventListener('load',()=>{setActive(user()?'homePage':'loginPage');try{const n=JSON.parse(localStorage.getItem('khadamatiRequests')||'[]');if($('v7RequestBadge')&&n.length){$('v7RequestBadge').textContent=n.length;$('v7RequestBadge').classList.remove('hidden')}}catch{}});
 })();
+
+/* V7.3 Provider workspace */
+(function(){
+  function mineProviders(){const u=user(); if(!u)return []; return demoProviders().filter(p=>String(p.user_id||p.userId||'demo')===String(u.id||'demo') || String(p.contact||'')===String(u.phone||''));}
+  async function loadMine(){
+    if(!BACKEND_READY){const ps=mineProviders(); const req=demoUser()?.requestList||[]; return {providers:ps,requests:req.filter(r=>ps.some(p=>String(p.id)===String(r.providerId)))};}
+    const {data:ps,error}=await sb.from('providers').select('id,name,category,description,price,contact,verified,verification_status,commission_rate').eq('user_id',sessionUser.id).order('created_at',{ascending:false}); if(error)throw error;
+    const ids=(ps||[]).map(p=>p.id); let requests=[]; if(ids.length){const q=await sb.from('service_requests').select('id,service,note,status,created_at,provider_id,provider_price,platform_fee,provider_net,payment_status').in('provider_id',ids).order('created_at',{ascending:false}); if(q.error)throw q.error; requests=q.data||[];} return {providers:ps||[],requests};
+  }
+  function pct(r){if(r.status==='تم التنفيذ')return 100;if(r.status==='جاري التنفيذ')return 60;if(r.status==='قيد المراجعة')return 20;return 0}
+  async function renderProviderDashboard(){
+    if(!user())return show('loginPage'); show('providerDashboardPage');
+    const orders=$('providerDashOrders'), offers=$('providerDashOffers'), earn=$('providerDashEarnings');
+    orders.innerHTML='<div class="provider-empty">جاري تحميل لوحة العمل…</div>';
+    try{const d=await loadMine(); const p=d.providers[0];
+      if(!p){$('providerDashProfile').innerHTML='<div class="provider-dash-profile"><div class="avatar">🧑‍💼</div><div><h2>ابدأ كمقدم خدمة</h2><small>أضف أول خدمة لك لتظهر للعملاء وتستقبل الطلبات.</small></div></div>'; $('providerDashStats').innerHTML=''; orders.innerHTML='<div class="provider-empty"><div style="font-size:30px">🚀</div><h3>لا توجد خدمة منشورة</h3><p>اضغط «إضافة خدمة» وابدأ استقبال العملاء.</p><button class="primary" id="pdEmptyAdd">إضافة خدمتي</button></div>'; $('pdEmptyAdd').onclick=()=>$('becomeProviderBtn')?.click(); return;}
+      $('providerDashProfile').innerHTML=`<div class="avatar">🧑‍💼</div><div style="flex:1"><h2>${escapeHtml(p.name)}</h2><small>${escapeHtml(p.category)} · ${p.verified?'🛡️ موثق':'التوثيق غير مكتمل'} · يبدأ من ${money(p.price)}</small></div><button class="secondary" id="pdProfileBtn">عرض ملفي</button></div>`;
+      const completed=d.requests.filter(r=>r.status==='تم التنفيذ').length, active=d.requests.filter(r=>r.status!=='تم التنفيذ'&&r.status!=='ملغي').length, gross=d.requests.filter(r=>['held','released'].includes(r.payment_status||r.paymentStatus)).reduce((a,r)=>a+Number(r.provider_net||r.providerNet||0),0);
+      $('providerDashStats').innerHTML=`<div class="provider-dash-stat"><span>📋</span><strong>${d.requests.length}</strong><small>كل الطلبات</small></div><div class="provider-dash-stat"><span>⚡</span><strong>${active}</strong><small>طلبات نشطة</small></div><div class="provider-dash-stat"><span>✅</span><strong>${completed}</strong><small>مكتملة</small></div><div class="provider-dash-stat"><span>💰</span><strong>${money(gross)}</strong><small>صافي الأرباح</small></div>`;
+      $('pdProfileBtn').onclick=()=>showProviderProfile(p.id);
+      orders.innerHTML=d.requests.length?d.requests.map(r=>`<article class="provider-order"><div class="provider-order-top"><b>#${escapeHtml(r.id)}</b><span class="status ${statusClass(r.status)}">${escapeHtml(r.status||'قيد المراجعة')}</span></div><h3>${serviceInfo[r.service]?.[0]||'📋'} ${escapeHtml(r.service)}</h3><p>${escapeHtml(r.note||'لا توجد تفاصيل')}</p><div class="provider-progress"><i style="width:${pct(r)}%"></i></div><div class="provider-order-meta"><span>📅 ${formatDate(r.created_at||r.createdAt)}</span><span>💰 ${money(r.provider_net||r.providerNet||0)}</span><span>🔐 ${escapeHtml(r.payment_status||r.paymentStatus||'غير مطلوب')}</span></div><div class="provider-dash-actions"><button class="secondary pd-chat" data-id="${escapeHtml(r.id)}">💬 فتح المحادثة</button><button class="primary pd-exec" data-id="${escapeHtml(r.id)}">🚀 متابعة التنفيذ</button></div></article>`).join(''):'<div class="provider-empty"><div style="font-size:30px">📭</div><h3>لسه مفيش طلبات</h3><p>خدمتك منشورة، وانتظر أول طلب من العملاء.</p></div>';
+      orders.querySelectorAll('.pd-chat').forEach(b=>b.onclick=()=>{const r=d.requests.find(x=>String(x.id)===String(b.dataset.id)); if(r)openChat(r)});
+      orders.querySelectorAll('.pd-exec').forEach(b=>b.onclick=()=>{const r=d.requests.find(x=>String(x.id)===String(b.dataset.id)); if(r&&typeof openExecution==='function')openExecution(r)});
+      offers.innerHTML='<div class="provider-empty"><div style="font-size:28px">💼</div><h3>عروض الأسعار</h3><p>عروضك التي ترسلها للعملاء من سوق العروض تظهر هنا.</p><button class="secondary" id="pdOffersBtn">فتح سوق العروض</button></div>';
+      $('pdOffersBtn').onclick=showOffers;
+      earn.innerHTML=`<article class="provider-earning-row"><div><b>صافي الأرباح المحررة</b><small>بعد خصم عمولة خدماتي</small></div><strong class="provider-money">${money(gross)}</strong></article><article class="provider-earning-row"><div><b>طلبات مكتملة</b><small>يمكنك متابعة السحب من المحفظة</small></div><strong>${completed}</strong></article><button class="primary" id="pdWalletBtn">💰 فتح المحفظة</button>`; $('pdWalletBtn').onclick=renderWallet;
+      document.querySelectorAll('.provider-dash-tab').forEach(t=>t.onclick=()=>{document.querySelectorAll('.provider-dash-tab').forEach(x=>x.classList.remove('active'));t.classList.add('active');['orders','offers','earnings'].forEach(k=>$('providerDash'+k[0].toUpperCase()+k.slice(1)).classList.toggle('hidden',k!==t.dataset.pdTab))});
+    }catch(e){orders.innerHTML='<div class="provider-empty"><h3>تعذر تحميل لوحة مقدم الخدمة</h3><p>جرّب مرة أخرى أو راجع إعدادات Supabase.</p></div>'}
+  }
+  window.renderProviderDashboard=renderProviderDashboard;
+  $('providerDashBack')?.addEventListener('click',()=>{show('accountPage');setTimeout(()=>document.querySelector('[data-v7-nav="accountPage"]')?.classList.add('active'),0)});
+  $('providerDashAdd')?.addEventListener('click',()=>$('becomeProviderBtn')?.click());
+  document.addEventListener('click',e=>{const a=e.target.closest('[data-v72-action="provider-dashboard"]');if(a)renderProviderDashboard()});
+  const oldNav=document.querySelector('[data-v7-action="provider"]'); if(oldNav)oldNav.dataset.v7Action='provider-dashboard';
+})();
