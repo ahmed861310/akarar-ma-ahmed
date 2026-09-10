@@ -46,3 +46,12 @@
 4. ضع رابط `create-payment-session` في `config.js` داخل `paymentFunctionUrl`.
 5. اربط Adapter مع بوابة الدفع التي اخترتها، ثم اضبط عنوان الـWebhook لديها.
 6. اختبر حالات success / failed / refunded ومطابقة المبلغ قبل الإطلاق.
+
+## V5.2 — تطبيق PWA + Offline + Push
+- 📱 `manifest.webmanifest` يجعل خدماتي قابلة للتثبيت كتطبيق على أندرويد والمتصفحات الداعمة.
+- ⚡ `sw.js` للتخزين المؤقت والعمل بدون اتصال جزئيًا.
+- 🔔 Service Worker جاهز لإظهار Push Notifications.
+- 📴 صفحة Offline عند فقد الاتصال.
+- 📲 شريط تثبيت داخل الموقع.
+- 🖼️ أيقونات التطبيق 192/512.
+- ⚠️ Push الحقيقي يحتاج VAPID public key + حفظ subscription على الخادم + مزود Push. لا تضع VAPID private key داخل الموقع.

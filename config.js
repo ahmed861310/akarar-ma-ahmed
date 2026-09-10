@@ -3,5 +3,6 @@
 window.KHADAMATI_CONFIG = {
   supabaseUrl: '',
   supabaseAnonKey: '',
-  paymentFunctionUrl: '' // مثال: https://YOUR-PROJECT.supabase.co/functions/v1/create-payment-session
+  paymentFunctionUrl: '',
+  vapidPublicKey: '' // مثال: https://YOUR-PROJECT.supabase.co/functions/v1/create-payment-session
 };
