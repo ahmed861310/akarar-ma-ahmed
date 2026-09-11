@@ -974,3 +974,10 @@ select score, case when score>=90 then 'ممتاز' when score>=78 then 'موث�
 $$;
 revoke all on function public.provider_reputation_summary(bigint) from public,anon;
 grant execute on function public.provider_reputation_summary(bigint) to authenticated;
+
+-- V8.0 SECURITY HARDENING: لا تكشف أكواد الخصم وقيَمها للزوار مباشرة.
+-- التحقق من الكوبون يتم عبر الدالة الآمنة validate_coupon للمستخدم المسجل فقط.
+drop policy if exists "coupons public read active" on public.coupons;
+revoke select on public.coupons from anon, authenticated;
+revoke execute on function public.validate_coupon(text,numeric) from anon;
+grant execute on function public.validate_coupon(text,numeric) to authenticated;
