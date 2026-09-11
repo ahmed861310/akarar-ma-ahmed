@@ -770,21 +770,6 @@ create policy "market requests own insert" on public.market_requests for insert 
 create policy "market requests admin read" on public.market_requests for select using (public.is_admin());
 create policy "offers participants read" on public.service_offers for select using (exists(select 1 from public.market_requests r where r.id=request_id and (r.user_id=auth.uid() or public.is_admin())) or exists(select 1 from public.providers p where p.id=provider_id and p.user_id=auth.uid()));
 create policy "providers insert offers" on public.service_offers for insert with check (exists(select 1 from public.providers p where p.id=provider_id and p.user_id=auth.uid()));
-create or replace function public.accept_service_offer(p_request_id bigint,p_offer_id bigint)
-returns boolean language plpgsql security definer set search_path=public as $$
-declare req public.market_requests; off public.service_offers;
-begin
- select * into req from public.market_requests where id=p_request_id and user_id=auth.uid() and status='open' for update;
- if not found then raise exception 'not_allowed'; end if;
- select * into off from public.service_offers where id=p_offer_id and request_id=p_request_id and status='pending' for update;
- if not found then raise exception 'offer_not_found'; end if;
- update public.service_offers set status=case when id=p_offer_id then 'accepted' else 'rejected' end where request_id=p_request_id;
- update public.market_requests set status='awarded',selected_offer_id=p_offer_id where id=p_request_id;
- return true;
-end; $$;
-revoke all on function public.accept_service_offer(bigint,bigint) from public,anon;
-grant execute on function public.accept_service_offer(bigint,bigint) to authenticated;
-
 -- V6.4: تحويل العرض المقبول إلى طلب خدمة فعلي وربطه بدورة الدفع/الوساطة
 alter table public.service_requests add column if not exists source_market_request_id bigint references public.market_requests(id) on delete set null;
 alter table public.service_requests add column if not exists agreed_deadline_days integer;
