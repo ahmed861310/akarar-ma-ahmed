@@ -493,3 +493,25 @@ async function renderV24Pilot(){const box=$('adminPilotStatus');if(!box)return;b
 $('adminPilotRefresh')?.addEventListener('click',renderV24Pilot);
 const _renderAdminV24=renderAdmin;renderAdmin=async function(){await _renderAdminV24();const tab=document.querySelector('.admin-tab.active')?.dataset.tab;if(tab==='pilot')await renderV24Pilot()};
 document.querySelectorAll('.admin-tab').forEach(t=>t.addEventListener('click',()=>setTimeout(()=>{if(t.dataset.tab==='pilot')renderV24Pilot()},0)));
+
+/* V25 — Canary & Observability */
+async function loadV25Canary(){
+ if(!BACKEND_READY)return {runs:[],events:[]};
+ const [r,e]=await Promise.all([sb.rpc('admin_v25_canary_dashboard'),sb.rpc('admin_v25_recent_health_events',{p_limit:20})]);
+ if(r.error)throw r.error;if(e.error)throw e.error;return {runs:r.data||[],events:e.data||[]};
+}
+async function renderV25Canary(){
+ const sum=$('adminCanarySummary'),runs=$('adminCanaryRuns'),events=$('adminCanaryEvents');if(!sum)return;
+ try{const d=await loadV25Canary();
+  sum.innerHTML=`<article class="control-kpi warning"><small>🧬 آخر اختبار</small><b>${escapeHtml(d.runs[0]?.status||'لا يوجد')}</b><small>${escapeHtml(d.runs[0]?.run_key||'ابدأ اختبارًا جديدًا')}</small></article><article class="control-kpi ok"><small>اختبارات مسجلة</small><b>${d.runs.length}</b></article><article class="control-kpi"><small>أحداث صحة</small><b>${d.events.length}</b></article>`;
+  runs.innerHTML=d.runs.length?d.runs.map(x=>`<div class="control-incident"><div><b>#${x.run_id} — ${escapeHtml(x.status)}</b><small>${escapeHtml(x.run_key)} · ${x.checks_failed||0} فشل من ${x.checks_total||0}</small></div><span>${escapeHtml(String(x.started_at||''))}</span></div>`).join(''):'<p class="muted">لا توجد اختبارات بعد.</p>';
+  events.innerHTML=d.events.length?d.events.map(x=>`<div class="control-incident"><div><b>${x.severity==='critical'?'🔴':x.severity==='warning'?'🟠':'🟢'} ${escapeHtml(x.event_key)}</b><small>${escapeHtml(x.details||'')}</small></div><span>${escapeHtml(String(x.created_at||''))}</span></div>`).join(''):'<p class="muted">لا توجد أحداث.</p>';
+ }catch(e){sum.innerHTML='<div class="empty-state"><h3>V25 غير مفعلة</h3><p>نفّذ V25-canary-observability.sql ثم أعد المحاولة.</p></div>'}
+}
+async function v25Finish(pass){if(!BACKEND_READY){toast('اربط Supabase أولاً');return}try{const d=await loadV25Canary();const run=d.runs.find(x=>x.status==='running');if(!run){toast('لا يوجد اختبار Running');return}const r=await sb.rpc('admin_v25_finish_canary',{p_run_id:run.run_id,p_pass:pass,p_notes:pass?'اختبار Canary ناجح':'اختبار Canary فاشل'});if(r.error)throw r.error;toast(pass?'تم اعتماد الاختبار ✓':'تم تسجيل فشل الاختبار');renderV25Canary()}catch(e){toast('تعذر إنهاء الاختبار')}}
+$('adminCanaryRefresh')?.addEventListener('click',renderV25Canary);
+$('adminCanaryStart')?.addEventListener('click',async()=>{if(!BACKEND_READY){toast('اربط Supabase أولاً');return}try{const r=await sb.rpc('admin_v25_start_canary',{});if(r.error)throw r.error;toast('بدأ اختبار Canary ✓');renderV25Canary()}catch(e){toast(e.message||'تعذر بدء الاختبار')}});
+$('adminCanaryPass')?.addEventListener('click',()=>v25Finish(true));
+$('adminCanaryFail')?.addEventListener('click',()=>v25Finish(false));
+const _renderAdminV25=renderAdmin;renderAdmin=async function(){await _renderAdminV25();const tab=document.querySelector('.admin-tab.active')?.dataset.tab;if(tab==='canary')await renderV25Canary()};
+document.querySelectorAll('.admin-tab').forEach(t=>t.addEventListener('click',()=>setTimeout(()=>{if(t.dataset.tab==='canary')renderV25Canary()},0)));
