@@ -472,3 +472,24 @@ async function renderV23Control(){const box=$('adminControlKpis');if(!box)return
 $('adminControlRefresh')?.addEventListener('click',renderV23Control);
 const _renderAdminV23=renderAdmin;renderAdmin=async function(){await _renderAdminV23();const tab=document.querySelector('.admin-tab.active')?.dataset.tab;if(tab==='control')await renderV23Control()};
 document.querySelectorAll('.admin-tab').forEach(t=>t.addEventListener('click',()=>setTimeout(()=>{if(t.dataset.tab==='control')renderV23Control()},0)));
+
+
+/* V24 — Controlled Pilot */
+async function loadV24Pilot(){
+ if(!BACKEND_READY)return {status:{mode:'pilot',payments_enabled:false,withdrawals_enabled:false,new_requests_enabled:true,dispatch_enabled:true,reason:'وضع تجريبي محلي'},gates:[],audit:[]};
+ const [s,g,a]=await Promise.all([sb.rpc('v24_platform_status'),sb.rpc('admin_v24_launch_gate'),sb.rpc('admin_v24_recent_control_audit',{p_limit:20})]);
+ if(s.error)throw s.error;if(g.error)throw g.error;if(a.error)throw a.error;
+ return {status:(s.data||[])[0]||{},gates:g.data||[],audit:a.data||[]};
+}
+function renderV24Pilot(d){
+ const st=$('adminPilotStatus'), act=$('adminPilotActions'), audit=$('adminPilotAudit'); if(!st)return;
+ const s=d.status||{};
+ st.innerHTML=`<article class="control-kpi ${s.mode==='live'?'ok':s.mode==='paused'?'critical':'warning'}"><small>وضع المنصة</small><b>${escapeHtml(s.mode||'—')}</b><small>${escapeHtml(s.reason||'')}</small></article><article class="control-kpi"><small>💳 الدفع</small><b>${s.payments_enabled?'مفعل':'متوقف'}</b></article><article class="control-kpi"><small>🏦 السحب</small><b>${s.withdrawals_enabled?'مفعل':'متوقف'}</b></article><article class="control-kpi"><small>📋 الطلبات الجديدة</small><b>${s.new_requests_enabled?'مسموح':'متوقف'}</b></article>`;
+ act.innerHTML=`<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px"><button class="secondary v24-preset" data-preset="pilot">🧪 وضع تجريبي آمن</button><button class="secondary v24-preset" data-preset="pause">🛑 إيقاف طارئ</button><button class="primary v24-preset" data-preset="live">🚀 وضع Live</button></div><p class="muted">زر Live لا يعني أن بوابة الدفع أصبحت مربوطة؛ يجب إعداد أسرار Gateway واختبارها أولاً.</p>`;
+ audit.innerHTML=d.audit.length?d.audit.map(x=>`<div class="control-incident"><div><b>${escapeHtml(x.old_mode||'—')} → ${escapeHtml(x.new_mode||'—')}</b><small>${escapeHtml(x.reason||'بدون سبب')} · ${escapeHtml(String(x.created_at||''))}</small></div><span>${x.payments_enabled?'💳':''}${x.withdrawals_enabled?' 🏦':''}</span></div>`).join(''):'<p class="muted">لا توجد تغييرات.</p>';
+ act.querySelectorAll('.v24-preset').forEach(b=>b.onclick=async()=>{const p=b.dataset.preset;const cfg=p==='pilot'?['pilot',false,false,true,true,'إطلاق تجريبي آمن']:p==='pause'?['paused',false,false,false,false,'إيقاف طارئ']:['live',true,true,true,true,'تشغيل Live — بعد التحقق'];if(!BACKEND_READY){toast('الوضع التجريبي المحلي لا يغير قاعدة البيانات');return}try{const r=await sb.rpc('admin_v24_set_platform_control',{p_mode:cfg[0],p_payments_enabled:cfg[1],p_withdrawals_enabled:cfg[2],p_new_requests_enabled:cfg[3],p_dispatch_enabled:cfg[4],p_reason:cfg[5]});if(r.error)throw r.error;toast('تم تحديث وضع المنصة ✓');renderV24Pilot(await loadV24Pilot())}catch(e){toast('تعذر تحديث وضع المنصة')}});
+}
+async function renderV24Pilot(){const box=$('adminPilotStatus');if(!box)return;box.innerHTML='<div class="muted">جاري فحص الإطلاق…</div>';try{renderV24Pilot(await loadV24Pilot())}catch(e){box.innerHTML='<div class="empty-state"><h3>تعذر تحميل مركز الإطلاق</h3><p>نفّذ V24-controlled-pilot.sql وتأكد من صلاحيات الإدارة.</p></div>'}}
+$('adminPilotRefresh')?.addEventListener('click',renderV24Pilot);
+const _renderAdminV24=renderAdmin;renderAdmin=async function(){await _renderAdminV24();const tab=document.querySelector('.admin-tab.active')?.dataset.tab;if(tab==='pilot')await renderV24Pilot()};
+document.querySelectorAll('.admin-tab').forEach(t=>t.addEventListener('click',()=>setTimeout(()=>{if(t.dataset.tab==='pilot')renderV24Pilot()},0)));
