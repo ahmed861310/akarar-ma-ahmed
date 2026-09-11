@@ -1,0 +1,10 @@
+{
+  "version": "V22",
+  "name": "Khadamati",
+  "focus": "Financial Control Plane",
+  "previous": "V21",
+  "files": [
+    "V22-financial-control.sql",
+    "README-V22.md"
+  ]
+}
