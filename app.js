@@ -249,7 +249,7 @@ async function updateWithdrawal(id,status){try{async function showPublic(){show(
 $('publicProvidersBtn')?.addEventListener('click',showProviders);$('publicSeeAll')?.addEventListener('click',showProviders);$('publicLoginBtn')?.addEventListener('click',()=>show('loginPage'));document.querySelectorAll('.service[data-service-slug]').forEach(b=>b.addEventListener('click',()=>openPublicService(b.dataset.serviceSlug)));
 
 function handlePublicHash(){const sm=location.hash.match(/^#service=(.+)$/);if(sm){openPublicService(decodeURIComponent(sm[1]));return true}const m=location.hash.match(/^#provider=(.+)$/);if(m){showProviderProfile(decodeURIComponent(m[1]));return true}return false}
-if(BACKEND_READY){const {error}=await sb.from('withdrawal_requests').update({status}).eq('id',id);if(error)throw error}else{const a=JSON.parse(localStorage.getItem('khadamatiWithdrawals')||'[]');const x=a.find(v=>String(v.id)===String(id));if(x)x.status=status;localStorage.setItem('khadamatiWithdrawals',JSON.stringify(a))}toast('تم تحديث طلب السحب');renderAdmin()}catch(e){toast('تعذر تحديث طلب السحب')}}
+if(BACKEND_READY){const {error}=await sb.rpc('admin_update_withdrawal_status',{p_id:Number(id),p_status:status});if(error)throw error}else{const a=JSON.parse(localStorage.getItem('khadamatiWithdrawals')||'[]');const x=a.find(v=>String(v.id)===String(id));if(x)x.status=status;localStorage.setItem('khadamatiWithdrawals',JSON.stringify(a))}toast('تم تحديث طلب السحب');renderAdmin()}catch(e){toast('تعذر تحديث طلب السحب')}}
 
 // V5.4 — نظام الثقة والتحقق
 let verificationProvider=null;

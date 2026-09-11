@@ -1,0 +1,7 @@
+{
+  "version": "V21",
+  "title": "Production Launch Control",
+  "focus": ["payment integrity", "secure withdrawals", "workflow orchestration", "launch preflight"],
+  "requires": ["V20-production-consolidation.sql"],
+  "live_credentials_included": false
+}
