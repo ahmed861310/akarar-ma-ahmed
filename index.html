@@ -74,13 +74,13 @@
     <div class="admin-stat"><span>💰</span><div><strong id="adminRevenue">0</strong><small>عمولات خدماتي</small></div></div>
   </div>
   <div class="admin-finance-strip"><div><span>🔐</span><div><b id="adminHeld">0 جنيه</b><small>أموال محجوزة</small></div></div><div><span>📈</span><div><b id="adminReleased">0 جنيه</b><small>أموال محررة</small></div></div><div><span>↩️</span><div><b id="adminRefunded">0 جنيه</b><small>مبالغ مستردة</small></div></div><div><span>🏦</span><div><b id="adminWithdrawals">0</b><small>طلبات سحب</small></div></div></div>
-  <div class="admin-toolbar"><div class="admin-tabs"><button class="admin-tab active" data-tab="overview">نظرة عامة</button><button class="admin-tab" data-tab="requests">الطلبات</button><button class="admin-tab" data-tab="users">المستخدمون</button><button class="admin-tab" data-tab="providers">مقدمو الخدمات</button><button class="admin-tab" data-tab="finance">الماليات</button><button class="admin-tab" data-tab="verification">التوثيق</button><button class="admin-tab" data-tab="safety">🛡️ الأمان</button><button class="admin-tab" data-tab="trust">🏆 الثقة</button><button class="admin-tab" data-tab="market">🧠 ذكاء السوق</button><button class="admin-tab" data-tab="risk">🚨 المخاطر الذكية</button></div><input id="adminSearch" placeholder="ابحث في القسم الحالي..."></div>
+  <div class="admin-toolbar"><div class="admin-tabs"><button class="admin-tab active" data-tab="overview">نظرة عامة</button><button class="admin-tab" data-tab="requests">الطلبات</button><button class="admin-tab" data-tab="users">المستخدمون</button><button class="admin-tab" data-tab="providers">مقدمو الخدمات</button><button class="admin-tab" data-tab="finance">الماليات</button><button class="admin-tab" data-tab="verification">التوثيق</button><button class="admin-tab" data-tab="safety">🛡️ الأمان</button><button class="admin-tab" data-tab="trust">🏆 الثقة</button><button class="admin-tab" data-tab="market">🧠 ذكاء السوق</button><button class="admin-tab" data-tab="risk">🚨 المخاطر الذكية</button><button class="admin-tab" data-tab="cases">⚖️ النزاعات والبلاغات</button></div><input id="adminSearch" placeholder="ابحث في القسم الحالي..."></div>
   <div id="adminOverviewPanel" class="admin-panel"><div id="adminGrowthSummary" class="growth-summary"></div><div class="admin-overview-grid"><div class="panel"><h2>آخر الطلبات</h2><div id="adminRecentRequests"></div></div><div class="panel"><h2>أهم مقدمي الخدمات</h2><div id="adminTopProviders"></div></div></div></div>
   <div id="adminRequestsPanel" class="admin-panel hidden"><div id="adminRequestsList"></div></div>
   <div id="adminUsersPanel" class="admin-panel hidden"><div id="adminUsersList"></div></div>
   <div id="adminProvidersPanel" class="admin-panel hidden"><div id="adminProvidersList"></div></div>
   <div id="adminFinancePanel" class="admin-panel hidden"><div id="adminFinanceList"></div></div><div id="adminVerificationPanel" class="admin-panel hidden"><div id="adminVerificationList"></div></div><div id="adminSafetyPanel" class="admin-panel hidden"><div id="adminSafetyList"></div></div><div id="adminTrustPanel" class="admin-panel hidden"><div class="panel"><h2>🏆 مركز الثقة الذكي</h2><p class="muted">درجة الثقة تعتمد على التقييمات، الإنجازات، التوثيق، وإشارات المخاطر.</p><div id="adminTrustList"></div></div></div><div id="adminMarketPanel" class="admin-panel hidden"><div class="panel"><h2>🧠 ذكاء السوق</h2><p class="muted">ملخص إحصائي للأسعار والطلب حسب نوع الخدمة لمساعدة الإدارة على اتخاذ قرارات أفضل.</p><div id="adminMarketList"></div></div></div>
-  <div id="adminRiskPanel" class="admin-panel hidden"><div class="risk-hero"><div><span class="eyebrow dark-eyebrow">🚨 محرك الأمان</span><h2>المخاطر الذكية</h2><p class="muted">تحليل قائم على قواعد واضحة لاكتشاف الأنماط غير الطبيعية مبكرًا.</p></div><div class="risk-hero-score"><strong id="riskAlertsCount">0</strong><small>تنبيهات تحتاج مراجعة</small></div></div><div class="risk-summary" id="riskSummary"></div><div id="adminRiskList"></div></div>
+  <div id="adminCasesPanel" class="admin-panel hidden"><div class="panel"><h2>⚖️ مركز النزاعات والبلاغات</h2><p class="muted">راجع الحالات المفتوحة وغيّر حالتها من خلال صلاحيات الإدارة فقط.</p><div class="cases-grid"><div><h3>البلاغات</h3><div id="adminReportsList"></div></div><div><h3>النزاعات</h3><div id="adminDisputesList"></div></div></div></div></div><div id="adminRiskPanel" class="admin-panel hidden"><div class="risk-hero"><div><span class="eyebrow dark-eyebrow">🚨 محرك الأمان</span><h2>المخاطر الذكية</h2><p class="muted">تحليل قائم على قواعد واضحة لاكتشاف الأنماط غير الطبيعية مبكرًا.</p></div><div class="risk-hero-score"><strong id="riskAlertsCount">0</strong><small>تنبيهات تحتاج مراجعة</small></div></div><div class="risk-summary" id="riskSummary"></div><div id="adminRiskList"></div></div>
 </section>
 <section id="providersPage" class="page hidden">
   <div class="providers-head"><button id="providersBackBtn" class="back-btn">← الرئيسية</button><div><span class="eyebrow dark-eyebrow">سوق خدماتي</span><h1>مقدمو الخدمات</h1><p class="muted">اختر مقدم الخدمة المناسب وأرسل له طلبك مباشرة.</p></div><button id="becomeProviderBtn" class="secondary provider-cta">أضف خدمتك</button></div>
@@ -300,6 +300,37 @@ document.addEventListener('click',e=>{const b=e.target.closest('.ex-file');if(!b
   setTimeout(refresh,150);
 })();
 </script>
+<script>
+(function(){
+  const esc=v=>String(v??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  async function loadCases(){
+    if(!window.BACKEND_READY||!window.sb){return {reports:[],disputes:[]};}
+    const [r,d]=await Promise.all([
+      sb.from('reports').select('id,reason,details,status,created_at,request_id,provider_id').order('created_at',{ascending:false}).limit(50),
+      sb.from('disputes').select('id,reason,details,status,created_at,request_id,provider_id').order('created_at',{ascending:false}).limit(50)
+    ]);
+    if(r.error)throw r.error;if(d.error)throw d.error;return {reports:r.data||[],disputes:d.data||[]};
+  }
+  function row(x,type){return `<article class="case-row"><div><b>#${esc(x.id)} · ${esc(x.reason)}</b><small>${new Date(x.created_at).toLocaleString('ar-EG')} · طلب #${esc(x.request_id||'—')}</small><p>${esc(x.details)}</p></div><select class="case-status" data-type="${type}" data-id="${esc(x.id)}"><option ${x.status==='open'?'selected':''} value="open">مفتوح</option><option ${x.status==='investigating'?'selected':''} value="investigating">قيد التحقيق</option><option ${x.status==='resolved'?'selected':''} value="resolved">تم الحل</option><option ${x.status==='dismissed'?'selected':''} value="dismissed">مرفوض</option></select></article>`}
+  async function renderCases(){
+    const r=$('adminReportsList'),d=$('adminDisputesList');if(!r||!d)return;
+    try{const x=await loadCases();r.innerHTML=x.reports.length?x.reports.map(v=>row(v,'reports')).join(''):'<div class="empty-state">لا توجد بلاغات.</div>';d.innerHTML=x.disputes.length?x.disputes.map(v=>row(v,'disputes')).join(''):'<div class="empty-state">لا توجد نزاعات.</div>'}
+    catch(e){r.innerHTML=d.innerHTML='<div class="empty-state"><h3>تعذر تحميل الحالات</h3><p>تأكد من تطبيق schema.sql وتسجيل الدخول كإدارة.</p></div>'}
+  }
+  async function updateCase(type,id,status){
+    if(!window.BACKEND_READY||!window.sb)return toast('يلزم ربط Supabase للإدارة الحقيقية');
+    const fn=type==='reports'?'admin_update_report_status':'admin_update_dispute_status';
+    const {error}=await sb.rpc(fn,{p_id:Number(id),p_status:status});if(error){toast(error.message||'تعذر تحديث الحالة');return}toast('تم تحديث الحالة ✓');renderCases();
+  }
+  document.addEventListener('change',e=>{const el=e.target.closest('.case-status');if(el)updateCase(el.dataset.type,el.dataset.id,el.value)});
+  document.addEventListener('click',e=>{const t=e.target.closest('.admin-tab');if(t&&t.dataset.tab==='cases')setTimeout(renderCases,30)});
+  window.renderKhadamatiCases=renderCases;
+  const old=window.renderAdmin;if(old)window.renderAdmin=async function(){await old();const tab=document.querySelector('.admin-tab.active')?.dataset.tab;if(tab==='cases')await renderCases()};
+})();
+</script>
+<style>
+.cases-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.case-row{display:flex;justify-content:space-between;gap:12px;padding:14px;border:1px solid #e5e7eb;border-radius:16px;margin:10px 0;background:#fff}.case-row small,.case-row p{display:block;color:#6b7280;margin:6px 0}.case-status{height:40px;border:1px solid #d7dee0;border-radius:10px;padding:0 8px;font:inherit;background:#fff}@media(max-width:800px){.cases-grid{grid-template-columns:1fr}.case-row{flex-direction:column}.case-status{width:100%}}
+</style>
 <script src="v7.4-execution.js"></script>
 <script src="v7.7-reputation.js"></script>
 <script src="v7.5-execution.js"></script><script src="v7.6-safety.js"></script>

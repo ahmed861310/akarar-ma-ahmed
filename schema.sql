@@ -981,3 +981,29 @@ drop policy if exists "coupons public read active" on public.coupons;
 revoke select on public.coupons from anon, authenticated;
 revoke execute on function public.validate_coupon(text,numeric) from anon;
 grant execute on function public.validate_coupon(text,numeric) to authenticated;
+
+
+-- V9.0: مركز النزاعات والبلاغات — تحديث الحالة عبر دوال إدارية فقط
+create or replace function public.admin_update_report_status(p_id bigint,p_status text)
+returns boolean language plpgsql security definer set search_path=public
+as $$ begin
+  if not public.is_admin() then raise exception 'admin only'; end if;
+  if p_status not in ('open','investigating','resolved','dismissed') then raise exception 'invalid status'; end if;
+  update public.reports set status=p_status, reviewed_at=case when p_status in ('resolved','dismissed') then now() else reviewed_at end where id=p_id;
+  if not found then raise exception 'report not found'; end if;
+  return true;
+end; $$;
+revoke all on function public.admin_update_report_status(bigint,text) from public, anon, authenticated;
+grant execute on function public.admin_update_report_status(bigint,text) to authenticated;
+
+create or replace function public.admin_update_dispute_status(p_id bigint,p_status text)
+returns boolean language plpgsql security definer set search_path=public
+as $$ begin
+  if not public.is_admin() then raise exception 'admin only'; end if;
+  if p_status not in ('open','investigating','resolved','dismissed') then raise exception 'invalid status'; end if;
+  update public.disputes set status=p_status, reviewed_at=case when p_status in ('resolved','dismissed') then now() else reviewed_at end where id=p_id;
+  if not found then raise exception 'dispute not found'; end if;
+  return true;
+end; $$;
+revoke all on function public.admin_update_dispute_status(bigint,text) from public, anon, authenticated;
+grant execute on function public.admin_update_dispute_status(bigint,text) to authenticated;
