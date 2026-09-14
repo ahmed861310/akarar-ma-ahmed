@@ -89,3 +89,23 @@ body{padding-bottom:82px}
 
 /* V23 Control Tower */
 .control-kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:18px 0}.control-kpi{padding:16px;border:1px solid #e5e7eb;border-radius:16px;background:rgba(255,255,255,.72)}.control-kpi b{display:block;font-size:24px;margin:5px 0}.control-kpi small{color:#6b7280}.control-kpi.warning{border-color:#f3c76b}.control-kpi.critical{border-color:#ef9a9a}.control-main-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.control-gate,.control-incident{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:13px 0;border-bottom:1px solid #eee}.control-gate:last-child,.control-incident:last-child{border-bottom:0}.control-pass{font-weight:700}.control-fail{font-weight:700}.control-incident small,.control-gate small{display:block;color:#6b7280;margin-top:4px}.control-incident button{white-space:nowrap}@media(max-width:800px){.control-main-grid{grid-template-columns:1fr}}
+
+/* V27-FIX: reliable page scrolling on Android/iOS/PWA */
+html, body {
+  width: 100%;
+  min-height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: auto;
+}
+body {
+  position: relative;
+  touch-action: pan-y;
+}
+main {
+  min-height: 1px;
+}
+.v7-commandbar {
+  touch-action: pan-y;
+}
