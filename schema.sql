@@ -27,6 +27,7 @@ as $$ select exists(select 1 from public.profiles where id = auth.uid() and role
 drop policy if exists "profiles own read" on public.profiles;
 drop policy if exists "profiles own insert" on public.profiles;
 drop policy if exists "profiles own update" on public.profiles;
+drop policy if exists "profiles own update name only" on public.profiles;
 drop policy if exists "profiles admin read" on public.profiles;
 create policy "profiles own read" on public.profiles for select using (id = auth.uid() or public.is_admin());
 create policy "profiles own insert" on public.profiles for insert with check (id = auth.uid() and role = 'user');
