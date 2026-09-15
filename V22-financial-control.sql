@@ -92,7 +92,8 @@ returns boolean language plpgsql security definer set search_path=public
 as $$
 declare r public.service_requests; po public.payment_orders; total numeric; fee numeric; provider numeric;
 begin
-  if not public.is_admin() and auth.uid() is null then raise exception 'غير مصرح'; end if;
+  -- This function is called by the SECURITY DEFINER trigger below.
+  -- Do not grant it to authenticated users; the trigger is the only execution path.
   select * into r from public.service_requests where id=p_request_id for update;
   if not found then raise exception 'الطلب غير موجود'; end if;
   if r.payment_status <> 'released' then raise exception 'الطلب غير مسوى'; end if;
@@ -105,8 +106,7 @@ begin
   on conflict(request_id) do update set payment_order_id=excluded.payment_order_id,gross_customer_amount=excluded.gross_customer_amount,provider_amount=excluded.provider_amount,platform_fee=excluded.platform_fee,status='posted',posted_at=coalesce(public.platform_finance_ledger_v22.posted_at,excluded.posted_at);
   return true;
 end; $$;
-revoke all on function public.post_platform_finance_v22(bigint) from public,anon;
-grant execute on function public.post_platform_finance_v22(bigint) to authenticated;
+revoke all on function public.post_platform_finance_v22(bigint) from public,anon,authenticated;
 
 -- 5) مطابقة مالية: تكشف الطلبات التي حالتها لا تتطابق مع أوامر الدفع أو دفتر المنصة.
 create or replace function public.admin_v22_reconciliation()
