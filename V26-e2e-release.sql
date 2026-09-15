@@ -42,8 +42,8 @@ begin
   case when c.id=true and not c.payments_enabled and not c.withdrawals_enabled then 'الدفع والسحب متوقفان' else 'يجب إيقاف الدفع والسحب' end);
  -- 2. وجود طبقات الطلب والمطابقة والتوزيع
  insert into public.v26_e2e_checks(run_id,step_no,check_key,status,details) values
- (rid,2,'workflow_schema',case when to_regclass('public.workflow_runs') is not null and to_regclass('public.workflow_transitions') is not null then 'pass' else 'fail' end,'workflow_runs / workflow_transitions'),
- (rid,3,'matching_schema',case when to_regclass('public.dispatch_attempts') is not null then 'pass' else 'fail' end,'dispatch_attempts متاحة للتوزيع');
+ (rid,2,'workflow_schema',case when (to_regclass('public.workflow_runs_v21') is not null or to_regclass('public.workflow_runs_v20') is not null) and (to_regclass('public.workflow_transitions_v21') is not null or to_regclass('public.workflow_transitions_v20') is not null) then 'pass' else 'fail' end,'workflow_runs_v21/v20 + workflow_transitions_v21/v20'),
+ (rid,3,'matching_schema',case when to_regclass('public.dispatch_attempts_v20') is not null then 'pass' else 'fail' end,'dispatch_attempts_v20 متاحة للتوزيع');
  -- 3. طبقة الدفع والتسوية والرقابة المالية
  insert into public.v26_e2e_checks(run_id,step_no,check_key,status,details) values
  (rid,4,'payment_schema',case when to_regclass('public.payment_orders') is not null and to_regprocedure('public.create_payment_order(bigint,text,text)') is not null then 'pass' else 'fail' end,'payment_orders + create_payment_order(3 args)'),
@@ -55,7 +55,7 @@ begin
  (rid,8,'observability',case when to_regclass('public.v25_health_events') is not null then 'pass' else 'fail' end,'سجل صحة المنصة موجود');
  -- 5. بوابة الإطلاق
  insert into public.v26_e2e_checks(run_id,step_no,check_key,status,details) values
- (rid,9,'launch_gate',case when to_regprocedure('public.admin_v24_launch_gate()') is not null then 'pass' else 'fail' end,'Launch Gate موجود'),
+ (rid,9,'launch_gate',case when to_regprocedure('public.v27_launch_gate()') is not null then 'pass' else 'fail' end,'V27 Launch Gate موجود'),
  (rid,10,'admin_security',case when to_regprocedure('public.is_admin()') is not null then 'pass' else 'fail' end,'حارس الإدارة موجود');
  select count(*) filter(where status='fail') into fail_count from public.v26_e2e_checks where run_id=rid;
  update public.v26_e2e_runs set failed_count=fail_count,passed_count=(select count(*) from public.v26_e2e_checks where run_id=rid and status='pass'),status=case when fail_count=0 then 'passed' else 'failed' end,finished_at=now(),notes=case when fail_count=0 then 'Synthetic E2E PASS — لم يتم لمس أموال حقيقية' else 'Synthetic E2E FAIL — راجع الخطوات الفاشلة' end where id=rid;

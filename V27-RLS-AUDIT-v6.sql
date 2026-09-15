@@ -1,0 +1,3 @@
+-- V27 RLS/SECURITY DEFINER hardening
+-- v6: admin diagnostic RPCs now require public.is_admin() before returning privileged data.
+-- No service-role secrets are placed in browser files.

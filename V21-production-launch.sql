@@ -137,8 +137,8 @@ language sql stable security definer set search_path=public
 as $$
 select 'held_requests'::text, coalesce(sum(coalesce(payment_amount,0)),0), 'إجمالي الأموال المحجوزة حسب الطلبات' where false
 union all select 'held_requests',coalesce(sum(coalesce(payment_amount,0)),0),'إجمالي الأموال المحجوزة' from public.service_requests where payment_status='held'
-union all select 'released_requests',coalesce(sum(coalesce(payment_amount,0)),0),'إجمالي الطلبات المحررة' from public.service_requests where payment_status='released'
-union all select 'refunded_requests',coalesce(sum(coalesce(payment_amount,0)),0),'إجمالي الطلبات المستردة' from public.service_requests where payment_status='refunded';
+union all select 'released_requests',coalesce(sum(coalesce(payment_amount,0)),0),'إجمالي الطلبات المحررة' from public.service_requests where payment_status='released' and public.is_admin()
+union all select 'refunded_requests',coalesce(sum(coalesce(payment_amount,0)),0),'إجمالي الطلبات المستردة' from public.service_requests where payment_status='refunded' and public.is_admin();
 $$;
 revoke all on function public.admin_financial_integrity_v21() from public,anon;
 grant execute on function public.admin_financial_integrity_v21() to authenticated;

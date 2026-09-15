@@ -15,5 +15,5 @@ begin
   r := r || jsonb_build_array(jsonb_build_object('withdrawal_statuses','status',case when to_regclass('public.withdrawal_requests') is not null then 'PASS' else 'FAIL' end));
   return jsonb_build_object('ok', not exists (select 1 from jsonb_array_elements(r) x where x->>'status'='FAIL'), 'checks', r, 'generated_at', now());
 end $$;
-revoke all on function public.v27_launch_gate() from public;
+revoke all on function public.v27_launch_gate() from public, anon;
 grant execute on function public.v27_launch_gate() to authenticated;
