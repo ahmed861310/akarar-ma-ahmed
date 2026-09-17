@@ -439,7 +439,7 @@ const _renderOfferRequests=renderOfferRequests;renderOfferRequests=async functio
   window.renderProviderDashboard=renderProviderDashboard;
   $('providerDashBack')?.addEventListener('click',()=>{show('accountPage');setTimeout(()=>document.querySelector('[data-v7-nav="accountPage"]')?.classList.add('active'),0)});
   $('providerDashAdd')?.addEventListener('click',()=>$('becomeProviderBtn')?.click());
-  document.addEventListener('click',e=>{const a=e.target.closest('[data-v72-action="provider-dashboard"]');if(a)renderProviderDashboard()});
+  document.addEventListener('click',e=>{const a=e.target.closest('[data-v7-action="provider-dashboard"]');if(a)renderProviderDashboard()});
   const oldNav=document.querySelector('[data-v7-action="provider"]'); if(oldNav)oldNav.dataset.v7Action='provider-dashboard';
 })();
 
