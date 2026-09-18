@@ -193,15 +193,7 @@ $('publicProvidersBtn')?.addEventListener('click',showProviders);$('publicSeeAll
 
 function handlePublicHash(){const sm=location.hash.match(/^#service=(.+)$/);if(sm){openPublicService(decodeURIComponent(sm[1]));return true}const m=location.hash.match(/^#provider=(.+)$/);if(m){showProviderProfile(decodeURIComponent(m[1]));return true}return false}
 if(BACKEND_READY){const {error}=await sb.from('providers').insert({user_id:sessionUser.id,name:n,category:c,description:d,price:pr,contact,active:true});if(error)throw error}else{const arr=demoProviders();arr.unshift({id:'demo-p'+Date.now(),name:n,category:c,description:d,price:pr,contact});saveProviders(arr)}setMsg('providerMsg','تم نشر خدمتك بنجاح ✅',true);setTimeout(()=>{ $('providerModal').classList.add('hidden');$('providerModal').setAttribute('aria-hidden','true');showProviders()},500)}catch(e){setMsg('providerMsg','تعذر نشر الخدمة حالياً.')}};
-$('chatBackBtn').onclick=()=>{closeChat();showRequests()};
-// V27.1: make the mobile chat composer explicitly focusable/touchable.
-(function(){const ci=$('chatInput');if(!ci)return;ci.disabled=false;ci.readOnly=false;ci.tabIndex=0;ci.addEventListener('pointerdown',()=>{ci.focus({preventScroll:true})},{passive:true});ci.addEventListener('touchstart',()=>{ci.focus({preventScroll:true})},{passive:true});})();
-$('sendChatBtn').addEventListener('click',sendChatMessage);
-const chatInputEl=$('chatInput');
-chatInputEl?.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();sendChatMessage()}});
-chatInputEl?.addEventListener('pointerdown',()=>{chatInputEl.removeAttribute('readonly');setTimeout(()=>chatInputEl.focus(),0)},{passive:true});
-chatInputEl?.addEventListener('click',()=>chatInputEl.focus());
-$('walletBtn').onclick=renderWallet;$('walletTopBtn').onclick=renderWallet;$('walletBackBtn').onclick=showHome;$('addBalanceBtn').onclick=addDemoBalance;$('closeCheckout').onclick=closeCheckout;$('checkoutModal').addEventListener('click',e=>{if(e.target.id==='checkoutModal')closeCheckout()});$('applyCouponBtn').onclick=applyCoupon;$('payNowBtn').onclick=payPending;
+$('chatBackBtn').onclick=()=>{closeChat();showRequests()};$('sendChatBtn').onclick=sendChatMessage;$('chatInput').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendChatMessage()}});$('walletBtn').onclick=renderWallet;$('walletTopBtn').onclick=renderWallet;$('walletBackBtn').onclick=showHome;$('addBalanceBtn').onclick=addDemoBalance;$('closeCheckout').onclick=closeCheckout;$('checkoutModal').addEventListener('click',e=>{if(e.target.id==='checkoutModal')closeCheckout()});$('applyCouponBtn').onclick=applyCoupon;$('payNowBtn').onclick=payPending;
 async function adminLogin(){if(!BACKEND_READY){showAdminDemo();return}try{const u=await loadProfile();if(!u||u.role!=='admin')return toast('هذا الحساب ليس حساب إدارة');showAdmin()}catch(e){toast('تعذر فتح لوحة الإدارة')}}
 $('adminDemoBtn').onclick=adminLogin;$('adminBackBtn').onclick=showHome;
 function showAdmin(){show('adminPage');renderAdmin()}
@@ -448,8 +440,7 @@ const _renderOfferRequests=renderOfferRequests;renderOfferRequests=async functio
   $('providerDashBack')?.addEventListener('click',()=>{show('accountPage');setTimeout(()=>document.querySelector('[data-v7-nav="accountPage"]')?.classList.add('active'),0)});
   $('providerDashAdd')?.addEventListener('click',()=>$('becomeProviderBtn')?.click());
   document.addEventListener('click',e=>{const a=e.target.closest('[data-v72-action="provider-dashboard"]');if(a)renderProviderDashboard()});
-  // لا نغيّر زر «قدّم خدمتك» في الحساب إلى لوحة مقدم الخدمة؛ الزر يجب أن يفتح نموذج نشر الخدمة.
-  // لوحة مقدم الخدمة لها زرها المستقل #providerDashAdd.
+  const oldNav=document.querySelector('[data-v7-action="provider"]'); if(oldNav)oldNav.dataset.v7Action='provider-dashboard';
 })();
 
 
@@ -545,3 +536,115 @@ $('adminE2eRefresh')?.addEventListener('click',renderV26E2E);
 $('adminE2eRun')?.addEventListener('click',async()=>{if(!BACKEND_READY){toast('اربط Supabase أولاً لتشغيل الاختبار');return}try{const r=await sb.rpc('admin_v26_run_e2e');if(r.error)throw r.error;toast('تم تشغيل اختبار E2E ✓');await renderV26E2E()}catch(e){toast(e.message||'تعذر تشغيل الاختبار')}});
 const _renderAdminV26=renderAdmin;renderAdmin=async function(){await _renderAdminV26();const tab=document.querySelector('.admin-tab.active')?.dataset.tab;if(tab==='e2e')await renderV26E2E()};
 document.querySelectorAll('.admin-tab').forEach(t=>t.addEventListener('click',()=>setTimeout(()=>{if(t.dataset.tab==='e2e')renderV26E2E()},0)));
+
+
+/* =========================
+   Khadamati Doctors v1
+   Frontend-only demo module.
+   Does NOT modify Supabase or any database schema.
+   ========================= */
+(function () {
+  const defaultDoctors = [
+    {id:"dr-1", name:"د. أحمد محمد", specialty:"باطنة", area:"القاهرة", fee:250, hours:"5:00 م - 9:00 م", verified:true, bio:"استشارات باطنة وحالات مزمنة."},
+    {id:"dr-2", name:"د. سارة علي", specialty:"أطفال", area:"مدينة نصر", fee:200, hours:"4:00 م - 8:00 م", verified:true, bio:"متابعة الأطفال والفحوصات الدورية."},
+    {id:"dr-3", name:"د. محمود حسن", specialty:"أسنان", area:"المعادي", fee:300, hours:"6:00 م - 10:00 م", verified:true, bio:"كشف وعلاجات أسنان عامة."},
+    {id:"dr-4", name:"د. منى خالد", specialty:"جلدية", area:"مصر الجديدة", fee:250, hours:"3:00 م - 7:00 م", verified:true, bio:"جلدية وتجميل طبي."},
+    {id:"dr-5", name:"د. كريم السيد", specialty:"عظام", area:"الجيزة", fee:300, hours:"6:00 م - 9:00 م", verified:false, bio:"فحص ومتابعة مشاكل العظام والمفاصل."}
+  ];
+
+  function doctorsPageEl(){ return document.getElementById("doctorsPage"); }
+  function doctorListEl(){ return document.getElementById("doctorsList"); }
+
+  function renderDoctors(){
+    const list = doctorListEl();
+    if(!list) return;
+
+    const q = (document.getElementById("doctorSearch")?.value || "").trim().toLowerCase();
+    const specialty = document.getElementById("doctorSpecialty")?.value || "";
+
+    const filtered = defaultDoctors.filter(d =>
+      (!q || d.name.toLowerCase().includes(q) || d.area.toLowerCase().includes(q) || d.specialty.toLowerCase().includes(q)) &&
+      (!specialty || d.specialty === specialty)
+    );
+
+    list.innerHTML = filtered.length ? filtered.map(d => `
+      <article class="doctor-card">
+        <div class="doctor-avatar">👨‍⚕️</div>
+        <div class="doctor-main">
+          <h3>${d.name} ${d.verified ? '<span class="doctor-verified">✓ موثق</span>' : ''}</h3>
+          <div class="doctor-meta">${d.specialty} • ${d.area}</div>
+          <div class="doctor-meta">💰 الكشف: ${d.fee} جنيه • 🕒 ${d.hours}</div>
+          <p>${d.bio}</p>
+          <button class="primary-btn doctor-details-btn" data-doctor-id="${d.id}" type="button">عرض الملف والحجز</button>
+        </div>
+      </article>
+    `).join("") : '<div class="empty-state">لا يوجد أطباء مطابقون للبحث.</div>';
+
+    list.querySelectorAll(".doctor-details-btn").forEach(btn => {
+      btn.addEventListener("click", () => showDoctorDetails(btn.dataset.doctorId));
+    });
+  }
+
+  function showDoctors(){
+    // Use the app's existing navigation function when available.
+    if (typeof window.show === "function") {
+      try { window.show("doctorsPage"); } catch(e) {}
+    }
+    const page = doctorsPageEl();
+    if(page) page.classList.add("active");
+    renderDoctors();
+  }
+
+  function showDoctorDetails(id){
+    const d = defaultDoctors.find(x => x.id === id);
+    if(!d) return;
+
+    const old = document.getElementById("doctorDetailsModal");
+    if(old) old.remove();
+
+    const modal = document.createElement("div");
+    modal.id = "doctorDetailsModal";
+    modal.className = "doctor-modal";
+    modal.innerHTML = `
+      <div class="doctor-modal-card" role="dialog" aria-modal="true">
+        <button class="doctor-modal-close" type="button" aria-label="إغلاق">×</button>
+        <div class="doctor-avatar large">👨‍⚕️</div>
+        <h2>${d.name} ${d.verified ? '<span class="doctor-verified">✓ موثق</span>' : ''}</h2>
+        <div class="doctor-meta">${d.specialty} • ${d.area}</div>
+        <p>${d.bio}</p>
+        <div class="doctor-detail-row">رسوم الكشف: <strong>${d.fee} جنيه</strong></div>
+        <div class="doctor-detail-row">المواعيد: <strong>${d.hours}</strong></div>
+        <button class="primary-btn doctor-book-btn" type="button">طلب حجز</button>
+        <div class="medical-disclaimer">الحجز لا يُعد تشخيصًا طبيًا. يجب تأكيد الموعد وبيانات الطبيب قبل الزيارة.</div>
+      </div>`;
+    document.body.appendChild(modal);
+
+    modal.querySelector(".doctor-modal-close").onclick = () => modal.remove();
+    modal.addEventListener("click", e => { if(e.target === modal) modal.remove(); });
+    modal.querySelector(".doctor-book-btn").onclick = () => bookDoctor(d);
+  }
+
+  function bookDoctor(d){
+    const modal = document.getElementById("doctorDetailsModal");
+    if(modal) modal.remove();
+
+    if (typeof window.showToast === "function") {
+      window.showToast("تم تسجيل طلب الحجز مبدئيًا مع " + d.name);
+    } else {
+      alert("تم تسجيل طلب الحجز مبدئيًا مع " + d.name + " — سيتم تأكيد الموعد.");
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    document.getElementById("doctorsBtn")?.addEventListener("click", showDoctors);
+    document.getElementById("doctorsBackBtn")?.addEventListener("click", () => {
+      if (typeof window.show === "function") {
+        try { window.show("homePage"); return; } catch(e) {}
+      }
+      doctorsPageEl()?.classList.remove("active");
+    });
+    document.getElementById("doctorSearch")?.addEventListener("input", renderDoctors);
+    document.getElementById("doctorSpecialty")?.addEventListener("change", renderDoctors);
+    renderDoctors();
+  });
+})();
