@@ -188,11 +188,43 @@ async function runSmartMatch(){
     box.querySelectorAll('.smart-profile').forEach(b=>b.onclick=()=>showProviderProfile(b.dataset.id));
   }catch(e){box.innerHTML='<div class="empty-state"><h3>تعذر إنشاء الترشيحات</h3><p>جرّب مرة أخرى.</p></div>'}
 }
-$('providersBtn').onclick=showProviders;$('providersBackBtn').onclick=showHome;$('providerSearch').oninput=async()=>{try{renderProviders(await loadProviders())}catch{}};$('providerCategory').onchange=async()=>{try{renderProviders(await loadProviders())}catch{}};$('smartMatchBtn')?.addEventListener('click',runSmartMatch);$('becomeProviderBtn').onclick=()=>{if(!user())return show('loginPage');$('providerName').value=user().name||'';$('providerContact').value=user().phone||'';setMsg('providerMsg','');$('providerModal').classList.remove('hidden');$('providerModal').setAttribute('aria-hidden','false')};$('closeProviderModal').onclick=()=>{$('providerModal').classList.add('hidden');$('providerModal').setAttribute('aria-hidden','true')};$('providerModal').addEventListener('click',e=>{if(e.target.id==='providerModal')$('closeProviderModal').click()});$('providerImage')?.addEventListener('change',()=>{const f=$('providerImage').files?.[0],box=$('providerImagePreview');if(!box)return;if(!f){box.classList.add('hidden');box.innerHTML='';return}if(f.size>5*1024*1024){$('providerImage').value='';box.classList.add('hidden');box.innerHTML='';return setMsg('providerMsg','الصورة أكبر من 5 ميجابايت.')}if(!/^image\/(jpeg|png|webp)$/.test(f.type)){return setMsg('providerMsg','اختر JPG أو PNG أو WEBP.')}const url=URL.createObjectURL(f);box.innerHTML=`<img src="${url}" alt="معاينة الصورة">`;box.classList.remove('hidden');});$('saveProviderBtn').onclick=async()=>{const n=$('providerName').value.trim(),c=$('providerService').value,d=$('providerDesc').value.trim(),pr=Number($('providerPrice').value),contact=$('providerContact').value.trim(),imageFile=$('providerImage')?.files?.[0];if(n.length<2)return setMsg('providerMsg','اكتب اسم مقدم الخدمة.');if(d.length<5)return setMsg('providerMsg','اكتب وصفاً للخدمة.');if(!pr||pr<1)return setMsg('providerMsg','اكتب سعراً صحيحاً.');if(!validPhone(contact))return setMsg('providerMsg','اكتب رقم واتساب مصري صحيح.');if(imageFile&&(imageFile.size>5*1024*1024||!/^image\/(jpeg|png|webp)$/.test(imageFile.type)))return setMsg('providerMsg','اختر صورة JPG أو PNG أو WEBP بحد أقصى 5 ميجابايت.');try{async function showPublic(){show('publicPage');try{const list=await loadProviders();const top=list.slice(0,3);$('publicProvidersList').innerHTML=top.length?top.map(p=>`<article class="provider-card"><div class="provider-avatar">${p.image_url?`<img src="${escapeHtml(p.image_url)}" alt="صورة الخدمة" style="width:100%;height:100%;object-fit:cover;border-radius:inherit">`:'🧑‍💼'}</div><span class="provider-category">${escapeHtml(p.category)}</span>${verificationBadge(p)}<h3>${escapeHtml(p.name)}</h3><p class="provider-desc">${escapeHtml(p.description)}</p><div class="provider-price">${escapeHtml(p.price)} جنيه <small>يبدأ من</small></div><div class="provider-actions"><button class="secondary public-profile" data-id="${escapeHtml(p.id)}">عرض الملف</button></div></article>`).join(''):'<div class="empty-state"><div>🧑‍💼</div><h3>لا يوجد مقدمو خدمات بعد</h3><p>كن أول من يضيف خدمته.</p></div>';document.querySelectorAll('.public-profile').forEach(b=>b.onclick=()=>showProviderProfile(b.dataset.id))}catch(e){$('publicProvidersList').innerHTML='<div class="empty-state"><h3>تعذر تحميل مقدمي الخدمات</h3></div>'}}
-$('publicProvidersBtn')?.addEventListener('click',showProviders);$('publicSeeAll')?.addEventListener('click',showProviders);$('publicLoginBtn')?.addEventListener('click',()=>show('loginPage'));document.querySelectorAll('.service[data-service-slug]').forEach(b=>b.addEventListener('click',()=>openPublicService(b.dataset.serviceSlug)));
-
+$('providersBtn').onclick=showProviders;
+$('providersBackBtn').onclick=showHome;
+$('providerSearch').oninput=async()=>{try{renderProviders(await loadProviders())}catch{}};
+$('providerCategory').onchange=async()=>{try{renderProviders(await loadProviders())}catch{}};
+$('smartMatchBtn')?.addEventListener('click',runSmartMatch);
+$('becomeProviderBtn').onclick=()=>{if(!user())return show('loginPage');$('providerName').value=user().name||'';$('providerContact').value=user().phone||'';setMsg('providerMsg','');$('providerModal').classList.remove('hidden');$('providerModal').setAttribute('aria-hidden','false')};
+$('closeProviderModal').onclick=()=>{$('providerModal').classList.add('hidden');$('providerModal').setAttribute('aria-hidden','true')};
+$('providerModal').addEventListener('click',e=>{if(e.target.id==='providerModal')$('closeProviderModal').click()});
+$('providerImage')?.addEventListener('change',()=>{const f=$('providerImage').files?.[0],box=$('providerImagePreview');if(!box)return;if(!f){box.classList.add('hidden');box.innerHTML='';return}if(f.size>5*1024*1024){$('providerImage').value='';box.classList.add('hidden');box.innerHTML='';return setMsg('providerMsg','الصورة أكبر من 5 ميجابايت.')}if(!/^image\/(jpeg|png|webp)$/.test(f.type)){return setMsg('providerMsg','اختر JPG أو PNG أو WEBP.')}const url=URL.createObjectURL(f);box.innerHTML=`<img src="${url}" alt="معاينة الصورة">`;box.classList.remove('hidden')});
+$('saveProviderBtn').onclick=async()=>{
+ const n=$('providerName').value.trim(),c=$('providerService').value,d=$('providerDesc').value.trim(),pr=Number($('providerPrice').value),contact=$('providerContact').value.trim(),imageFile=$('providerImage')?.files?.[0];
+ if(n.length<2)return setMsg('providerMsg','اكتب اسم مقدم الخدمة.');
+ if(d.length<5)return setMsg('providerMsg','اكتب وصفاً للخدمة.');
+ if(!pr||pr<1)return setMsg('providerMsg','اكتب سعراً صحيحاً.');
+ if(!validPhone(contact))return setMsg('providerMsg','اكتب رقم واتساب مصري صحيح.');
+ if(imageFile&&(imageFile.size>5*1024*1024||!/^image\/(jpeg|png|webp)$/.test(imageFile.type)))return setMsg('providerMsg','اختر صورة JPG أو PNG أو WEBP بحد أقصى 5 ميجابايت.');
+ try{
+   let image_url=null, imageWarning=false;
+   if(BACKEND_READY){
+     if(imageFile){
+       try{const ext=(imageFile.name.split('.').pop()||'jpg').toLowerCase();const path=sessionUser.id+'/'+Date.now()+'.'+ext;const up=await sb.storage.from('provider-images').upload(path,imageFile,{contentType:imageFile.type,upsert:false});if(up.error)throw up.error;image_url=sb.storage.from('provider-images').getPublicUrl(path).data.publicUrl;}catch(uploadErr){console.error('provider image upload failed',uploadErr);imageWarning=true;}
+     }
+     const {error}=await sb.from('providers').insert({user_id:sessionUser.id,name:n,category:c,description:d,price:pr,contact,active:true,image_url});
+     if(error)throw error;
+   }else{
+     const arr=demoProviders();if(imageFile)image_url=URL.createObjectURL(imageFile);arr.unshift({id:'demo-p'+Date.now(),name:n,category:c,description:d,price:pr,contact,image_url});saveProviders(arr);
+   }
+   setMsg('providerMsg',imageWarning?'تم نشر خدمتك بنجاح ✅ لكن تعذر رفع الصورة حالياً.':'تم نشر خدمتك بنجاح ✅',true);
+   setTimeout(()=>{$('providerModal').classList.add('hidden');$('providerModal').setAttribute('aria-hidden','true');showProviders()},700);
+ }catch(e){console.error('provider publish failed',e);setMsg('providerMsg','تعذر نشر الخدمة حالياً. تأكد من تسجيل الدخول ثم حاول مرة أخرى.')}
+};
+$('publicProvidersBtn')?.addEventListener('click',showProviders);
+$('publicSeeAll')?.addEventListener('click',showProviders);
+$('publicLoginBtn')?.addEventListener('click',()=>show('loginPage'));
+document.querySelectorAll('.service[data-service-slug]').forEach(b=>b.addEventListener('click',()=>openPublicService(b.dataset.serviceSlug)));
 function handlePublicHash(){const sm=location.hash.match(/^#service=(.+)$/);if(sm){openPublicService(decodeURIComponent(sm[1]));return true}const m=location.hash.match(/^#provider=(.+)$/);if(m){showProviderProfile(decodeURIComponent(m[1]));return true}return false}
-if(BACKEND_READY){let image_url=null;if(imageFile){const ext=(imageFile.name.split('.').pop()||'jpg').toLowerCase();const path=sessionUser.id+'/'+Date.now()+'.'+ext;const up=await sb.storage.from('provider-images').upload(path,imageFile,{contentType:imageFile.type,upsert:false});if(up.error)throw up.error;const pub=sb.storage.from('provider-images').getPublicUrl(path);image_url=pub.data.publicUrl;}const {error}=await sb.from('providers').insert({user_id:sessionUser.id,name:n,category:c,description:d,price:pr,contact,active:true,image_url});if(error)throw error}else{const arr=demoProviders();let image_url=null;if(imageFile)image_url=URL.createObjectURL(imageFile);arr.unshift({id:'demo-p'+Date.now(),name:n,category:c,description:d,price:pr,contact,image_url});saveProviders(arr)}setMsg('providerMsg','تم نشر خدمتك بنجاح ✅',true);setTimeout(()=>{ $('providerModal').classList.add('hidden');$('providerModal').setAttribute('aria-hidden','true');showProviders()},500)}catch(e){setMsg('providerMsg','تعذر نشر الخدمة حالياً.')}};
+
 $('chatBackBtn').onclick=()=>{closeChat();showRequests()};$('sendChatBtn').onclick=sendChatMessage;$('chatInput').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendChatMessage()}});$('walletBtn').onclick=renderWallet;$('walletTopBtn').onclick=renderWallet;$('walletBackBtn').onclick=showHome;$('addBalanceBtn').onclick=addDemoBalance;$('closeCheckout').onclick=closeCheckout;$('checkoutModal').addEventListener('click',e=>{if(e.target.id==='checkoutModal')closeCheckout()});$('applyCouponBtn').onclick=applyCoupon;$('payNowBtn').onclick=payPending;
 async function adminLogin(){if(!BACKEND_READY){showAdminDemo();return}try{const u=await loadProfile();if(!u||u.role!=='admin')return toast('هذا الحساب ليس حساب إدارة');showAdmin()}catch(e){toast('تعذر فتح لوحة الإدارة')}}
 $('adminDemoBtn').onclick=adminLogin;$('adminBackBtn').onclick=showHome;
@@ -536,27 +568,3 @@ $('adminE2eRefresh')?.addEventListener('click',renderV26E2E);
 $('adminE2eRun')?.addEventListener('click',async()=>{if(!BACKEND_READY){toast('اربط Supabase أولاً لتشغيل الاختبار');return}try{const r=await sb.rpc('admin_v26_run_e2e');if(r.error)throw r.error;toast('تم تشغيل اختبار E2E ✓');await renderV26E2E()}catch(e){toast(e.message||'تعذر تشغيل الاختبار')}});
 const _renderAdminV26=renderAdmin;renderAdmin=async function(){await _renderAdminV26();const tab=document.querySelector('.admin-tab.active')?.dataset.tab;if(tab==='e2e')await renderV26E2E()};
 document.querySelectorAll('.admin-tab').forEach(t=>t.addEventListener('click',()=>setTimeout(()=>{if(t.dataset.tab==='e2e')renderV26E2E()},0)));
-
-/* V27.1 — إصلاح زر «أضف/قدم خدمتك» على أندرويد: ربط احتياطي عبر delegation */
-(function(){
-  function openProviderModalSafe(e){
-    const b=e.target.closest('#becomeProviderBtn');
-    if(!b) return;
-    e.preventDefault();
-    e.stopPropagation();
-    const modal=document.getElementById('providerModal');
-    if(!modal) return;
-    const u=typeof user==='function'?user():null;
-    if(!u){ if(typeof show==='function') show('loginPage'); return; }
-    const name=document.getElementById('providerName');
-    const contact=document.getElementById('providerContact');
-    const msg=document.getElementById('providerMsg');
-    if(name) name.value=u.name||'';
-    if(contact) contact.value=u.phone||'';
-    if(msg) msg.textContent='';
-    modal.classList.remove('hidden');
-    modal.setAttribute('aria-hidden','false');
-  }
-  document.addEventListener('click',openProviderModalSafe,true);
-  document.addEventListener('pointerup',openProviderModalSafe,true);
-})();
