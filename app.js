@@ -648,3 +648,156 @@ document.querySelectorAll('.admin-tab').forEach(t=>t.addEventListener('click',()
     renderDoctors();
   });
 })();
+
+
+/* =========================
+   Khadamati Cars v1
+   Frontend prototype only.
+   No database changes.
+   ========================= */
+(function(){
+  const prices = { economy: 35, comfort: 50, family: 60 };
+
+  function estimateRide(){
+    const pickup=(document.getElementById("ridePickup")?.value||"").trim();
+    const destination=(document.getElementById("rideDestination")?.value||"").trim();
+    const type=document.getElementById("rideType")?.value||"economy";
+    const el=document.getElementById("rideEstimate");
+    if(!el) return;
+    if(!pickup || !destination){ el.textContent="—"; return; }
+    // Prototype estimate only; real distance pricing comes with Maps integration.
+    el.textContent = prices[type] + " جنيه تقريبًا";
+  }
+
+  function showCars(){
+    if(typeof window.show==="function"){
+      try { window.show("carsPage"); } catch(e) {}
+    }
+    document.getElementById("carsPage")?.classList.add("active");
+    estimateRide();
+  }
+
+  function requestRide(){
+    const pickup=(document.getElementById("ridePickup")?.value||"").trim();
+    const destination=(document.getElementById("rideDestination")?.value||"").trim();
+    const status=document.getElementById("rideStatus");
+    if(!pickup || !destination){
+      if(status) status.textContent="من فضلك اكتب نقطة الانطلاق والوجهة أولًا.";
+      return;
+    }
+    if(status) status.textContent="تم تسجيل طلب السيارة مبدئيًا. جاري البحث عن سائق...";
+    const btn=document.getElementById("requestRideBtn");
+    if(btn){ btn.disabled=true; btn.textContent="جاري البحث عن سائق..."; }
+    setTimeout(()=>{
+      if(status) status.textContent="النموذج جاهز للمرحلة التالية: ربط السائقين والخرائط والتتبع الحي.";
+      if(btn){ btn.disabled=false; btn.textContent="طلب سيارة مرة أخرى"; }
+    },1800);
+  }
+
+  document.addEventListener("DOMContentLoaded",()=>{
+    document.getElementById("carsBtn")?.addEventListener("click",showCars);
+    document.getElementById("carsBackBtn")?.addEventListener("click",()=>{
+      if(typeof window.show==="function"){
+        try { window.show("homePage"); return; } catch(e) {}
+      }
+      document.getElementById("carsPage")?.classList.remove("active");
+    });
+    document.getElementById("ridePickup")?.addEventListener("input",estimateRide);
+    document.getElementById("rideDestination")?.addEventListener("input",estimateRide);
+    document.getElementById("rideType")?.addEventListener("change",estimateRide);
+    document.getElementById("requestRideBtn")?.addEventListener("click",requestRide);
+  });
+})();
+
+
+/* =========================
+   Khadamati Cars v2
+   Full local ride cycle - no database changes.
+   ========================= */
+(function(){
+  const demoDrivers=[
+    {id:"drv-1",name:"محمد أحمد",car:"هيونداي إلنترا",plate:"ق ن 1234",rating:"4.9"},
+    {id:"drv-2",name:"محمود علي",car:"كيا سيراتو",plate:"س م 5678",rating:"4.8"},
+    {id:"drv-3",name:"أحمد حسن",car:"تويوتا كورولا",plate:"ر ع 9012",rating:"4.9"}
+  ];
+  let ride=null;
+
+  function el(id){return document.getElementById(id);}
+  function save(){try{localStorage.setItem("khadamati_demo_ride",JSON.stringify(ride));}catch(e){}}
+  function load(){try{const x=localStorage.getItem("khadamati_demo_ride");if(x)ride=JSON.parse(x);}catch(e){}}
+
+  function estimate(){
+    const p=(el("ridePickup")?.value||"").trim(), d=(el("rideDestination")?.value||"").trim();
+    const type=el("rideType")?.value||"economy";
+    if(!p||!d){if(el("rideEstimate"))el("rideEstimate").textContent="—";return;}
+    const base={economy:35,comfort:50,family:60}[type]||35;
+    if(el("rideEstimate"))el("rideEstimate").textContent=base+" جنيه تقريبًا";
+  }
+
+  function render(){
+    const box=el("rideStatus"); if(!box)return;
+    if(!ride){box.innerHTML="";return;}
+    const labels={
+      requested:"🔎 جاري البحث عن سائق...",
+      accepted:"✅ السائق قبل الرحلة",
+      arrived:"📍 السائق وصل إلى نقطة الانطلاق",
+      started:"🚗 الرحلة بدأت",
+      completed:"🏁 تم إنهاء الرحلة",
+      cancelled:"❌ تم إلغاء الرحلة"
+    };
+    let driverHtml=ride.driver?`
+      <div class="ride-driver">
+        <div class="ride-driver-avatar">👨‍✈️</div>
+        <div><strong>${ride.driver.name}</strong><br>${ride.driver.car} • ${ride.driver.plate}<br>⭐ ${ride.driver.rating}</div>
+      </div>`:"";
+    let actions="";
+    if(ride.status==="requested") actions=`<button id="demoAcceptBtn" class="secondary-btn" type="button">محاكاة قبول سائق</button>`;
+    if(ride.status==="accepted") actions=`<button id="demoArrivedBtn" class="secondary-btn" type="button">محاكاة وصول السائق</button>`;
+    if(ride.status==="arrived") actions=`<button id="demoStartBtn" class="primary-btn" type="button">بدء الرحلة</button>`;
+    if(ride.status==="started") actions=`<button id="demoCompleteBtn" class="primary-btn" type="button">إنهاء الرحلة</button>`;
+    if(ride.status==="completed"||ride.status==="cancelled") actions=`<button id="demoNewRideBtn" class="secondary-btn" type="button">رحلة جديدة</button>`;
+    box.innerHTML=`<div class="ride-cycle">
+      <div class="ride-status-title">${labels[ride.status]||ride.status}</div>
+      <div class="ride-route">📍 ${ride.pickup}<br>🏁 ${ride.destination}</div>
+      ${driverHtml}
+      <div class="ride-price">السعر التقديري: <strong>${ride.price} جنيه</strong></div>
+      <div class="ride-actions">${actions}</div>
+    </div>`;
+    el("demoAcceptBtn")?.addEventListener("click",()=>transition("accepted",demoDrivers[0]));
+    el("demoArrivedBtn")?.addEventListener("click",()=>transition("arrived"));
+    el("demoStartBtn")?.addEventListener("click",()=>transition("started"));
+    el("demoCompleteBtn")?.addEventListener("click",()=>transition("completed"));
+    el("demoNewRideBtn")?.addEventListener("click",()=>{ride=null;save();render();});
+  }
+
+  function transition(status,driver){
+    ride.status=status;
+    if(driver) ride.driver=driver;
+    save(); render();
+  }
+
+  function request(){
+    const p=(el("ridePickup")?.value||"").trim(), d=(el("rideDestination")?.value||"").trim();
+    if(!p||!d){if(el("rideStatus"))el("rideStatus").innerHTML='<div class="ride-error">اكتب نقطة الانطلاق والوجهة أولًا.</div>';return;}
+    const type=el("rideType")?.value||"economy";
+    const price={economy:35,comfort:50,family:60}[type]||35;
+    ride={id:"demo-"+Date.now(),pickup:p,destination:d,type,price,status:"requested",driver:null};
+    save();render();
+  }
+
+  function showCarsV2(){
+    load();
+    if(typeof window.show==="function"){try{window.show("carsPage");}catch(e){}}
+    el("carsPage")?.classList.add("active");
+    estimate();render();
+  }
+
+  document.addEventListener("DOMContentLoaded",()=>{
+    el("carsBtn")?.addEventListener("click",showCarsV2);
+    el("ridePickup")?.addEventListener("input",estimate);
+    el("rideDestination")?.addEventListener("input",estimate);
+    el("rideType")?.addEventListener("change",estimate);
+    el("requestRideBtn")?.addEventListener("click",request);
+    load(); render();
+  });
+})();

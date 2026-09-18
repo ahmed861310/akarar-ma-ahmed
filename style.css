@@ -118,3 +118,31 @@ body{padding-bottom:82px}
   .doctor-main h3{font-size:16px}
   .doctors-banner{align-items:flex-start;flex-direction:column}
 }
+
+/* =========================
+   Khadamati Cars v1
+   ========================= */
+.cars-banner{margin-top:12px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.ride-card{background:#fff;border:1px solid #e7e7e7;border-radius:18px;padding:18px;box-shadow:0 3px 12px rgba(0,0,0,.05)}
+.ride-card label{display:block;margin:10px 0 6px;font-size:14px;font-weight:600}
+.ride-card input,.ride-card select{width:100%;min-height:46px;border:1px solid #ddd;border-radius:12px;padding:10px 12px;font:inherit;background:#fff}
+.ride-estimate{display:flex;justify-content:space-between;align-items:center;margin:16px 0;padding:13px;border-radius:12px;background:#f7f7f7}
+.ride-estimate strong{font-size:18px}
+.ride-request-btn{width:100%}
+.ride-request-btn:disabled{opacity:.65;cursor:wait}
+.ride-status{margin-top:12px;text-align:center;min-height:24px;color:#555;line-height:1.5}
+.ride-note{margin-top:12px;padding:12px;border-radius:12px;background:#fff8e8;color:#765d17;font-size:12px;line-height:1.6}
+@media(max-width:600px){
+  .cars-banner{align-items:flex-start;flex-direction:column}
+}
+
+.ride-cycle{margin-top:10px;padding:14px;border:1px solid #e6e6e6;border-radius:14px;background:#fafafa;text-align:right}
+.ride-status-title{font-weight:700;font-size:16px;margin-bottom:10px}
+.ride-route{line-height:1.9;padding:10px;border-radius:10px;background:#fff;margin-bottom:10px}
+.ride-driver{display:flex;gap:10px;align-items:center;padding:10px;border-radius:10px;background:#fff;margin-bottom:10px}
+.ride-driver-avatar{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#eee;font-size:24px}
+.ride-price{padding:8px 0}
+.ride-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.ride-actions button{flex:1;min-height:44px;border:0;border-radius:10px;padding:8px 12px;font:inherit;cursor:pointer}
+.secondary-btn{background:#eee}
+.ride-error{color:#b42318;padding:8px}

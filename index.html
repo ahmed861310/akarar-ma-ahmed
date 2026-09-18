@@ -29,6 +29,13 @@
                 <div class="banner-subtitle">ابحث عن طبيب حسب التخصص وتواصل للحجز</div>
               </div>
               <button id="doctorsBtn" class="primary-btn" type="button">استعرض الأطباء</button>
+            <div class="market-banner cars-banner">
+              <div>
+                <div class="banner-title">🚗 اطلب سيارة</div>
+                <div class="banner-subtitle">اطلب رحلة وحدد نقطة البداية والوجهة</div>
+              </div>
+              <button id="carsBtn" class="primary-btn" type="button">اطلب الآن</button>
+            </div>
             </div><button id="businessBtn" class="secondary small-primary">🚀 باقات ونمو</button></div><div class="section-head"><h2>الخدمات الرئيسية</h2><button id="allServicesBtn" class="link-btn">عرض الكل</button></div>
 <div class="services" id="servicesGrid">
 <button class="service" data-service-slug="inquiries" data-title="الاستعلامات"><span class="service-icon">🔎</span><b>الاستعلامات</b><small>استعلم عن حالة خدماتك</small></button>
@@ -59,6 +66,40 @@
   </div>
   <div id="doctorsList" class="doctors-list"></div>
   <div class="medical-disclaimer">المعلومات المعروضة للتعريف فقط. يجب التحقق من ترخيص الطبيب، ولا يقدم التطبيق تشخيصًا أو وصفًا طبيًا آليًا.</div>
+</section>
+
+<section id="carsPage" class="page">
+  <div class="page-header">
+    <button id="carsBackBtn" class="icon-btn" type="button">←</button>
+    <h2>🚗 اطلب سيارة</h2>
+  </div>
+
+  <div class="ride-card">
+    <label>نقطة الانطلاق</label>
+    <input id="ridePickup" type="text" placeholder="مثال: مدينة نصر" autocomplete="off">
+
+    <label>الوجهة</label>
+    <input id="rideDestination" type="text" placeholder="مثال: مصر الجديدة" autocomplete="off">
+
+    <label>نوع السيارة</label>
+    <select id="rideType">
+      <option value="economy">اقتصادي</option>
+      <option value="comfort">مريحة</option>
+      <option value="family">عائلية</option>
+    </select>
+
+    <div class="ride-estimate">
+      <span>السعر التقديري</span>
+      <strong id="rideEstimate">—</strong>
+    </div>
+
+    <button id="requestRideBtn" class="primary-btn ride-request-btn" type="button">طلب السيارة</button>
+    <div id="rideStatus" class="ride-status"></div>
+  </div>
+
+  <div class="ride-note">
+    النسخة الحالية هي نموذج واجهة وتجربة أولية. التتبع الحي والخرائط والسائقين الحقيقيين سيتم ربطهم في المرحلة التالية.
+  </div>
 </section>
 <section id="referralPage" class="page hidden">
   <div class="providers-head"><button id="referralBackBtn" class="back-btn">← الرئيسية</button><div><span class="eyebrow dark-eyebrow">🎁 برنامج الإحالة</span><h1>دعواتي ومكافآتي</h1><p class="muted">شارك رابطك الخاص وراقب الدعوات والمكافآت.</p></div></div>
