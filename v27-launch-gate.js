@@ -3,7 +3,7 @@
   window.KHADAMATI_V27 = {
     version:'V27',
     checks(){
-      const c = window.KHADAMATI_CONFIG || window.CONFIG || {};
+      const c = window.CONFIG || {};
       const checks=[];
       checks.push({id:'supabase',label:'Supabase configuration',status:(c.supabaseUrl&&c.supabaseAnonKey)?'PASS':'FAIL'});
       checks.push({id:'payment',label:'Payment function configured',status:c.paymentFunctionUrl?'PASS':'WARN'});

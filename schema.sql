@@ -27,7 +27,6 @@ as $$ select exists(select 1 from public.profiles where id = auth.uid() and role
 drop policy if exists "profiles own read" on public.profiles;
 drop policy if exists "profiles own insert" on public.profiles;
 drop policy if exists "profiles own update" on public.profiles;
-drop policy if exists "profiles own update name only" on public.profiles;
 drop policy if exists "profiles admin read" on public.profiles;
 create policy "profiles own read" on public.profiles for select using (id = auth.uid() or public.is_admin());
 create policy "profiles own insert" on public.profiles for insert with check (id = auth.uid() and role = 'user');
@@ -72,6 +71,21 @@ create policy "providers own update" on public.providers for update using (user_
 create policy "requests own read" on public.service_requests for select using (user_id = auth.uid() or public.is_admin());
 
 -- V2.3: ملفات مقدمي الخدمات + التقييمات + تتبع العمولة
+alter table public.providers add column if not exists image_url text;
+
+insert into storage.buckets (id,name,public,file_size_limit,allowed_mime_types)
+values ('provider-images','provider-images',true,5242880,array['image/jpeg','image/png','image/webp'])
+on conflict (id) do update set public=true,file_size_limit=5242880,allowed_mime_types=array['image/jpeg','image/png','image/webp'];
+
+drop policy if exists "provider images public read" on storage.objects;
+drop policy if exists "provider images owner upload" on storage.objects;
+drop policy if exists "provider images owner update" on storage.objects;
+drop policy if exists "provider images owner delete" on storage.objects;
+create policy "provider images public read" on storage.objects for select using (bucket_id='provider-images');
+create policy "provider images owner upload" on storage.objects for insert to authenticated with check (bucket_id='provider-images' and (storage.foldername(name))[1]=auth.uid()::text);
+create policy "provider images owner update" on storage.objects for update to authenticated using (bucket_id='provider-images' and (storage.foldername(name))[1]=auth.uid()::text) with check (bucket_id='provider-images' and (storage.foldername(name))[1]=auth.uid()::text);
+create policy "provider images owner delete" on storage.objects for delete to authenticated using (bucket_id='provider-images' and (storage.foldername(name))[1]=auth.uid()::text);
+
 alter table public.providers add column if not exists commission_rate numeric(5,2) not null default 10 check (commission_rate >= 0 and commission_rate <= 100);
 alter table public.service_requests add column if not exists provider_price numeric(12,2);
 alter table public.service_requests add column if not exists platform_fee numeric(12,2) not null default 0;

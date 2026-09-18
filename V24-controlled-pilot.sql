@@ -72,7 +72,7 @@ begin
  if not found then raise exception 'الطلب غير موجود'; end if;
  if r.provider_id is null then raise exception 'الطلب غير مرتبط بمقدم خدمة'; end if;
  if r.payment_status in ('held','released') then raise exception 'الطلب مدفوع بالفعل'; end if;
- if k is not null then select id into oid from public.payment_orders where user_id=auth.uid() and idempotency_key=k; if oid is not null then return oid; end if; end if;
+ if k is not null then select id into oid from public.payment_orders where idempotency_key=k; if oid is not null then return oid; end if; end if;
  total:=coalesce(r.provider_price,0)+coalesce(r.platform_fee,0);
  if total<=0 then raise exception 'قيمة الدفع غير صحيحة'; end if;
  if p_coupon_code is not null and length(trim(p_coupon_code))>0 then select coalesce(discount,0) into discount from public.validate_coupon(upper(trim(p_coupon_code)),coalesce(r.provider_price,0)) limit 1; end if;
@@ -80,7 +80,7 @@ begin
  insert into public.payment_orders(request_id,user_id,amount,coupon_code,status,idempotency_key) values(p_request_id,auth.uid(),total,nullif(upper(trim(p_coupon_code)),''),'created',k) returning id into oid;
  return oid;
 exception when unique_violation then
- select id into oid from public.payment_orders where user_id=auth.uid() and idempotency_key=k; if oid is null then raise; end if; return oid;
+ select id into oid from public.payment_orders where idempotency_key=k; if oid is null then raise; end if; return oid;
 end; $$;
 revoke all on function public.create_payment_order(bigint,text) from public,anon,authenticated;
 grant execute on function public.create_payment_order(bigint,text,text) to authenticated;
