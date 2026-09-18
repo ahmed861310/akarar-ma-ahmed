@@ -110,7 +110,7 @@
 </section>
 <section id="chatPage" class="page hidden">
   <div class="chat-head"><button id="chatBackBtn" class="back-btn">← الطلب</button><div><span class="eyebrow dark-eyebrow">محادثة الطلب</span><h1 id="chatTitle">محادثة</h1><p id="chatSubtitle" class="muted">تواصل مع مقدم الخدمة حول تفاصيل الطلب.</p></div><span class="chat-live">● مباشر</span></div>
-  <div class="chat-shell"><div id="chatMessages" class="chat-messages"></div><div class="chat-compose"><textarea id="chatInput" rows="2" maxlength="1000" placeholder="اكتب رسالتك..." aria-label="اكتب رسالتك" autocomplete="off" autocapitalize="sentences" spellcheck="true"></textarea><button id="sendChatBtn" class="primary">إرسال ↗</button></div><p id="chatMsg" class="msg"></p></div>
+  <div class="chat-shell"><div id="chatMessages" class="chat-messages"></div><div class="chat-compose"><textarea id="chatInput" rows="2" maxlength="1000" placeholder="اكتب رسالتك..."></textarea><button id="sendChatBtn" class="primary">إرسال ↗</button></div><p id="chatMsg" class="msg"></p></div>
 </section>
 <section id="walletPage" class="page hidden">
   <div class="wallet-head"><button id="walletBackBtn" class="back-btn">← الرئيسية</button><div><span class="eyebrow dark-eyebrow">الماليات</span><h1>محفظة خدماتي</h1><p class="muted">تابع رصيدك وحركة الأموال داخل المنصة.</p></div></div>
