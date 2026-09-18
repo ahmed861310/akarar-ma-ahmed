@@ -196,7 +196,12 @@ if(BACKEND_READY){const {error}=await sb.from('providers').insert({user_id:sessi
 $('chatBackBtn').onclick=()=>{closeChat();showRequests()};
 // V27.1: make the mobile chat composer explicitly focusable/touchable.
 (function(){const ci=$('chatInput');if(!ci)return;ci.disabled=false;ci.readOnly=false;ci.tabIndex=0;ci.addEventListener('pointerdown',()=>{ci.focus({preventScroll:true})},{passive:true});ci.addEventListener('touchstart',()=>{ci.focus({preventScroll:true})},{passive:true});})();
-$('sendChatBtn').onclick=sendChatMessage;$('chatInput').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendChatMessage()}});$('walletBtn').onclick=renderWallet;$('walletTopBtn').onclick=renderWallet;$('walletBackBtn').onclick=showHome;$('addBalanceBtn').onclick=addDemoBalance;$('closeCheckout').onclick=closeCheckout;$('checkoutModal').addEventListener('click',e=>{if(e.target.id==='checkoutModal')closeCheckout()});$('applyCouponBtn').onclick=applyCoupon;$('payNowBtn').onclick=payPending;
+$('sendChatBtn').addEventListener('click',sendChatMessage);
+const chatInputEl=$('chatInput');
+chatInputEl?.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();sendChatMessage()}});
+chatInputEl?.addEventListener('pointerdown',()=>{chatInputEl.removeAttribute('readonly');setTimeout(()=>chatInputEl.focus(),0)},{passive:true});
+chatInputEl?.addEventListener('click',()=>chatInputEl.focus());
+$('walletBtn').onclick=renderWallet;$('walletTopBtn').onclick=renderWallet;$('walletBackBtn').onclick=showHome;$('addBalanceBtn').onclick=addDemoBalance;$('closeCheckout').onclick=closeCheckout;$('checkoutModal').addEventListener('click',e=>{if(e.target.id==='checkoutModal')closeCheckout()});$('applyCouponBtn').onclick=applyCoupon;$('payNowBtn').onclick=payPending;
 async function adminLogin(){if(!BACKEND_READY){showAdminDemo();return}try{const u=await loadProfile();if(!u||u.role!=='admin')return toast('هذا الحساب ليس حساب إدارة');showAdmin()}catch(e){toast('تعذر فتح لوحة الإدارة')}}
 $('adminDemoBtn').onclick=adminLogin;$('adminBackBtn').onclick=showHome;
 function showAdmin(){show('adminPage');renderAdmin()}
