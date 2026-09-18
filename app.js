@@ -536,3 +536,27 @@ $('adminE2eRefresh')?.addEventListener('click',renderV26E2E);
 $('adminE2eRun')?.addEventListener('click',async()=>{if(!BACKEND_READY){toast('اربط Supabase أولاً لتشغيل الاختبار');return}try{const r=await sb.rpc('admin_v26_run_e2e');if(r.error)throw r.error;toast('تم تشغيل اختبار E2E ✓');await renderV26E2E()}catch(e){toast(e.message||'تعذر تشغيل الاختبار')}});
 const _renderAdminV26=renderAdmin;renderAdmin=async function(){await _renderAdminV26();const tab=document.querySelector('.admin-tab.active')?.dataset.tab;if(tab==='e2e')await renderV26E2E()};
 document.querySelectorAll('.admin-tab').forEach(t=>t.addEventListener('click',()=>setTimeout(()=>{if(t.dataset.tab==='e2e')renderV26E2E()},0)));
+
+/* V27.1 — إصلاح زر «أضف/قدم خدمتك» على أندرويد: ربط احتياطي عبر delegation */
+(function(){
+  function openProviderModalSafe(e){
+    const b=e.target.closest('#becomeProviderBtn');
+    if(!b) return;
+    e.preventDefault();
+    e.stopPropagation();
+    const modal=document.getElementById('providerModal');
+    if(!modal) return;
+    const u=typeof user==='function'?user():null;
+    if(!u){ if(typeof show==='function') show('loginPage'); return; }
+    const name=document.getElementById('providerName');
+    const contact=document.getElementById('providerContact');
+    const msg=document.getElementById('providerMsg');
+    if(name) name.value=u.name||'';
+    if(contact) contact.value=u.phone||'';
+    if(msg) msg.textContent='';
+    modal.classList.remove('hidden');
+    modal.setAttribute('aria-hidden','false');
+  }
+  document.addEventListener('click',openProviderModalSafe,true);
+  document.addEventListener('pointerup',openProviderModalSafe,true);
+})();

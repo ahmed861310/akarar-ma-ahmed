@@ -109,3 +109,6 @@ main {
 .v7-commandbar {
   touch-action: pan-y;
 }
+
+/* V27.1 — إصلاح لمس زر تقديم/إضافة الخدمة */
+.providers-head .provider-cta,#becomeProviderBtn{position:relative;z-index:1000;pointer-events:auto;touch-action:manipulation;-webkit-user-select:none;user-select:none;}
