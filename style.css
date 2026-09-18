@@ -146,3 +146,250 @@ body{padding-bottom:82px}
 .ride-actions button{flex:1;min-height:44px;border:0;border-radius:10px;padding:8px 12px;font:inherit;cursor:pointer}
 .secondary-btn{background:#eee}
 .ride-error{color:#b42318;padding:8px}
+
+
+/* V27 MOBILE RESPONSIVE FIX — Frontend only, no database changes */
+html, body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  overscroll-behavior-x: none;
+}
+
+main, .page, .container, section, article, .panel, .market-stack {
+  max-width: 100%;
+  min-width: 0;
+}
+
+.market-stack {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 22px;
+}
+
+.market-stack .market-banner {
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+}
+
+.market-copy {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.market-copy h2,
+.market-copy p,
+.banner-title,
+.banner-subtitle {
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+
+.market-banner .primary-btn,
+.market-banner .small-primary {
+  flex: 0 0 auto;
+  white-space: normal;
+  max-width: 100%;
+}
+
+.business-market-btn {
+  justify-self: stretch;
+}
+
+.chat-shell {
+  width: 100%;
+  max-width: 900px;
+  min-width: 0;
+}
+
+.chat-messages {
+  width: 100%;
+  min-width: 0;
+  -webkit-overflow-scrolling: touch;
+}
+
+.chat-compose {
+  width: 100%;
+  min-width: 0;
+  align-items: stretch;
+}
+
+.chat-compose textarea,
+#chatInput {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  min-height: 56px;
+  box-sizing: border-box;
+  resize: none;
+  pointer-events: auto !important;
+  touch-action: manipulation;
+  user-select: text;
+  -webkit-user-select: text;
+  position: relative;
+  z-index: 101;
+  cursor: text;
+  background: #fff;
+  color: var(--text);
+  opacity: 1;
+}
+
+.chat-compose .primary,
+#sendChatBtn {
+  position: relative;
+  z-index: 101;
+  touch-action: manipulation;
+  pointer-events: auto !important;
+}
+
+@media (max-width: 650px) {
+  .page {
+    width: 100%;
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .hero {
+    width: 100%;
+    min-width: 0;
+    padding: 20px 16px;
+    gap: 12px;
+  }
+
+  .hero > div:first-child {
+    min-width: 0;
+  }
+
+  .hero h1 {
+    font-size: 24px;
+    overflow-wrap: anywhere;
+  }
+
+  .hero p {
+    line-height: 1.7;
+  }
+
+  .quick-search {
+    width: 100%;
+    min-width: 0;
+    padding: 0 12px;
+  }
+
+  .ai-banner {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .market-stack {
+    gap: 10px;
+  }
+
+  .market-banner {
+    flex-direction: column;
+    align-items: stretch !important;
+    padding: 15px !important;
+    gap: 12px !important;
+  }
+
+  .market-banner .small-primary,
+  .market-banner .primary-btn {
+    width: 100%;
+    min-width: 0;
+    margin: 0;
+  }
+
+  .services {
+    width: 100%;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .service {
+    min-width: 0;
+    padding: 15px 11px;
+    overflow-wrap: anywhere;
+  }
+
+  .service small {
+    overflow-wrap: anywhere;
+  }
+
+  .stats {
+    width: 100%;
+    grid-template-columns: 1fr;
+  }
+
+  .section-head {
+    gap: 10px;
+  }
+
+  .section-head h2 {
+    min-width: 0;
+  }
+
+  .bottom-help {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .chat-compose {
+    flex-direction: column;
+  }
+
+  .chat-compose textarea,
+  #chatInput {
+    min-height: 110px;
+    padding: 14px;
+    font-size: 16px; /* يمنع تكبير/تصغير غير مريح في أندرويد */
+  }
+
+  .chat-compose .primary,
+  #sendChatBtn {
+    width: 100%;
+    min-height: 52px;
+    margin-top: 0;
+  }
+
+  .chat-head {
+    width: 100%;
+    min-width: 0;
+    gap: 10px;
+  }
+
+  .chat-head > div:nth-child(2) {
+    min-width: 0;
+  }
+
+  .chat-head h1,
+  .chat-head p {
+    overflow-wrap: anywhere;
+  }
+}
+
+@media (max-width: 420px) {
+  .page {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .services {
+    grid-template-columns: 1fr;
+  }
+
+  .market-banner {
+    border-radius: 17px;
+  }
+
+  .banner-title {
+    font-size: 16px;
+  }
+
+  .banner-subtitle {
+    font-size: 13px;
+    line-height: 1.6;
+  }
+}

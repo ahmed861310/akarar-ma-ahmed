@@ -22,21 +22,35 @@
 <section id="homePage" class="page hidden">
 <div class="hero"><div><span class="eyebrow">منصة الخدمات الرقمية</span><h1>مرحباً <span id="welcomeName">بك</span> 👋</h1><p>أنجز خدماتك وتابع طلباتك من مكان واحد.</p></div><div class="avatar">👤</div></div>
 <div class="quick-search"><span>🔎</span><input id="serviceSearch" placeholder="ابحث عن خدمة..."><kbd>بحث</kbd></div>
-<div class="ai-banner"><div><span class="eyebrow dark-eyebrow">🤖 المساعد الذكي</span><h2>مش عارف تختار الخدمة؟</h2><p>جاوب على 3 أسئلة وخدماتي يقترح لك نوع الخدمة وأفضل مقدمي الخدمات.</p></div><button id="aiAssistantBtn" class="primary small-primary">ابدأ مع المساعد</button></div><div class="market-banner"><div><span class="eyebrow dark-eyebrow">سوق الخدمات</span><h2>اطلب خدمتك من مقدم خدمة مباشرة</h2><p>استعرض مقدمي الخدمات، الأسعار، ثم أرسل طلبك للمقدم المناسب.</p></div><button id="providersBtn" class="primary small-primary">استعرض مقدمي الخدمات</button>
-            <div class="market-banner doctors-banner">
-              <div>
-                <div class="banner-title">👨‍⚕️ أطباء متخصصون</div>
-                <div class="banner-subtitle">ابحث عن طبيب حسب التخصص وتواصل للحجز</div>
-              </div>
-              <button id="doctorsBtn" class="primary-btn" type="button">استعرض الأطباء</button>
-            <div class="market-banner cars-banner">
-              <div>
-                <div class="banner-title">🚗 اطلب سيارة</div>
-                <div class="banner-subtitle">اطلب رحلة وحدد نقطة البداية والوجهة</div>
-              </div>
-              <button id="carsBtn" class="primary-btn" type="button">اطلب الآن</button>
-            </div>
-            </div><button id="businessBtn" class="secondary small-primary">🚀 باقات ونمو</button></div><div class="section-head"><h2>الخدمات الرئيسية</h2><button id="allServicesBtn" class="link-btn">عرض الكل</button></div>
+<div class="ai-banner"><div><span class="eyebrow dark-eyebrow">🤖 المساعد الذكي</span><h2>مش عارف تختار الخدمة؟</h2><p>جاوب على 3 أسئلة وخدماتي يقترح لك نوع الخدمة وأفضل مقدمي الخدمات.</p></div><button id="aiAssistantBtn" class="primary small-primary">ابدأ مع المساعد</button></div><div class="market-stack">
+  <div class="market-banner">
+    <div class="market-copy">
+      <span class="eyebrow dark-eyebrow">سوق الخدمات</span>
+      <h2>اطلب خدمتك من مقدم خدمة مباشرة</h2>
+      <p>استعرض مقدمي الخدمات، الأسعار، ثم أرسل طلبك للمقدم المناسب.</p>
+    </div>
+    <button id="providersBtn" class="primary small-primary" type="button">استعرض مقدمي الخدمات</button>
+  </div>
+
+  <div class="market-banner doctors-banner">
+    <div class="market-copy">
+      <div class="banner-title">👨‍⚕️ أطباء متخصصون</div>
+      <div class="banner-subtitle">ابحث عن طبيب حسب التخصص وتواصل للحجز</div>
+    </div>
+    <button id="doctorsBtn" class="primary-btn" type="button">استعرض الأطباء</button>
+  </div>
+
+  <div class="market-banner cars-banner">
+    <div class="market-copy">
+      <div class="banner-title">🚗 اطلب سيارة</div>
+      <div class="banner-subtitle">اطلب رحلة وحدد نقطة البداية والوجهة</div>
+    </div>
+    <button id="carsBtn" class="primary-btn" type="button">اطلب الآن</button>
+  </div>
+
+  <button id="businessBtn" class="secondary small-primary business-market-btn" type="button">🚀 باقات ونمو</button>
+</div>
+<div class="section-head"><h2>الخدمات الرئيسية</h2><button id="allServicesBtn" class="link-btn">عرض الكل</button></div>
 <div class="services" id="servicesGrid">
 <button class="service" data-service-slug="inquiries" data-title="الاستعلامات"><span class="service-icon">🔎</span><b>الاستعلامات</b><small>استعلم عن حالة خدماتك</small></button>
 <button class="service" data-service-slug="payments" data-title="المدفوعات"><span class="service-icon">💳</span><b>المدفوعات</b><small>فواتير ومدفوعات إلكترونية</small></button>
